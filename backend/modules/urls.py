@@ -11,9 +11,9 @@ urlpatterns = []
 
 try:
     modules_dir = f"{settings.BASE_DIR}/modules/"
-    urls = Path(modules_dir).rglob('urls.py')
+    urls = Path(modules_dir).rglob("urls.py")
     for url in urls:
-        module_name, _ = url.as_posix().split('/')[-2:]
+        module_name, _ = url.as_posix().split("/")[-2:]
         if not module_name == "modules":
             urlpatterns += [
                 path(f"{module_name}/", include(f"modules.{module_name}.urls"))  # noqa
