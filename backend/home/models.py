@@ -45,10 +45,3 @@ class HomePage(models.Model):
     @property
     def field(self):
         return "body"
-
-
-class Hello(models.Model):
-    "Generated Model"
-    text = models.CharField(
-        max_length=256,
-    )
