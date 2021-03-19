@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="prefix__pin" width="18.087" height="24.687" viewBox="0 0 18.087 24.687">
+    <defs>
+        <linearGradient id="prefix__linear-gradient" x1=".5" x2=".5" y2="1" gradientUnits="objectBoundingBox">
+            <stop offset="0" stop-color="#ed8f31"/>
+            <stop offset="1" stop-color="#ffa304"/>
+        </linearGradient>
+        <style>
+            .prefix__cls-1{fill:url(#prefix__linear-gradient)}
+        </style>
+    </defs>
+    <g id="prefix__Group_61" data-name="Group 61">
+        <path id="prefix__Path_188" d="M79.616 0a9 9 0 0 0-9.043 8.941c0 6.118 8.093 15.1 8.437 15.479a.821.821 0 0 0 1.212 0c.345-.379 8.437-9.361 8.437-15.479A9 9 0 0 0 79.616 0zm0 13.439a4.5 4.5 0 1 1 4.55-4.5 4.529 4.529 0 0 1-4.55 4.5z" data-name="Path 188" class="prefix__cls-1" transform="translate(-70.573)"/>
+    </g>
+</svg>

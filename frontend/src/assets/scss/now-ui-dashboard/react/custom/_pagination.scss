@@ -1,0 +1,29 @@
+.page-item {
+  .page-link {
+    height: 2.4rem;
+    width: 2.4rem;
+    display: flex;
+    padding: 0rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: $btn-round-radius;
+    margin-left: 0.5rem;
+    color: $secondary-color;
+  }
+}
+.page-item.active {
+	.page-link {
+		background-color: $secondary-color;
+    border-color: $secondary-color;
+	}
+}
+.page-item:first-child .page-link {
+  margin-left: 0;
+  border-radius: $btn-round-radius;
+  margin-left: 0.5rem;
+}
+.page-item:last-child .page-link {
+  margin-left: 0;
+  border-radius: $btn-round-radius;
+  margin-left: 0.5rem;
+}

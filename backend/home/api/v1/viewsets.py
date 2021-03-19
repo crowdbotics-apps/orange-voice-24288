@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from rest_auth.registration.views import RegisterView, LoginView
 
 from home.api.v1.serializers import (
     SignupSerializer,
@@ -52,3 +53,11 @@ class HomePageViewSet(ModelViewSet):
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     permission_classes = [IsAdminUser]
     http_method_names = ["get", "put", "patch"]
+
+
+class RegisterViewToken(RegisterView):
+    authentication_classes = ()
+
+
+class LoginViewToken(LoginView):
+    authentication_classes = ()

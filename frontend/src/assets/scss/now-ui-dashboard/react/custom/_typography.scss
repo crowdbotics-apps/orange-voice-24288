@@ -1,0 +1,15 @@
+.text-order-placed-color,
+a.text-order-placed-color:focus,
+a.text-order-placed-color:hover {
+  color: $order-placed-color !important;
+}
+.text-order-picked-color,
+a.text-order-picked-color:focus,
+a.text-order-picked-color:hover {
+  color: $order-picked-color !important;
+}
+.text-order-out-for-delivery-color,
+a.text-order-out-for-delivery-color:focus,
+a.text-order-out-for-delivery-color:hover {
+  color: $order-out-for-delivery-color !important;
+}

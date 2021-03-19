@@ -1,0 +1,40 @@
+.card-user {
+
+  .image {
+    height: 120px;
+  }
+
+  .author {
+    text-align: center;
+    text-transform: none;
+    a + p.description {
+      margin-top: -7px;
+    }
+  }
+
+  .avatar {
+    width: 124px;
+    height: 124px;
+    border-radius: 0;
+    position: relative;
+  }
+
+  .card-body {
+    min-height: 240px;
+    padding:50px 0px;
+  }
+
+  hr {
+    margin: 5px 15px;
+  }
+
+  .button-container {
+    margin-bottom: 6px;
+    text-align: center;
+  }
+}
+.vertical-center {
+  margin: 0;
+  -ms-transform: translateY(50%);
+  transform: translateY(50%);
+}

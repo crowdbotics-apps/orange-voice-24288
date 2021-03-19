@@ -1,0 +1,59 @@
+.hide-overflow {
+    overflow: hidden;
+}
+
+.margin-left-zero {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+}
+
+.text-primary {
+    color: $primary-color;
+    font-size: 16px;
+}
+
+.float-content-right {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.margin-top-30 {
+    margin-top: 30px;
+}
+
+.margin-top-40 {
+    margin-top: 37%;
+    text-align: center;
+}
+
+.margin-15 {
+    margin: 15%;
+}
+
+.black-text {
+    color: black;
+}
+
+.white-text {
+    color: white;
+}
+
+.login-right-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    
+    .heading {
+        padding-right: 40%;
+    }
+}
+
+.muted-text {
+    color: $opacity-gray-9 !important;
+}
+
+label {
+    color: $secondary-color !important;
+    font-size: 16px !important;
+}

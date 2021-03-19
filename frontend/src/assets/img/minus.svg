@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
+    <g id="prefix__Group_146" data-name="Group 146" transform="translate(-333.364 -400)">
+        <path id="prefix__Rectangle_25" d="M0 0H23V23H0z" data-name="Rectangle 25" transform="translate(333.364 400)" style="fill:rgba(53,123,243,.2)"/>
+        <g id="prefix__icon_default_glyph:plus_" data-name="icon [default][glyph:plus]" transform="translate(336.273 402.909)">
+            <path id="prefix__icon_area" d="M0 0H18V18H0z" data-name="icon area" transform="translate(.091 .091)" style="fill:#357bf3;opacity:0"/>
+            <g id="prefix__icon" transform="translate(2.288 8.727)">
+                <path id="prefix__Line_38" d="M0 0L13.043 0" data-name="Line 38" style="fill:none;stroke:#357bf3;stroke-linecap:round;stroke-width:2px"/>
+            </g>
+        </g>
+    </g>
+</svg>
