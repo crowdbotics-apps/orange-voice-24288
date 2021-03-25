@@ -17,7 +17,7 @@ services:
     volumes:
       - ./postgres-data/postgres:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "54321:54321"
   redis:
     ports:
       - "6379:6379"

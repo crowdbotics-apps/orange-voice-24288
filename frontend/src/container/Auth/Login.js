@@ -68,7 +68,7 @@ function Login({history}) {
         return;
       }
       let body = {
-        username: formValues.email,
+        email: formValues.email,
         password: formValues.password,
       };
       dispatch(AuthActions.signin(body));

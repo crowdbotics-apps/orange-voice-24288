@@ -14,10 +14,10 @@ export class CategoryActions {
             payload: { body }
         };
     }
-    static editCategory(body) {
+    static editCategory(body, id) {
         return {
             type: CategoryTypes.EDIT_CATEGORY_PROG,
-            payload: { body }
+            payload: { body, id }
         };
     }
     static delCategory(id) {

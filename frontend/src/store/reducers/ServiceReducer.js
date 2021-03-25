@@ -19,7 +19,7 @@ export function serviceReducer(state = INITIAL_STATE, action) {
         case ServiceTypes.GET_SERVICES_PROG:
             return { ...state, isProgressList: true, services: [] };
         case ServiceTypes.GET_SERVICES_SUCC:
-            return { ...state, isProgressList: false, services: action.payload.result, paging: action.payload.paging };
+            return { ...state, isProgressList: false, services: action.payload.results, paging: action.payload };
         case ServiceTypes.GET_SERVICES_FAIL:
             return { ...state, isProgressList: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 

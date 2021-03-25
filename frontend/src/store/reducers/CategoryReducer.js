@@ -20,7 +20,7 @@ export function categoryReducer(state = INITIAL_STATE, action) {
         case CategoryTypes.GET_CATEGORIES_PROG:
             return { ...state, isProgressList: true, categories: [] };
         case CategoryTypes.GET_CATEGORIES_SUCC:
-            return { ...state, isProgressList: false, categories: action.payload.result, paging: action.payload.paging };
+            return { ...state, isProgressList: false, categories: action.payload.results, paging: action.payload };
         case CategoryTypes.GET_CATEGORIES_FAIL:
             return { ...state, isProgressList: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 

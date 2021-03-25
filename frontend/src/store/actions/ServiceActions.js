@@ -20,10 +20,10 @@ export class ServiceActions {
             payload: { body, history }
         };
     }
-    static editService(body, history) {
+    static editService(body, history, id) {
         return {
             type: ServiceTypes.EDIT_SERVICE_PROG,
-            payload: { body, history }
+            payload: { body, history, id }
         };
     }
     static delService(id) {

@@ -37,7 +37,7 @@ function EditSerivce({ history }) {
         price: 0,
         minQty: 0,
         isActive: true,
-        categoryId: '',
+        category: '',
         file: null,
         image: '',
         removeImage: false,
@@ -56,7 +56,7 @@ function EditSerivce({ history }) {
                 price,
                 minQty,
                 isActive,
-                categoryId,
+                category,
                 image,
                 removeImage,
                 id
@@ -70,7 +70,7 @@ function EditSerivce({ history }) {
                 price,
                 minQty,
                 isActive,
-                categoryId,
+                category,
                 image,
                 removeImage,
                 id
@@ -130,8 +130,8 @@ function EditSerivce({ history }) {
             setNotValid({ error: true, type: 'title', message: 'Title is too short' });
             return;
         }
-        if (formValues.categoryId === '') {
-            setNotValid({ error: true, type: 'categoryId', message: 'Please select category' });
+        if (formValues.category === '') {
+            setNotValid({ error: true, type: 'category', message: 'Please select category' });
             return;
         }
         if (!formValues.description) {
@@ -199,15 +199,19 @@ function EditSerivce({ history }) {
         }
         let formData = new FormData();
         formData.append('title', formValues.title);
-        formData.append('categoryId', Number(formValues.categoryId));
+        formData.append('category', Number(formValues.category));
         formData.append('description', formValues.description);
         formData.append('shortDescription', formValues.shortDescription);
         formData.append('minQty', Number(formValues.minQty));
         formData.append('price', parseFloat(formValues.price));
-        formData.append('imageFile', formValues.file);
+        if (formValues.file) formData.append('image', formValues.file);
         formData.append('removeImage', formValues.removeImage);
         formData.append('id', formValues.id);
-        dispatch(ServiceActions.editService(formData, history));
+
+        for (var key of formData.entries()) {
+            console.log(key[0] + ', ' + key[1]);
+        }
+        dispatch(ServiceActions.editService(formData, history, formValues.id));
 
     }, [formValues, dispatch, history, imageNotValid, notValid]);
     return (
@@ -242,8 +246,8 @@ function EditSerivce({ history }) {
                                             <Input type="select"
                                                 name="select"
                                                 id="exampleSelect"
-                                                value={formValues.categoryId}
-                                                onChange={(e) => setFormValues({ ...formValues, categoryId: Number(e.target.value) })}
+                                                value={formValues.category}
+                                                onChange={(e) => setFormValues({ ...formValues, category: Number(e.target.value) })}
 
                                             >
                                                 <option value={''} >Select Category</option>
@@ -255,7 +259,7 @@ function EditSerivce({ history }) {
                                                 }
 
                                             </Input>
-                                            {notValid.error && notValid.type === 'categoryId' &&
+                                            {notValid.error && notValid.type === 'category' &&
                                                 <label className=" ml-3 text-danger" >{notValid.message}</label>
                                             }
                                         </FormGroup>

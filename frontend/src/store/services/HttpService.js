@@ -4,9 +4,10 @@ import { API_URL } from './Config';
 export class HttpService {
 
     static get(url, headers = { 'Content-Type': 'application/json' }) {
+        const auth = StorageService.getToken() ? {'Authorization': 'Token '+ StorageService.getToken()}: {}
         return ajax({
-            url: `${API_URL}/api${url}`,
-            headers: { ...headers, 'Authorization': `Bearer ${StorageService.getToken()}` },
+            url: `${API_URL}${url}`,
+            headers: { ...headers, ...auth },
             method: 'GET',
             async: true,
             crossDomain: true,
@@ -16,23 +17,25 @@ export class HttpService {
     } // get
 
     static post(url, body, headers = { 'Content-Type': 'application/json' }) {
+        const auth = StorageService.getToken() ? {'Authorization': 'Token '+ StorageService.getToken()}: {}
         return ajax({
-            url: `${API_URL}/api${url}`,
+            url: `${API_URL}${url}`,
             method: 'POST',
             body,
-            headers: { ...headers, 'Authorization': `Bearer ${StorageService.getToken()}` },
+            headers: { ...headers, ...auth },
             async: true,
             crossDomain: true,
             responseType: 'json',
-            createXHR: () => new XMLHttpRequest()
+            // createXHR: () => new XMLHttpRequest()
         });
     } // post
     static put(url, body, headers = { 'Content-Type': 'application/json' }) {
+        const auth = StorageService.getToken() ? {'Authorization': 'Token '+ StorageService.getToken()}: {}
         return ajax({
-            url: `${API_URL}/api${url}`,
+            url: `${API_URL}${url}`,
             method: 'PUT',
             body,
-            headers: { ...headers, 'Authorization': `Bearer ${StorageService.getToken()}` },
+            headers: { ...headers, ...auth },
             async: true,
             crossDomain: true,
             responseType: 'json',
@@ -41,11 +44,12 @@ export class HttpService {
     } // put
 
     static delete(url, body, headers = { 'Content-Type': 'application/json' }) {
+        const auth = StorageService.getToken() ? {'Authorization': 'Token '+ StorageService.getToken()}: {}
         return ajax({
-            url: `${API_URL}/api${url}`,
+            url: `${API_URL}${url}`,
             method: 'DELETE',
             body,
-            headers:{ ...headers, 'Authorization': `Bearer ${StorageService.getToken()}` },
+            headers: { ...headers, ...auth },
             async: true,
             crossDomain: true,
             responseType: 'json',

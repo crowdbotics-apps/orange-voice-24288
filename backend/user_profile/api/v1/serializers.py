@@ -7,16 +7,18 @@ from core.utils import update_object
 
 class ProfileSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(required=False)
-    email = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = Profile
         fields = (
             "id",
             "fullname",
-            "phone_number",
-            "postal_code",
-            "referral_code",
+            "firstName",
+            "lastName",
+            "phoneNo",
+            "email",
+            "postalCode",
+            "referralCode",
             "created_on"
         )
 

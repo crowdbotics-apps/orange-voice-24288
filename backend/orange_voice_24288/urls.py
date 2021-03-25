@@ -16,10 +16,12 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.views.decorators.csrf import csrf_exempt
 from allauth.account.views import confirm_email
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from home.api.v1.viewsets import LoginViewToken
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -29,10 +31,18 @@ urlpatterns = [
     path("api/v1/", include("home.api.v1.urls")),
 
     path("users/", include("users.urls", namespace="users")),
+    path('rest-auth/login', csrf_exempt(LoginViewToken.as_view()), name='rest_login'),
     path("rest-auth/", include("rest_auth.urls")),
     # Override email confirm to use allauth's HTML view instead of rest_auth's API view
     path("rest-auth/registration/account-confirm-email/<str:key>/", confirm_email),
     path("rest-auth/registration/", include("rest_auth.registration.urls")),
+    path('api/v1/', include([
+        path("", include("driver.api.v1.urls")),
+        path("", include("address.api.v1.urls")),
+        path("", include("order.api.v1.urls")),
+        path("", include("service.api.v1.urls")),
+        path("", include("user_profile.api.v1.urls")),
+    ])),
     re_path(r'.*', include("home.urls")),
     path("home/", include("home.urls")),
 ]

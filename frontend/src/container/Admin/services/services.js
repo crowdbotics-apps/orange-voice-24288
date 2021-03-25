@@ -27,7 +27,6 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import DeleteModal from '../../../components/Modals/DeleteModal';
 import { ServiceActions } from '../../../store/actions/ServiceActions';
 import { useSelector, useDispatch } from 'react-redux';
-import { API_URL } from '../../../store/services/Config';
 
 
 function Services({ history }) {
@@ -38,7 +37,8 @@ function Services({ history }) {
     const isProgress = useSelector(store => store?.service?.isProgressList);
     const service = useSelector(store => store?.service?.service);
     const services = useSelector(store => store?.service?.services);
-    const paging = useSelector(store => store?.service?.paging);
+    const paging = useSelector(store => store?.service);
+    console.warn(paging, 'is the paging...');
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -98,7 +98,7 @@ function Services({ history }) {
             formatter: (cell) => {
                 if (cell)
                     return (
-                        <img src={`${API_URL}/${cell}`} alt={'img'} className="img-thumbnail table-image" />
+                        <img src={`${cell}`} alt={'img'} className="img-thumbnail table-image" />
                     );
                 else {
                     return (
@@ -215,7 +215,7 @@ function Services({ history }) {
                                 <div className='spinner-lg' ></div>
                                 :
                                 <>
-                                    <Badge color="primary">{paging.totalCount} Services</Badge>
+                                    <Badge color="primary">{paging.count} Services</Badge>
                                     <ToolkitProvider
                                         keyField='id'
                                         data={services}
@@ -240,7 +240,7 @@ function Services({ history }) {
                                                         pagination={paginationFactory({
                                                             page: paging.pageNumber,
                                                             sizePerPage: 10,
-                                                            totalSize: paging.totalCount,
+                                                            totalSize: paging.count,
                                                             hideSizePerPage: true,
                                                         })}
                                                     />

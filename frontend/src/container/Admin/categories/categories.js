@@ -94,7 +94,7 @@ function Categories() {
             formatter: (cell) => {
                 if (cell)
                     return (
-                        <img src={`${API_URL}/${cell}`} alt={'img'} className="img-thumbnail table-image" />
+                        <img src={`${cell}`} alt={'img'} className="img-thumbnail table-image" />
                     );
                 else {
                     return (

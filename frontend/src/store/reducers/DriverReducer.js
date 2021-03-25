@@ -21,7 +21,7 @@ export function driverReducer(state = INITIAL_STATE, action) {
         case DriverTypes.GET_DRIVERS_PROG:
             return { ...state, isProgressList: true, drivers: [] };
         case DriverTypes.GET_DRIVERS_SUCC:
-            return { ...state, isProgressList: false, drivers: action.payload.result, paging: action.payload.paging };
+            return { ...state, isProgressList: false, drivers: action.payload.results, paging: action.payload };
         case DriverTypes.GET_DRIVERS_FAIL:
             return { ...state, isProgressList: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 
@@ -30,7 +30,7 @@ export function driverReducer(state = INITIAL_STATE, action) {
         case DriverTypes.GET_DRIVER_HISTORY_PROG:
             return { ...state, isProgressList: true, driverHistory: [] };
         case DriverTypes.GET_DRIVER_HISTORY_SUCC:
-            return { ...state, isProgressList: false, driverHistory: action.payload.result, paging: action.payload.paging };
+            return { ...state, isProgressList: false, driverHistory: action.payload.results, paging: action.payload };
         case DriverTypes.GET_DRIVER_HISTORY_FAIL:
             return { ...state, isProgressList: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 

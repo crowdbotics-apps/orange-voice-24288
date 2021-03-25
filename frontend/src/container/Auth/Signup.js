@@ -140,7 +140,7 @@ function Signup({history}) {
                           {isProgress ? (
                             <div className="spinner"></div>
                           ) : (
-                            <span> Login </span>
+                            <span> Sign up </span>
                           )}
                         </Button>
                         {isError && (

@@ -19,13 +19,15 @@ class SignupSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(required=False)
     postal_code = serializers.CharField(required=False)
     referral_code = serializers.CharField(required=False)
+    firstName = serializers.CharField(required=False)
+    lastName = serializers.CharField(required=False)
 
     class Meta:
         model = User
         fields = (
             "id",
-            "last_name",
-            "first_name",
+            "lastName",
+            "firstName",
             "phone_number",
             "email",
             "password",
@@ -62,8 +64,8 @@ class SignupSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User(
             email=validated_data.get("email"),
-            first_name=validated_data.get("first_name"),
-            last_name=validated_data.get("last_name"),
+            first_name=validated_data.get("firstName"),
+            last_name=validated_data.get("lastName"),
             username=generate_unique_username(
                 [validated_data.get("name"), validated_data.get("email"), "user"]
             ),
@@ -72,9 +74,9 @@ class SignupSerializer(serializers.ModelSerializer):
         user.save()
         Profile.objects.create(
             user=user,
-            phone_number=validated_data.get('phone_number'),
-            postal_code=validated_data.get('postal_code'),
-            referral_code=validated_data.get('referral_code'),
+            phoneNo=validated_data.get('phone_number'),
+            postalCode=validated_data.get('postal_code'),
+            referralCode=validated_data.get('referral_code'),
         )
         request = self._get_request()
         setup_user_email(request, user, [])
@@ -110,21 +112,32 @@ class PasswordSerializer(PasswordResetSerializer):
 
 
 class TokenSerializer(serializers.ModelSerializer):
-    profile_id = serializers.SerializerMethodField()
     role = serializers.SerializerMethodField()
     firstName = serializers.SerializerMethodField()
     lastName = serializers.SerializerMethodField()
+    userName = serializers.SerializerMethodField()
     token = serializers.SerializerMethodField()
+    userId = serializers.SerializerMethodField()
+    isProfileCompleted = serializers.SerializerMethodField()
 
     class Meta:
         model = Token
-        fields = ('token', 'user', 'firstName', 'lastName', 'profile_id', 'role')
+        fields = ("userId", 'token', 'firstName', 'lastName', 'userName', 'role', 'isProfileCompleted')
 
     def get_role(self, instance):
         return 'Admin'  # TODO: get role from user groups
 
+    def get_userId(self, _):
+        return self.instance.user.id
+
+    def get_isProfileCompleted(self, _):
+        return True  # TODO: Check if profile is complete
+
     def get_firstName(self, _):
         return self.instance.user.first_name
+
+    def get_userName(self, _):
+        return self.instance.user.username
 
     def get_lastName(self, _):
         return self.instance.user.last_name

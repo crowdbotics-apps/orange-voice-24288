@@ -42,8 +42,8 @@ export function authReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         isProgressList: false,
-        users: action.payload.result,
-        paging: action.payload.paging,
+        users: action.payload.results,
+        paging: action.payload,
       };
 
     case AuthTypes.GET_ALL_USERS_FAIL:

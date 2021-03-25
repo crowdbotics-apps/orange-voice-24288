@@ -89,9 +89,9 @@ const EditCategoryModal = () => {
         let formData = new FormData();
         formData.append('id', category.id);
         formData.append('title', title);
-        formData.append('imageFile', file);
+        formData.append('image', file);
         formData.append('removeImage', removeImage);
-        dispatch(CategoryActions.editCategory(formData));
+        dispatch(CategoryActions.editCategory(formData, category.id));
 
     }, [dispatch, title, category, file, imageNotValid, notValid, removeImage]);
 
