@@ -22,19 +22,18 @@ DEBUG = env.bool("DEBUG", default=False)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str("SECRET_KEY")
 
-ALLOWED_HOSTS = env.list("HOST", default=["*"])
+# ALLOWED_HOSTS = env.list("HOST", default=["*"])
+ALLOWED_HOSTS = ["*"]
 SITE_ID = 1
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env.bool("SECURE_REDIRECT", default=False)
-
 
 # Application definition
 
@@ -51,7 +50,11 @@ LOCAL_APPS = [
     "home",
     "modules",
     "users.apps.UsersConfig",
-'user_profile',
+    'user_profile',
+    'driver',
+    'address',
+    'order',
+    'service',
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -69,6 +72,7 @@ THIRD_PARTY_APPS = [
     # start fcm_django push notifications
     "fcm_django",
     # end fcm_django push notifications
+    'corsheaders',
 ]
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS
 
@@ -80,6 +84,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = "orange_voice_24288.urls"
@@ -102,7 +108,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "orange_voice_24288.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
@@ -115,7 +120,6 @@ DATABASES = {
 
 if env.str("DATABASE_URL", default=None):
     DATABASES = {"default": env.db()}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -135,7 +139,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -144,7 +147,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -180,11 +182,12 @@ SOCIALACCOUNT_ALLOW_REGISTRATION = env.bool("SOCIALACCOUNT_ALLOW_REGISTRATION", 
 REST_AUTH_SERIALIZERS = {
     # Replace password reset serializer to fix 500 error
     "PASSWORD_RESET_SERIALIZER": "home.api.v1.serializers.PasswordSerializer",
+    'TOKEN_SERIALIZER': 'home.api.v1.serializers.TokenSerializer',
 }
 REST_AUTH_REGISTER_SERIALIZERS = {
     # Use custom serializer that has no username and matches web signup
     "REGISTER_SERIALIZER": "home.api.v1.serializers.SignupSerializer",
-'TOKEN_SERIALIZER': 'home.api.v1.serializers.TokenSerializer',
+
 }
 
 # Custom user model
@@ -196,18 +199,18 @@ EMAIL_HOST_PASSWORD = env.str("SENDGRID_PASSWORD", "")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-
 # AWS S3 config
 AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME", "")
 AWS_STORAGE_REGION = env.str("AWS_STORAGE_REGION", "")
+AWS_S3_SIGNATURE_VERSION = 's3v4'
 
 USE_S3 = (
-    AWS_ACCESS_KEY_ID
-    and AWS_SECRET_ACCESS_KEY
-    and AWS_STORAGE_BUCKET_NAME
-    and AWS_STORAGE_REGION
+        AWS_ACCESS_KEY_ID
+        and AWS_SECRET_ACCESS_KEY
+        and AWS_STORAGE_BUCKET_NAME
+        and AWS_STORAGE_REGION
 )
 
 if USE_S3:
@@ -222,7 +225,6 @@ if USE_S3:
     MEDIA_URL = "/mediafiles/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
-
 # start fcm_django push notifications
 FCM_DJANGO_SETTINGS = {"FCM_SERVER_KEY": env.str("FCM_SERVER_KEY", "")}
 # end fcm_django push notifications
@@ -233,6 +235,15 @@ SWAGGER_SETTINGS = {
     "DEFAULT_INFO": f"{ROOT_URLCONF}.api_info",
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100
+}
+
 if DEBUG or not (EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):
     # output email to console instead of sending
     if not DEBUG:
@@ -240,3 +251,4 @@ if DEBUG or not (EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):
             "You should setup `SENDGRID_USERNAME` and `SENDGRID_PASSWORD` env vars to send emails."
         )
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    CORS_ORIGIN_ALLOW_ALL = True

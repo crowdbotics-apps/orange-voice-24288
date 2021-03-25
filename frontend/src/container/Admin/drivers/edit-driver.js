@@ -29,7 +29,7 @@ function EditDriver({ history }) {
     const [formValues, setFormValues] = useState({
         name: '',
         email: '',
-        licence: '',
+        license: '',
         contactNumber: '',
         mainAddress: '',
         file: '',
@@ -45,7 +45,7 @@ function EditDriver({ history }) {
             let {
                 contactNumber,
                 email,
-                licence,
+                license,
                 mainAddress,
                 name,
                 id,
@@ -56,7 +56,7 @@ function EditDriver({ history }) {
                 contactNumber,
                 email,
                 mainAddress,
-                licence,
+                license,
                 name,
                 id,
                 removeImage,
@@ -130,12 +130,12 @@ function EditDriver({ history }) {
             setNotValid({ error: true, type: 'contactNumber', message: 'Please provide a valid contact number matching the format +1XXXXXXXXXX' });
             return;
         }
-        if (!formValues.licence) {
-            setNotValid({ error: true, type: 'licence', message: 'Please provide licence' });
+        if (!formValues.license) {
+            setNotValid({ error: true, type: 'license', message: 'Please provide license' });
             return;
         }
-        if (formValues.licence.length < 6 || formValues.licence.length > 6) {
-            setNotValid({ error: true, type: 'licence', message: 'License number must contain 6 characters' });
+        if (formValues.license.length < 6 || formValues.license.length > 6) {
+            setNotValid({ error: true, type: 'license', message: 'License number must contain 6 characters' });
             return;
         }
         if (!formValues.mainAddress) {
@@ -151,12 +151,12 @@ function EditDriver({ history }) {
         formData.append('id', formValues.id);
         formData.append('name', formValues.name);
         formData.append('email', formValues.email);
-        formData.append('licence', formValues.licence);
+        formData.append('license', formValues.license);
         formData.append('contactNumber', formValues.contactNumber);
         formData.append('mainAddress', formValues.mainAddress);
-        formData.append('profilePicture', formValues.file);
+        formData.append('image', formValues.file);
         formData.append('removeImage', formValues.removeImage);
-        dispatch(DriverActions.editDriver(formData, history));
+        dispatch(DriverActions.editDriver(formData, history, formValues.id));
 
 
     }, [formValues, dispatch, history, notValid, imageNotValid]);
@@ -228,10 +228,10 @@ function EditDriver({ history }) {
                                                     <Input
                                                         placeholder="License Number"
                                                         type="text"
-                                                        value={formValues.licence}
-                                                        onChange={(e) => setFormValues({ ...formValues, licence: e.target.value })}
+                                                        value={formValues.license}
+                                                        onChange={(e) => setFormValues({ ...formValues, license: e.target.value })}
                                                     />
-                                                    {notValid.error && notValid.type === 'licence' &&
+                                                    {notValid.error && notValid.type === 'license' &&
                                                         <label className=" ml-3 text-danger" >{notValid.message}</label>
                                                     }
                                                 </FormGroup>

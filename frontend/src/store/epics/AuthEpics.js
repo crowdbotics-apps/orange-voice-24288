@@ -12,7 +12,7 @@ export class AuthEpics {
     return action$.pipe(
       ofType(AuthTypes.SIGNIN_PROG),
       switchMap(({payload}) => {
-        return ajaxPost('/User/signin/', payload.body).pipe(
+        return ajaxPost('rest-auth/login', payload.body).pipe(
           pluck('response'),
           map((obj) => {
             let {
@@ -39,10 +39,14 @@ export class AuthEpics {
             }
           }),
           catchError((err) => {
+            let errText = '';
+            for (const [key, value] of Object.entries(err?.response)) {
+              errText += `${value}`;
+            }
             return of({
               type: AuthTypes.SIGNIN_FAIL,
               payload: {
-                message: err?.response ? err?.response.message : err?.message,
+                message: errText,
                 status: err?.status,
               },
             });
@@ -56,7 +60,7 @@ export class AuthEpics {
     return action$.pipe(
       ofType(AuthTypes.SIGNUP_PROG),
       switchMap(({payload}) => {
-        return ajaxPost('/User/signin/?SIGNUP', payload.body).pipe(
+        return ajaxPost('rest-auth/registration/', payload.body).pipe(
           pluck('response'),
           map((obj) => {
             let {
@@ -78,15 +82,19 @@ export class AuthEpics {
                 payload: {user},
               };
             } else {
-              let err = new Error('You donot have sufficient rights');
+              let err = new Error('You do not have sufficient rights');
               throw err;
             }
           }),
           catchError((err) => {
+            let errText = '';
+            for (const [key, value] of Object.entries(err?.response)) {
+              errText += `${value}`;
+            }
             return of({
               type: AuthTypes.SIGNIN_FAIL,
               payload: {
-                message: err?.response ? err?.response.message : err?.message,
+                message: errText,
                 status: err?.status,
               },
             });
@@ -102,7 +110,7 @@ export class AuthEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `/User/all?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[Email%2BfirstName%2BlastName%2BphoneNo%2BpostalCode]=${payload.search}&sort=-createdOn`,
+            `api/v1/profile/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&search=${payload.search}&sort=-createdOn`,
           );
         }).pipe(
           pluck('response'),

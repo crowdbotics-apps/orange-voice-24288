@@ -41,13 +41,13 @@ var dashRoutes = [
     component: Categories,
     layout: '/admin'
   },
-  {
-    path: '/locations',
-    name: 'Locations',
-    icon: 'fas fa-map-marker-alt',
-    component: Locations,
-    layout: '/admin'
-  },
+  // {
+  //   path: '/locations',
+  //   name: 'Locations',
+  //   icon: 'fas fa-map-marker-alt',
+  //   component: Locations,
+  //   layout: '/admin'
+  // },
   {
     path: '/customers',
     name: 'Customers',
@@ -55,19 +55,19 @@ var dashRoutes = [
     component: CustomersContainer,
     layout: '/admin'
   },
-  {
-    path: '/vouchers',
-    name: 'Vouchers',
-    icon: 'fas fa-tags',
-    component: VouchersContainer,
-    layout: '/admin'
-  },
-  {
-    path: '/app-faq',
-    name: 'App FAQs',
-    icon: 'fas fa-question',
-    component: AppFaq,
-    layout: '/admin'
-  }
+  // {
+  //   path: '/vouchers',
+  //   name: 'Vouchers',
+  //   icon: 'fas fa-tags',
+  //   component: VouchersContainer,
+  //   layout: '/admin'
+  // },
+  // {
+  //   path: '/app-faq',
+  //   name: 'App FAQs',
+  //   icon: 'fas fa-question',
+  //   component: AppFaq,
+  //   layout: '/admin'
+  // }
 ];
 export default dashRoutes;

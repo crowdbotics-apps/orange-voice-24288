@@ -11,7 +11,7 @@ export class OrderEpics {
     static getOrders(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_ORDERS_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                let url = `/Order/all?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[status]=${payload.status}&filters[orderNumber%2BdeliveryAddress%2BfirstName%2BlastName%2Bemail]=${payload.search}&sort=-orderDate`;
+                let url = `api/v1/order/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[status]=${payload.status}&search=${payload.search}&sort=-orderDate`;
                 if (payload.orderDate) {
                     let dateFilter = `&filters[>%3DpickupDate]=${payload.orderDate['startDate']}&filters[<%3DpickupDate]=${payload.orderDate['endDate']}`;
                     url = url.concat(dateFilter);
@@ -40,7 +40,7 @@ export class OrderEpics {
     static postOrder(action$, state$, { ajaxPost, history, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.POST_ORDER_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPost('/order', payload.body);
+                return ajaxPost('api/v1/order/', payload.body);
             }).pipe(pluck('response'), flatMap(obj => {
                 window.scrollTo(0, 0);
                 history.replace('/admin/customers');
@@ -48,7 +48,7 @@ export class OrderEpics {
                 return of(
                     {
                         type: OrderTypes.POST_ORDER_SUCC,
-                        payload: { order: obj.result }
+                        payload: { order: obj.results }
                     },
                     // NotificationActions.showSuccessNotification('Order placed successfully'),
                     // MyBasketActions.clearBasket()
@@ -76,7 +76,7 @@ export class OrderEpics {
     static getLov(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_LOV_PROG), switchMap(() => {
             return defer(() => {
-                return ajaxGet('/lov/all/');
+                return ajaxGet('api/v1/time-slots');
             }).pipe(pluck('response'), flatMap(obj => {
 
                 let config = {
@@ -113,12 +113,12 @@ export class OrderEpics {
     static getAddresses(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_ADDRESSES_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`/Address/all?filters[userId]=${payload.userId}`);
+                return ajaxGet(`api/v1/address/?filters[userId]=${payload.userId}`);
             }).pipe(pluck('response'), flatMap(obj => {
                 return of(
                     {
                         type: OrderTypes.GET_ADDRESSES_SUCC,
-                        payload: { addresses: obj.result }
+                        payload: { addresses: obj.results }
                     },
                 );
             })
@@ -165,7 +165,7 @@ export class OrderEpics {
     static getOrder(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_ORDER_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`/Order/${payload.orderId}`);
+                return ajaxGet(`api/v1/order/${payload.orderId}/`);
             }).pipe(pluck('response'), flatMap(obj => {
                 return iif(
                     () => payload?.openPdf,
@@ -288,7 +288,7 @@ export class OrderEpics {
     static checkSelectedPickupSlot(action$, state$, { ajaxPost, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.CHECK_SELECTED_PICKUP_SLOT_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPost('/Order/validatetimeslot', payload.body);
+                return ajaxPost('api/v1/validatetimeslot', payload.body);
             }).pipe(pluck('response'), flatMap((obj) => {
                 return of(
                     {
@@ -314,7 +314,7 @@ export class OrderEpics {
     static checkSelectedDropoffSlot(action$, state$, { ajaxPost, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.CHECK_SELECTED_DROPOFF_SLOT_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPost('/Order/validatetimeslot', payload.body);
+                return ajaxPost('api/v1/validatetimeslot', payload.body);
             }).pipe(pluck('response'), flatMap((obj) => {
                 return of(
                     {

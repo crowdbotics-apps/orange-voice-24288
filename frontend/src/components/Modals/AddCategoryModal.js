@@ -67,7 +67,7 @@ const AddCategoryModal = () => {
         }
         let formData = new FormData();
         formData.append('title', title);
-        formData.append('imageFile', file);
+        formData.append('image', file);
         dispatch(CategoryActions.addCategory(formData));
     }, [dispatch, title, file, imageNotValid, notValid]);
 

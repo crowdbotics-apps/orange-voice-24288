@@ -8,20 +8,28 @@ class Profile(TimestampModel):
         on_delete=models.CASCADE,
         related_name="profile",
     )
-    phone_number = models.CharField(
+    phoneNo = models.CharField(
         max_length=20, null=True, blank=True,
     )
-    postal_code = models.CharField(  max_length=10, null=True, blank=True)
-    referral_code = models.CharField(  max_length=60, null=True, blank=True)
+    postalCode = models.CharField(max_length=10, null=True, blank=True)
+    referralCode = models.CharField(max_length=160, null=True, blank=True)
+    stripeCustomerId = models.CharField(max_length=160, null=True, blank=True)
+    oneSignalPlayerId = models.CharField(max_length=160, null=True, blank=True)
 
+    def firstName(self):
+        return self.user.first_name
 
+    def lastName(self):
+        return self.user.last_name
+
+    def email(self):
+        return self.user.email
 
     @classmethod
     def search(cls, search_query=None, **kwargs):
         queryset = cls.objects.all()
         if search_query:
             queryset = queryset.filter(
-                models.Q(team__icontains=search_query) |
                 models.Q(user__last_name__icontains=search_query) |
                 models.Q(user__first_name__icontains=search_query)
             )

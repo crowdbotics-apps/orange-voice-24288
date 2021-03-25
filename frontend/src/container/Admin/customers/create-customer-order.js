@@ -257,21 +257,21 @@ export default function CreateCustomerOrder({ history }) {
             return;
         }
         let body = {
-            userId: Number(id),
+            profile: Number(id),
             orderDate: moment(new Date()).format('YYYY-MM-DD') + 'T00:00:00.000Z',
             pickupDate: moment(formValues.pickupDate).format('YYYY-MM-DD') + 'T00:00:00.000Z',
             pickupTime: formValues.pickupTime,
             dropoffDate: moment(formValues.dropoffDate).format('YYYY-MM-DD') + 'T00:00:00.000Z',
             dropoffTime: formValues.dropoffTime,
-            addressId: selectedAddress?.id,
+            address: selectedAddress?.id,
             deliveryAddress: selectedAddress?.mainAddress,
             description: formValues.driverInstruction,
             taxPercentage: Number(HSTPercentage),
             orderAmount: Number(totalAmount),
             discountAmount: Number(0),
             totalAmount: Number(grandTotal),
-            listDetail: items.map((v) => ({
-                serviceId: v.serviceId,
+            order_details: items.map((v) => ({
+                service: v.serviceId,
                 quantity: v.quantity,
                 unitPrice: v.unitPrice,
                 amount: v.unitPrice * v.quantity,

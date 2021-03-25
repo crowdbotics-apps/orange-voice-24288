@@ -21,10 +21,10 @@ export class DriverActions {
             payload: { body, history }
         };
     }
-    static editDriver(body, history) {
+    static editDriver(body, history, id) {
         return {
             type: DriverTypes.EDIT_DRIVER_PROG,
-            payload: { body, history }
+            payload: { body, history, id }
         };
     }
     static delDriver(id) {

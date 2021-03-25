@@ -10,14 +10,14 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
     const dispatch = useDispatch();
     const order = useSelector(store => store?.order?.order);
     const isProgress = useSelector(store => store?.order?.isProgressEdit);
-    const [listDetail, setListDetail] = useState([]);
+    const [order_details, setListDetail] = useState([]);
     const [totalAmount, setTotalAmount] = useState(0);
     const [totalHST, setTotalHST] = useState(0);
     const [grandTotal, setGrandTotal] = useState(0);
     const [discountAmount, setDiscountAmount] = useState(0);
     useEffect(() => {
         if (order) {
-            let array = order?.listDetail?.map((v) => {
+            let array = order?.order_details?.map((v) => {
                 let obj = v;
                 obj['id'] = undefined;
                 return (
@@ -31,20 +31,20 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
     }, [order]);
 
     const updateQty = useCallback((index, qty) => {
-        let array = [...listDetail];
+        let array = [...order_details];
         let detail = array[index];
         detail['quantity'] = Number(qty);
         array[index] = { ...detail };
         setListDetail(array);
-    }, [listDetail]);
+    }, [order_details]);
 
     const updateUnitPrice = useCallback((index, price) => {
-        let array = [...listDetail];
+        let array = [...order_details];
         let detail = array[index];
         detail['unitPrice'] = Number(price);
         array[index] = { ...detail };
         setListDetail(array);
-    }, [listDetail]);
+    }, [order_details]);
 
     const updateOrder = useCallback((e) => {
         e.preventDefault();
@@ -81,10 +81,10 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
             orderAmount: Number(totalAmount),
             discountAmount: Number(discountAmount),
             totalAmount: Number(grandTotal),
-            listDetail: listDetail,
+            order_details: order_details,
         };
         dispatch(OrderActions.editOrder(body));
-    }, [order, listDetail, dispatch, discountAmount, grandTotal, totalAmount]);
+    }, [order, order_details, dispatch, discountAmount, grandTotal, totalAmount]);
 
     const calculateTotal = useCallback((accumulator, item) => {
         let price = item.unitPrice;
@@ -99,10 +99,10 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
     }, []);
 
     const calculateAmount = useCallback(() => {
-        let amount = listDetail.reduce(calculateTotal, 0);
+        let amount = order_details.reduce(calculateTotal, 0);
         amount = Number(amount).toFixed(2);
         setTotalAmount(amount);
-    }, [listDetail, calculateTotal,]);
+    }, [order_details, calculateTotal,]);
 
     const calculateHST = useCallback((totalAmount) => {
         let hst = Number(totalAmount * (order?.taxPercentage / 100)).toFixed(2);
@@ -125,7 +125,7 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
         calculateAmount();
         calculateHST();
         calculateGrandTotal();
-    }, [listDetail, calculateAmount, discountAmount, calculateGrandTotal, calculateHST]);
+    }, [order_details, calculateAmount, discountAmount, calculateGrandTotal, calculateHST]);
     const closeBtn = <button className="close" onClick={toggle}>&times;</button>;
     return (
         <Modal isOpen={isOpen} centered={true} toggle={toggle} size={'lg'}>
@@ -218,7 +218,7 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
                                             Totals
                                     </Col>
                                     </Row>
-                                    {listDetail?.map((detail, index) => {
+                                    {order_details?.map((detail, index) => {
 
                                         return (<Row key={index} className="d-flex py-2 border-bottom border-dark">
                                             <Col md={3}>

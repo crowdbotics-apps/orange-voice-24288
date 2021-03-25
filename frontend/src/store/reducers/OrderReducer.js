@@ -37,7 +37,7 @@ export function orderReducer(state = INITIAL_STATE, action) {
         case OrderTypes.GET_ORDERS_PROG:
             return { ...state, isProgressList: true, orders: [] };
         case OrderTypes.GET_ORDERS_SUCC:
-            return { ...state, isProgressList: false, orders: action.payload.result, paging: action.payload.paging };
+            return { ...state, isProgressList: false, orders: action.payload.results, paging: action.payload };
         case OrderTypes.GET_ORDERS_FAIL:
             return { ...state, isProgressList: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 
@@ -46,7 +46,7 @@ export function orderReducer(state = INITIAL_STATE, action) {
         case OrderTypes.GET_ORDER_PROG:
             return { ...state, isProgress: true, order: undefined };
         case OrderTypes.GET_ORDER_SUCC:
-            return { ...state, isProgress: false, order: action.payload.result, };
+            return { ...state, isProgress: false, order: action.payload, };
         case OrderTypes.GET_ORDER_FAIL:
             return { ...state, isProgress: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 
