@@ -18,7 +18,11 @@ const StatusChangeConfModal = memo(({ isOpen, toggle, isProgress, newStatus, pre
     const updateStatus = useCallback(() => {
         let _selectedDriver = Number(selectedDriver);
         if (newStatus === OrderStatus.Cancelled) {
-            dispatch(OrderActions.cancelOrder(orderId));
+            let body = {
+                orderId,
+                status: newStatus,
+            };
+            dispatch(OrderActions.updateOrderStatus(body, orderId));
         }
         else {
             if (notValid.error) {
@@ -33,9 +37,9 @@ const StatusChangeConfModal = memo(({ isOpen, toggle, isProgress, newStatus, pre
             let body = {
                 orderId,
                 status: newStatus,
-                driverId: _selectedDriver > 0 ? _selectedDriver : undefined
+                driver: _selectedDriver > 0 ? _selectedDriver : undefined
             };
-            dispatch(OrderActions.updateOrderStatus(body));
+            dispatch(OrderActions.updateOrderStatus(body, orderId));
         }
     }, [orderId, newStatus, selectedDriver, dispatch, notValid]);
 

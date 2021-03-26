@@ -267,14 +267,14 @@ export default function CreateCustomerOrder({ history }) {
             deliveryAddress: selectedAddress?.mainAddress,
             description: formValues.driverInstruction,
             taxPercentage: Number(HSTPercentage),
-            orderAmount: Number(totalAmount),
+            orderAmount: Number(totalAmount).toFixed(2),
             discountAmount: Number(0),
             totalAmount: Number(grandTotal),
             order_details: items.map((v) => ({
                 service: v.serviceId,
                 quantity: v.quantity,
                 unitPrice: v.unitPrice,
-                amount: v.unitPrice * v.quantity,
+                amount: (v.unitPrice * v.quantity).toFixed(2),
             })),
         };
 
@@ -505,7 +505,7 @@ export default function CreateCustomerOrder({ history }) {
                                         <Col md={6}>
 
                                             <FormGroup>
-                                                <Label for="exampleSelect"><span className="text-danger" >* </span>Dropff Time</Label>
+                                                <Label for="exampleSelect"><span className="text-danger" >* </span>Drop Off Time</Label>
                                                 <Input type="select" name="select" value={formValues.dropoffTime}
                                                     onChange={(e) => {
                                                         setFormValues({ ...formValues, dropoffTime: e.target.value });

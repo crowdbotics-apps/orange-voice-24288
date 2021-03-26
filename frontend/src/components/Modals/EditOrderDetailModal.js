@@ -61,7 +61,8 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
             taxPercentage,
             couponId,
             couponCode,
-            couponType
+            couponType,
+            profile
 
         } = order;
         let body = {
@@ -82,8 +83,10 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
             discountAmount: Number(discountAmount),
             totalAmount: Number(grandTotal),
             order_details: order_details,
+            // address: address.id,
+            profile
         };
-        dispatch(OrderActions.editOrder(body));
+        dispatch(OrderActions.editOrder(body, id));
     }, [order, order_details, dispatch, discountAmount, grandTotal, totalAmount]);
 
     const calculateTotal = useCallback((accumulator, item) => {
@@ -222,7 +225,7 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
 
                                         return (<Row key={index} className="d-flex py-2 border-bottom border-dark">
                                             <Col md={3}>
-                                                {detail?.service?.title}
+                                                {detail?.service__title}
                                             </Col>
                                             <Col md={3}>
                                                 <Input value={detail?.quantity} min={1} type="number" onChange={(e) => updateQty(index, e.target.value)} />

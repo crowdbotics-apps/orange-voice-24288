@@ -75,10 +75,10 @@ export class OrderActions {
             payload: { body }
         };
     }
-    static editOrder(body) {
+    static editOrder(body, id) {
         return {
             type: OrderTypes.EDIT_ORDER_PROG,
-            payload: { body }
+            payload: { body, id }
         };
     }
     static delOrder(id) {
@@ -87,10 +87,10 @@ export class OrderActions {
             payload: { id }
         };
     }
-    static updateOrderStatus(body) {
+    static updateOrderStatus(body, id) {
         return {
             type: OrderTypes.UPDATE_ORDER_STATUS_PROG,
-            payload: { body }
+            payload: { body, id }
         };
     }
     static getCSVData(status) {

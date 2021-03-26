@@ -19,6 +19,9 @@ class Driver(TimestampModel):
     mainAddress = models.TextField(default='', )
     avatar = models.FileField(default=None, upload_to=media_directory, null=True, blank=True)
 
+    # class Meta:
+    #     unique_together = ['license', 'pk']
+
     @classmethod
     def search(cls, search_query=None, **kwargs):
         queryset = cls.objects.all()
