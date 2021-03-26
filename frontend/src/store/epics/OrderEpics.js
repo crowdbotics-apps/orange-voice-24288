@@ -140,7 +140,7 @@ export class OrderEpics {
     static getCSVData(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_CSV_DATA_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`/Order/all?page[number]=1&page[size]=5000&filters[status]=${payload.status}&sort=-orderDate`);
+                return ajaxGet(`'api/v1/order/'?page[number]=1&page[size]=5000&filters[status]=${payload.status}&sort=-orderDate`);
             }).pipe(pluck('response'), map(obj => {
                 return {
                     type: OrderTypes.GET_CSV_DATA_SUCC,
@@ -203,7 +203,7 @@ export class OrderEpics {
     static updateOrderStatus(action$, state$, { ajaxPut, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.UPDATE_ORDER_STATUS_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPut('/Order/status', payload.body);
+                return ajaxPut(`api/v1/order/status/${payload.id}/`, payload.body);
             }).pipe(pluck('response'), flatMap(obj => {
                 toast.success('status updated successfully');
                 return of({
@@ -259,7 +259,7 @@ export class OrderEpics {
     static editOrder(action$, state$, { ajaxPut, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.EDIT_ORDER_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPut('/Order/', payload.body);
+                return ajaxPut(`api/v1/order/${payload.id}/`, payload.body);
             }).pipe(pluck('response'), flatMap(obj => {
                 toast.success('Order updated successfully');
                 return of({
