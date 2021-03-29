@@ -31,7 +31,6 @@ import EditCategoryModal from '../../../components/Modals/EditCategoryModal';
 import DeleteModal from '../../../components/Modals/DeleteModal';
 import { useSelector, useDispatch } from 'react-redux';
 import { CategoryActions } from '../../../store/actions/CategoryActions';
-import { API_URL } from '../../../store/services/Config';
 
 
 function Categories() {
