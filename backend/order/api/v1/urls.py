@@ -11,5 +11,7 @@ urlpatterns = [
     path("", include(router.urls)),
     path("time-slots", ListTimeslotsView.as_view()),
     path("validatetimeslot", ValidateSlotView.as_view()),
-    path("order/status/<int:pk>/", OrderStatusAPIView.as_view())
+    path("order/status/<int:pk>/", OrderStatusAPIView.as_view()),
+    path("driver/<int:driver_pk>/order", OrderViewSet.as_view({'get': 'list'}))
+
 ]

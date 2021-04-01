@@ -8,6 +8,7 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_auth.registration.views import RegisterView, LoginView
+from rest_auth.views import PasswordResetView
 
 from home.api.v1.serializers import (
     SignupSerializer,
@@ -60,4 +61,8 @@ class RegisterViewToken(RegisterView):
 
 
 class LoginViewToken(LoginView):
+    authentication_classes = ()
+
+
+class ResetPasswordViewToken(PasswordResetView):
     authentication_classes = ()

@@ -14,11 +14,22 @@ Order_status = (
 )
 
 
+class OrderQueryset(models.QuerySet):
+    def search(self, search_query=None, **kwargs):
+        queryset = self.all()
+        if search_query:
+            queryset = queryset.filter(
+                # Todo: filter orders
+            )
+        return queryset
+
+
 class Order(TimestampModel):
     profile = models.ForeignKey('user_profile.Profile', related_name='orders', on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     deliveryAddress = models.TextField(blank=True)
-    status = models.CharField('Order status', choices=Order_status, default=OrderStatusEnum.OrderPlaced.value, null=True, blank=True,
+    status = models.CharField('Order status', choices=Order_status, default=OrderStatusEnum.OrderPlaced.value,
+                              null=True, blank=True,
                               max_length=25)
     orderAmount = models.DecimalField(
         max_digits=5, decimal_places=2, default=Decimal("0.0")
@@ -41,14 +52,7 @@ class Order(TimestampModel):
     address = models.ForeignKey('address.Address', related_name='orders', on_delete=models.CASCADE, blank=True)
     driver = models.ForeignKey('driver.Driver', related_name='orders', on_delete=models.CASCADE, blank=True, null=True)
 
-    @classmethod
-    def search(cls, search_query=None, **kwargs):
-        queryset = cls.objects.all()
-        if search_query:
-            queryset = queryset.filter(
-                # Todo: filter orders
-            )
-        return queryset
+    objects = OrderQueryset.as_manager()
 
 
 class OrderDetail(models.Model):

@@ -169,7 +169,7 @@ function Orders({ history }) {
     };
     const columns = [
         {
-            dataField: 'orderNumber',
+            dataField: 'id',
             text: '#'
         },
         {

@@ -41,13 +41,13 @@ var dashRoutes = [
     component: Categories,
     layout: '/admin'
   },
-  // {
-  //   path: '/locations',
-  //   name: 'Locations',
-  //   icon: 'fas fa-map-marker-alt',
-  //   component: Locations,
-  //   layout: '/admin'
-  // },
+  {
+    path: '/locations',
+    name: 'Locations',
+    icon: 'fas fa-map-marker-alt',
+    component: Locations,
+    layout: '/admin'
+  },
   {
     path: '/customers',
     name: 'Customers',

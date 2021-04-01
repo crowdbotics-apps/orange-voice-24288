@@ -20,7 +20,7 @@ export function locationReducer(state = INITIAL_STATE, action) {
         case LocationTypes.GET_LOCATIONS_PROG:
             return { ...state, isProgressList: true, locations: [] };
         case LocationTypes.GET_LOCATIONS_SUCC:
-            return { ...state, isProgressList: false, locations: action.payload.result, paging: action.payload.paging };
+            return { ...state, isProgressList: false, locations: action.payload.results, paging: action.payload };
         case LocationTypes.GET_LOCATIONS_FAIL:
             return { ...state, isProgressList: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 

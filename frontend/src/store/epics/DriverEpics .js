@@ -51,7 +51,7 @@ export class DriverEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/driver//${payload.driverId}/orders?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[name]=${payload.search}`,
+            `api/v1/driver/${payload.driverId}/order?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[name]=${payload.search}`,
           );
         }).pipe(
           pluck('response'),

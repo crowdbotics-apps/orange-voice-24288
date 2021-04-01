@@ -14,10 +14,10 @@ export class LocationActions {
             payload: { body }
         };
     }
-    static editLocation(body) {
+    static editLocation(body, id) {
         return {
             type: LocationTypes.EDIT_LOCATION_PROG,
-            payload: { body }
+            payload: { body, id}
         };
     }
     static delLocation(id) {

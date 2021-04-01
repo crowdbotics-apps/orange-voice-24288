@@ -8,6 +8,14 @@ export class AuthActions {
         };
     }
 
+
+    static resetPassword(body) {
+        return {
+            type: AuthTypes.RESET_PASSWORD_PROG,
+            payload: { body }
+        }
+    }
+
     static signup(body) {
         return {
             type: AuthTypes.SIGNUP_PROG,

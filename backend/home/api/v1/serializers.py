@@ -26,6 +26,7 @@ class SignupSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "id",
+            "username",
             "lastName",
             "firstName",
             "phone_number",
@@ -64,19 +65,15 @@ class SignupSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User(
             email=validated_data.get("email"),
-            first_name=validated_data.get("firstName"),
-            last_name=validated_data.get("lastName"),
-            username=generate_unique_username(
-                [validated_data.get("name"), validated_data.get("email"), "user"]
-            ),
+            username=validated_data.get('username'),
         )
         user.set_password(validated_data.get("password"))
         user.save()
         Profile.objects.create(
             user=user,
-            phoneNo=validated_data.get('phone_number'),
-            postalCode=validated_data.get('postal_code'),
-            referralCode=validated_data.get('referral_code'),
+            phoneNo=validated_data.get('phone_number', ''),
+            postalCode=validated_data.get('postal_code', ''),
+            referralCode=validated_data.get('referral_code', ''),
         )
         request = self._get_request()
         setup_user_email(request, user, [])

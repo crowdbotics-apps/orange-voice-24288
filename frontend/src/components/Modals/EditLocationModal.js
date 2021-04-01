@@ -57,7 +57,7 @@ const EditLocationModal = () => {
             name,
             postalCode
         };
-        dispatch(LocationActions.editLocation(body));
+        dispatch(LocationActions.editLocation(body, location.id));
 
     }, [dispatch, location, name, postalCode, notValid]);
 

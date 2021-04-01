@@ -16,8 +16,5 @@ export const registerValidationSchema = () =>
   yup.object().shape({
     [authFields.email]: emailValidation,
     [authFields.password]: passwordValidation,
-    [authFields.firstName]: stringRequired,
-    [authFields.lastName]: stringRequired,
-    [authFields.phoneNumber]: stringRequired,
-    [authFields.postalCode]: stringRequired,
+    [authFields.username]: stringRequired,
   });

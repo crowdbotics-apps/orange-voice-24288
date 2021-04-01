@@ -56,6 +56,39 @@ export class AuthEpics {
     );
   }
 
+  static resetPassword(action$, state$, {ajaxPost}) {
+    return action$.pipe(
+      ofType(AuthTypes.RESET_PASSWORD_PROG),
+      switchMap(({payload}) => {
+        return ajaxPost('rest-auth/password/reset/', payload.body).pipe(
+          pluck('response'),
+          map((obj) => {
+            let {detail} = obj;
+            toast.success(detail);
+            return {
+              type: AuthTypes.RESET_PASSWORD_SUCC,
+              payload: {message: detail},
+            };
+          }),
+          catchError((err) => {
+            let errText = '';
+            for (const [key, value] of Object.entries(err?.response)) {
+              errText += `${value?.email}`;
+            }
+
+            return of({
+              type: AuthTypes.RESET_PASSWORD_FAIL,
+              payload: {
+                message: errText,
+                status: err?.status,
+              },
+            });
+          }),
+        );
+      }),
+    );
+  }
+
   static signup(action$, state$, {ajaxPost}) {
     return action$.pipe(
       ofType(AuthTypes.SIGNUP_PROG),

@@ -29,6 +29,21 @@ export function authReducer(state = INITIAL_STATE, action) {
         errorStatus: action.payload.status,
       };
 
+    case AuthTypes.RESET_PASSWORD_PROG:
+      return {...state, isProgress: true};
+
+    case AuthTypes.RESET_PASSWORD_SUCC:
+      return {...state, isProgress: false};
+
+    case AuthTypes.RESET_PASSWORD_FAIL:
+      return {
+        ...state,
+        isProgress: false,
+        isError: true,
+        errorText: action.payload.message,
+        errorStatus: action.payload.status,
+      };
+
     case AuthTypes.SIGNUP_PROG:
       return {...state, isProgress: true};
 

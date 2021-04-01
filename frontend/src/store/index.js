@@ -58,6 +58,7 @@ export const rootEpic = combineEpics(
     AuthEpics.signup,
     AuthEpics.getNewAccessToken,
     AuthEpics.getAllUsers,
+    AuthEpics.resetPassword,
 
 
     CategoryEpics.getCategories,

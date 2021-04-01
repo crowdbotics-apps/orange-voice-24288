@@ -22,6 +22,17 @@
     margin-top: 30px;
 }
 
+.back-arrow {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    cursor: pointer;
+
+    i {
+        font-size: 40px;
+    }
+}
+
 .margin-top-40 {
     margin-top: 37%;
     text-align: center;

@@ -150,7 +150,7 @@ function Drivers({ history }) {
                             Location
                         </UncontrolledTooltip> */}
 
-                        {/* <Button
+                        <Button
                             className="btn-round btn-icon btn-icon-mini btn-neutral"
                             color="info"
                             id={`history-${rowIndex}`}
@@ -165,7 +165,7 @@ function Drivers({ history }) {
                             target={`history-${rowIndex}`}
                         >
                             View History
-                        </UncontrolledTooltip> */}
+                        </UncontrolledTooltip>
 
                         <Button
                             className="btn-round btn-icon btn-icon-mini btn-neutral"

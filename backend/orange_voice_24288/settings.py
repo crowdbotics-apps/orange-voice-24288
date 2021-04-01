@@ -55,6 +55,7 @@ LOCAL_APPS = [
     'address',
     'order',
     'service',
+    'location',
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",

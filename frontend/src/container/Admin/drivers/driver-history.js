@@ -71,7 +71,7 @@ function DriverHistory() {
     }, [search, onSearch, isSearch, dispatch, id]);
     const columns = [
         {
-            dataField: 'orderNumber',
+            dataField: 'id',
             text: '#'
         },
         {

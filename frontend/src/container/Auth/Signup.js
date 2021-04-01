@@ -41,13 +41,9 @@ function Signup({history}) {
   return (
     <Formik
       initialValues={{
-        [authFields.firstName]: '',
-        [authFields.lastName]: '',
-        [authFields.phoneNumber]: '',
+        [authFields.username]: '',
         [authFields.email]: '',
         [authFields.password]: '',
-        [authFields.postalCode]: '',
-        [authFields.referralCode]: '',
       }}
       onSubmit={(values) => {
         onLoginClick(values);
@@ -70,25 +66,12 @@ function Signup({history}) {
                     <Row className="justify-content-center">
                       <Col sm="12">
                         <TextField
-                          name="firstName"
+                          name="username"
                           type="text"
-                          placeholder="First Name"
+                          placeholder="Username"
                         />
                       </Col>
-                      <Col sm="12">
-                        <TextField
-                          name="lastName"
-                          type="text"
-                          placeholder="Last Name"
-                        />
-                      </Col>
-                      <Col sm="12">
-                        <TextField
-                          name="phoneNumber"
-                          type="text"
-                          placeholder="Phone Number"
-                        />
-                      </Col>
+
                       <Col sm="12">
                         <TextField
                           name="email"
@@ -101,20 +84,6 @@ function Signup({history}) {
                           name="password"
                           type="password"
                           placeholder="Password"
-                        />
-                      </Col>
-                      <Col sm="12">
-                        <TextField
-                          name="postalCode"
-                          type="text"
-                          placeholder="Postal Code"
-                        />
-                      </Col>
-                      <Col sm="12">
-                        <TextField
-                          name="referralCode"
-                          type="text"
-                          placeholder="Referral Code"
                         />
                       </Col>
                     </Row>

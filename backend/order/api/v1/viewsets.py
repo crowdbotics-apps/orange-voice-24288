@@ -1,4 +1,4 @@
-from rest_framework import authentication, viewsets, status
+from rest_framework import authentication, viewsets, status, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -19,9 +19,25 @@ class OrderViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, ]
     queryset = Order.objects.all()
 
+    def list(self, request, *args, **kwargs):
+
+        queryset = self.filter_queryset(self.get_queryset())
+
+        driver_pk = kwargs.get('driver_pk')
+        if driver_pk:
+            queryset = queryset.filter(driver=driver_pk)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def get_queryset(self):
         search_query = self.request.query_params.get('search', None)
-        queryset = Order.search(search_query, params=self.request.query_params)
+        queryset = Order.objects.search(search_query, params=self.request.query_params)
         return queryset
 
 

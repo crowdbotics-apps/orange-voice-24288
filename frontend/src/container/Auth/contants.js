@@ -1,5 +1,6 @@
 export const authFields = {
     firstName: 'firstName',
+    username: 'username',
     lastName: 'lastName',
     phoneNumber: 'phoneNumber',
     email: 'email',
