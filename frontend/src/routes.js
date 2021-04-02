@@ -2,10 +2,10 @@
 import Orders from './container/Admin/orders/orders';
 import Categories from './container/Admin/categories/categories';
 import CustomersContainer from './container/Admin/customers';
-import AppFaq from './container/Admin/app-faq/app-faq';
+// import AppFaq from './container/Admin/app-faq/app-faq';
 import DriverContainer from './container/Admin/drivers';
 import ServicesContainer from './container/Admin/services';
-import VouchersContainer from './container/Admin/vouchers';
+// import VouchersContainer from './container/Admin/vouchers';
 import Locations from './container/Admin/locations/locations';
 
 import { createBrowserHistory } from 'history';

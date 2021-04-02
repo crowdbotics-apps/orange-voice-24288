@@ -26,7 +26,7 @@ const EditProfileForm = ({profile}) => {
     (values) => {
       dispath(AuthActions.editProfile({...values, fullname: `${values?.firstName} ${values?.lastName}`}, profile?.id));
     },
-    [dispath, isError],
+    [dispath, profile],
   );
 
   return (

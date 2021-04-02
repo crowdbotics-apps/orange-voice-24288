@@ -42,7 +42,7 @@ export class AuthEpics {
           catchError((err) => {
             let errText = '';
             for (const [key, value] of Object.entries(err?.response || {})) {
-              errText += `${value}`;
+              errText += `${key}: ${value}`;
             }
             return of({
               type: AuthTypes.SIGNIN_FAIL,
@@ -74,7 +74,7 @@ export class AuthEpics {
           catchError((err) => {
             let errText = '';
             for (const [key, value] of Object.entries(err?.response)) {
-              errText += `${value?.email}`;
+              errText += `${key}: ${value?.email}`;
             }
 
             return of({
@@ -123,7 +123,7 @@ export class AuthEpics {
           catchError((err) => {
             let errText = '';
             for (const [key, value] of Object.entries(err?.response)) {
-              errText += `${value}`;
+              errText += `${key}: ${value}`;
             }
             return of({
               type: AuthTypes.SIGNIN_FAIL,
