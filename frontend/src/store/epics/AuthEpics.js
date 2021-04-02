@@ -23,9 +23,10 @@ export class AuthEpics {
               role,
               token,
               refreshToken,
+              profile
             } = obj;
             if (role === 'Admin') {
-              let user = {id, userName, firstName, lastName, role};
+              let user = {id, userName, firstName, lastName, role, profile};
               StorageService.setToken(token);
               StorageService.setRefreshToken(refreshToken);
               StorageService.setUser(user);
@@ -40,7 +41,7 @@ export class AuthEpics {
           }),
           catchError((err) => {
             let errText = '';
-            for (const [key, value] of Object.entries(err?.response)) {
+            for (const [key, value] of Object.entries(err?.response || {})) {
               errText += `${value}`;
             }
             return of({
@@ -203,4 +204,35 @@ export class AuthEpics {
       }),
     );
   }
+
+  static editProfile(action$, state$, {ajaxPut, history}) {
+    return action$.pipe(
+        ofType(AuthTypes.PROFILE_EDIT_PROG),
+        switchMap(({payload}) => {
+            return ajaxPut(`api/v1/profile/${payload.id}/`, payload.body).pipe(
+                pluck('response'),
+                map((obj) => {
+                    history.push('/admin/profile')
+                    return {
+                        type: AuthTypes.PROFILE_EDIT_SUCC,
+                        payload: obj
+                    }
+                }),
+                catchError((err) => {
+                    let errText = '';
+                    for (const [key, value] of Object.entries(err?.response || {})) {
+                      errText += `${key}: ${value}`;
+                    }
+                    return of({
+                        type: AuthTypes.PROFILE_EDIT_FAIL,
+                        payload: {
+                            message: errText,
+                            status: err?.status
+                        }
+                    })
+                })
+            )
+        })
+    )
+}
 }

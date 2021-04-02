@@ -140,7 +140,7 @@ export class OrderEpics {
     static getCSVData(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_CSV_DATA_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`'api/v1/order/'?page[number]=1&page[size]=5000&filters[status]=${payload.status}&sort=-orderDate`);
+                return ajaxGet(`api/v1/order/?page[number]=1&page[size]=5000&filters[status]=${payload.status}&sort=-orderDate`);
             }).pipe(pluck('response'), map(obj => {
                 return {
                     type: OrderTypes.GET_CSV_DATA_SUCC,

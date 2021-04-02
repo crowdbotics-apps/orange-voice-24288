@@ -3,10 +3,12 @@ from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
 from user_profile.models import Profile
 from core.utils import update_object
+from address.api.v1.serializers import AddressSerializer
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(required=False)
+    addresses = AddressSerializer(many=True, required=False)
 
     class Meta:
         model = Profile
@@ -14,9 +16,12 @@ class ProfileSerializer(serializers.ModelSerializer):
             "id",
             "fullname",
             "firstName",
+            "businessName",
+            "businessAddress",
             "lastName",
             "phoneNo",
             "email",
+            "addresses",
             "postalCode",
             "referralCode",
             "created_on"
@@ -49,6 +54,7 @@ class ProfileSerializer(serializers.ModelSerializer):
                 {"error": _("You can only edit your own profile.")}
             )
         fullname = validated_data.get('fullname', False)
+        print(validated_data, '*'*123)
         updated_instance = update_object(instance, validated_data)
 
         if validated_data.get('fullname'):

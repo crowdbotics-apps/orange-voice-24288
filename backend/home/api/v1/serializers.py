@@ -11,6 +11,7 @@ from rest_framework.authtoken.models import Token
 from rest_auth.serializers import PasswordResetSerializer
 from home.models import CustomText, HomePage
 from user_profile.models import Profile
+from user_profile.api.v1.serializers import ProfileSerializer
 
 User = get_user_model()
 
@@ -114,18 +115,26 @@ class TokenSerializer(serializers.ModelSerializer):
     lastName = serializers.SerializerMethodField()
     userName = serializers.SerializerMethodField()
     token = serializers.SerializerMethodField()
-    userId = serializers.SerializerMethodField()
+    id = serializers.SerializerMethodField()
     isProfileCompleted = serializers.SerializerMethodField()
+    profile = serializers.SerializerMethodField()
 
     class Meta:
         model = Token
-        fields = ("userId", 'token', 'firstName', 'lastName', 'userName', 'role', 'isProfileCompleted')
+        fields = ("id", 'token', 'firstName', 'lastName', 'userName', 'role', 'profile', 'isProfileCompleted')
 
     def get_role(self, instance):
         return 'Admin'  # TODO: get role from user groups
 
-    def get_userId(self, _):
+    def get_id(self, _):
         return self.instance.user.id
+
+    def get_profile(self, _):
+        user = self.instance.user
+        if not hasattr(user, 'profile'):
+            Profile.objects.create(user=user)
+        serializer = ProfileSerializer(self.instance.user.profile)
+        return serializer.data
 
     def get_isProfileCompleted(self, _):
         return True  # TODO: Check if profile is complete

@@ -38,15 +38,11 @@ function Services({ history }) {
     const service = useSelector(store => store?.service?.service);
     const services = useSelector(store => store?.service?.services);
     const paging = useSelector(store => store?.service);
-    console.warn(paging, 'is the paging...');
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(ServiceActions.getServices());
     }, [dispatch]);
-
-
-
 
     const onTableChange = useCallback((type, newState) => {
         if (type === 'pagination')

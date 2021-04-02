@@ -8,6 +8,13 @@ export class AuthActions {
         };
     }
 
+    static editProfile(body, id) {
+        return {
+            type: AuthTypes.PROFILE_EDIT_PROG,
+            payload: {body, id}
+        }
+    }
+
 
     static resetPassword(body) {
         return {

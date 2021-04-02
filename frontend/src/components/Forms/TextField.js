@@ -9,6 +9,7 @@ const TextField = ({label, iconName, type, ...props}) => {
 
   return (
     <React.Fragment>
+      {label && <label>{label}</label>}
       <InputGroup className={'form-control-lg input-group-focus'}>
         <Input type={showPassword ? 'text' : type} {...field} {...props} />
 
@@ -32,8 +33,9 @@ const TextField = ({label, iconName, type, ...props}) => {
         )}
       </InputGroup>
       {meta.touched && meta.error ? (
-        <label className="text-danger ml-3 fade-in">{meta.error}</label>
+        <InputGroup><label className="text-danger ml-3 fade-in">{meta.error}</label></InputGroup>
       ) : null}
+      
     </React.Fragment>
   );
 };

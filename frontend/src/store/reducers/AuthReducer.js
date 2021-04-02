@@ -20,6 +20,26 @@ export function authReducer(state = INITIAL_STATE, action) {
     case AuthTypes.SIGNIN_SUCC:
       return {...state, isProgress: false, user: action.payload.user};
 
+    case AuthTypes.PROFILE_EDIT_PROG:
+      return {...state, isProgress: true};
+
+    case AuthTypes.PROFILE_EDIT_SUCC:
+      return {
+        ...state,
+        isProgress: false,
+        user: {...state.user, profile: action.payload},
+      };
+    
+    case AuthTypes.PROFILE_EDIT_FAIL:
+      return {
+        ...state,
+        isProgress: false,
+        isError: true,
+        errorText: action.payload.message,
+        errorStatus: action.payload.status,
+
+      }
+
     case AuthTypes.SIGNIN_FAIL:
       return {
         ...state,

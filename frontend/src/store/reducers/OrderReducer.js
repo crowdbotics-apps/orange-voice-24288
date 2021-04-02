@@ -105,7 +105,7 @@ export function orderReducer(state = INITIAL_STATE, action) {
         case OrderTypes.GET_CSV_DATA_PROG:
             return { ...state, isProgressCSV: true };
         case OrderTypes.GET_CSV_DATA_SUCC:
-            return { ...state, isProgressCSV: false, csvData: action.payload.result };
+            return { ...state, isProgressCSV: false, csvData: action.payload.results };
         case OrderTypes.GET_CSV_DATA_FAIL:
             return { ...state, isProgressCSV: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 

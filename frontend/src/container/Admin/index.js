@@ -13,6 +13,7 @@ import routes from '../../routes';
 import { StorageService } from '../../store/services/StorageService';
 import { AuthActions } from '../../store/actions/AuthActions';
 import { connect } from 'react-redux';
+import Profile from './Profile'
 
 var ps;
 
@@ -67,6 +68,7 @@ class Dashboard extends React.Component {
                 />
               );
             })}
+            <Route path="/admin/profile" component={Profile} />
             <Redirect from="/admin" to="/admin/orders" />
           </Switch>
           {/* <Footer fluid /> */}

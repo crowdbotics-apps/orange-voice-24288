@@ -108,6 +108,7 @@ class Header extends React.Component {
     }
   }
   render() {
+    const {history} = this.props;
     return (
       // add or remove classes depending if we are on full-screen-maps page or not
       <Navbar
@@ -163,7 +164,7 @@ class Header extends React.Component {
                   </p>
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem tag="a" className=" cursor-pointer" >{this.props?.user?.userName}</DropdownItem>
+                  <DropdownItem tag="a" className=" cursor-pointer" onClick={() => {history.push('/admin/profile')}} >{this.props?.user?.userName}</DropdownItem>
                   <DropdownItem tag="a" className=" cursor-pointer font-weight-bold" onClick={this.onLogout} >
                     <i className="fas fa-sign-out-alt font-weight-bold"></i>
                     Logout</DropdownItem>

@@ -18,3 +18,15 @@ export const registerValidationSchema = () =>
     [authFields.password]: passwordValidation,
     [authFields.username]: stringRequired,
   });
+
+
+  export const profileValidationSchema = () =>
+  yup.object().shape({
+    [authFields.email]: emailValidation,
+    [authFields.firstName]: stringRequired,
+    [authFields.lastName]: stringRequired,
+    [authFields.businessName]: stringRequired,
+    [authFields.phoneNo]: stringRequired,
+    [authFields.postalCode]: stringRequired,
+    [authFields.businessAddress]: stringRequired,
+  });

@@ -14,6 +14,9 @@ class Profile(TimestampModel):
     postalCode = models.CharField(max_length=10, null=True, blank=True)
     referralCode = models.CharField(max_length=160, null=True, blank=True)
     stripeCustomerId = models.CharField(max_length=160, null=True, blank=True)
+    businessName = models.CharField(max_length=160, null=True, blank=True)
+    businessAddress = models.CharField(max_length=260, null=True, blank=True)
+    stripeCustomerId = models.CharField(max_length=160, null=True, blank=True)
     oneSignalPlayerId = models.CharField(max_length=160, null=True, blank=True)
 
     def firstName(self):
@@ -39,7 +42,7 @@ class Profile(TimestampModel):
         """ Display either first name and last name or username """
         if any([self.user.first_name, self.user.last_name]):
             return f'{self.user.first_name} {self.user.last_name}'
-        return f'{self.user.username}'
+        return f''
 
     def __str__(self):
         return f'{self.user}'
