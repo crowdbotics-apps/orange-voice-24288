@@ -25,6 +25,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { useSelector, useDispatch } from 'react-redux';
 import { AuthActions } from '../../../store/actions/AuthActions';
+import { getPage } from '../../../utils';
 
 
 function Customers({ history }) {
@@ -158,9 +159,9 @@ function Customers({ history }) {
                                                         onTableChange={onTableChange}
                                                         noDataIndication={() => <div className="text-center" >{'No results found'}</div>}
                                                         pagination={paginationFactory({
-                                                            page: paging.pageNumber,
+                                                            page: getPage(paging),
                                                             sizePerPage: 10,
-                                                            totalSize: paging.totalCount,
+                                                            totalSize: paging.count,
                                                             hideSizePerPage: true,
 
                                                         })}

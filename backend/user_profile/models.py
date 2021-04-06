@@ -1,5 +1,18 @@
 from django.db import models
 from core.models import TimestampModel
+from .utils import validate_search_profile_params
+
+
+class ProfileQueryset(models.QuerySet):
+    def search(self, search_query=None, **kwargs):
+        params = validate_search_profile_params(kwargs.get('params', {}))
+        queryset = self.all()
+        if search_query:
+            queryset = queryset.filter(
+                models.Q(user__last_name__icontains=search_query) |
+                models.Q(user__first_name__icontains=search_query)
+            )
+        return queryset.filter(**params)
 
 
 class Profile(TimestampModel):
@@ -18,6 +31,7 @@ class Profile(TimestampModel):
     businessAddress = models.CharField(max_length=260, null=True, blank=True)
     stripeCustomerId = models.CharField(max_length=160, null=True, blank=True)
     oneSignalPlayerId = models.CharField(max_length=160, null=True, blank=True)
+    objects = ProfileQueryset.as_manager()
 
     def firstName(self):
         return self.user.first_name
@@ -27,16 +41,6 @@ class Profile(TimestampModel):
 
     def email(self):
         return self.user.email
-
-    @classmethod
-    def search(cls, search_query=None, **kwargs):
-        queryset = cls.objects.all()
-        if search_query:
-            queryset = queryset.filter(
-                models.Q(user__last_name__icontains=search_query) |
-                models.Q(user__first_name__icontains=search_query)
-            )
-        return queryset.filter()
 
     def fullname(self):
         """ Display either first name and last name or username """

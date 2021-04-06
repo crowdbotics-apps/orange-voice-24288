@@ -242,7 +242,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication'
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 10
 }
 
 if DEBUG or not (EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):

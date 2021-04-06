@@ -144,7 +144,7 @@ export class AuthEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/profile/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&search=${payload.search}&sort=-createdOn`,
+            `api/v1/profile/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}&type=customer&limit=10`,
           );
         }).pipe(
           pluck('response'),

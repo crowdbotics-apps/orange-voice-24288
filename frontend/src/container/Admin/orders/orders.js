@@ -35,6 +35,7 @@ import { OrderActions } from '../../../store/actions/OrderActions';
 import { OrderStatusArray } from '../../../store/constants/OrderConstants';
 import moment from 'moment';
 import StatusChangeConfModal from '../../../components/Modals/StatusChangeConfModal';
+import { getPage } from '../../../utils';
 
 function Orders({ history }) {
 
@@ -109,17 +110,17 @@ function Orders({ history }) {
             endDate: ''
         };
         if (value === 'Today') {
-            orderDate['startDate'] = `${moment(new Date()).format('YYYY-MM-DD')} T00:00`;
-            orderDate['endDate'] = `${moment(new Date()).format('YYYY-MM-DD')} T23:59`;
+            orderDate['startDate'] = `${moment(new Date()).format('YYYY-MM-DD')}`;
+            orderDate['endDate'] = `${moment(new Date()).format('YYYY-MM-DD')}`;
         }
         else if (value === 'Tomorrow') {
-            orderDate['startDate'] = `${moment(new Date()).add(1, 'day').format('YYYY-MM-DD')} T00:00`;
-            orderDate['endDate'] = `${moment(new Date()).add(1, 'day').format('YYYY-MM-DD')} T23:59`;
+            orderDate['startDate'] = `${moment(new Date()).add(1, 'day').format('YYYY-MM-DD')}`;
+            orderDate['endDate'] = `${moment(new Date()).add(1, 'day').format('YYYY-MM-DD')}`;
         }
         else if (value === 'This Week') {
             const today = moment();
-            orderDate['startDate'] = `${today.startOf('week').format('YYYY-MM-DD')} T00:00`;
-            orderDate['endDate'] = `${today.endOf('week').format('YYYY-MM-DD')} T23:59`;
+            orderDate['startDate'] = `${today.startOf('week').format('YYYY-MM-DD')}`;
+            orderDate['endDate'] = `${today.endOf('week').format('YYYY-MM-DD')}`;
         }
         else {
             orderDate = null;
@@ -403,9 +404,9 @@ function Orders({ history }) {
                                                             {...props.baseProps}
                                                             onTableChange={onTableChange}
                                                             pagination={paginationFactory({
-                                                                page: paging.pageNumber,
+                                                                page: getPage(paging),
                                                                 sizePerPage: 10,
-                                                                totalSize: paging.totalCount,
+                                                                totalSize: paging.count,
                                                                 hideSizePerPage: true,
                                                             })}
                                                         />

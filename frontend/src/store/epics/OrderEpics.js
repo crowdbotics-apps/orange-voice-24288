@@ -11,9 +11,9 @@ export class OrderEpics {
     static getOrders(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_ORDERS_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                let url = `api/v1/order/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[status]=${payload.status}&search=${payload.search}&sort=-orderDate`;
+                let url = `api/v1/order/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&status=${payload.status}&search=${payload.search}&sort=-orderDate`;
                 if (payload.orderDate) {
-                    let dateFilter = `&filters[>%3DpickupDate]=${payload.orderDate['startDate']}&filters[<%3DpickupDate]=${payload.orderDate['endDate']}`;
+                    let dateFilter = `&filters[>%3DpickupDate]=${payload.orderDate['startDate']}&pickupDate=${payload.orderDate['endDate']}`;
                     url = url.concat(dateFilter);
                 }
                 return ajaxGet(url);
@@ -113,7 +113,7 @@ export class OrderEpics {
     static getAddresses(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_ADDRESSES_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`api/v1/address/?filters[userId]=${payload.userId}`);
+                return ajaxGet(`api/v1/address/?profile=${payload.userId}`);
             }).pipe(pluck('response'), flatMap(obj => {
                 return of(
                     {
@@ -140,7 +140,7 @@ export class OrderEpics {
     static getCSVData(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(OrderTypes.GET_CSV_DATA_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`api/v1/order/?page[number]=1&page[size]=5000&filters[status]=${payload.status}&sort=-orderDate`);
+                return ajaxGet(`api/v1/order/?page=1&page=5000&status=${payload.status}&sort=-orderDate`);
             }).pipe(pluck('response'), map(obj => {
                 return {
                     type: OrderTypes.GET_CSV_DATA_SUCC,

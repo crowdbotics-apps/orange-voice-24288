@@ -9,6 +9,7 @@ from address.api.v1.serializers import AddressSerializer
 class ProfileSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(required=False)
     addresses = AddressSerializer(many=True, required=False)
+    role = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = Profile
@@ -16,6 +17,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "id",
             "fullname",
             "firstName",
+            "role",
             "businessName",
             "businessAddress",
             "lastName",
@@ -29,6 +31,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_email(self, instance):
         return instance.user.email
+
+    def get_role(self, instance):
+        groups_qs = instance.user.groups.all()
+        if groups_qs.exists():
+            return groups_qs.first().name
+        return ''
 
     def _get_request(self):
         request = self.context.get("request")
@@ -54,7 +62,6 @@ class ProfileSerializer(serializers.ModelSerializer):
                 {"error": _("You can only edit your own profile.")}
             )
         fullname = validated_data.get('fullname', False)
-        print(validated_data, '*'*123)
         updated_instance = update_object(instance, validated_data)
 
         if validated_data.get('fullname'):

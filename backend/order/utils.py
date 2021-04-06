@@ -1,3 +1,14 @@
+def validate_search_order_params(params={}):
+    validated_params = {}
+
+    if params.get('pickupDate'):
+        validated_params['pickupDate__icontains'] = params.get('pickupDate')
+    if params.get('status'):
+        validated_params['status__icontains'] = params.get('status')
+
+    return validated_params
+
+
 time_slots = [
     {
         "groupName": "DropOffTimeSlot",

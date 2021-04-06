@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.http import HttpRequest
 from django.utils.translation import ugettext_lazy as _
 from allauth.account import app_settings as allauth_settings
@@ -12,6 +13,7 @@ from rest_auth.serializers import PasswordResetSerializer
 from home.models import CustomText, HomePage
 from user_profile.models import Profile
 from user_profile.api.v1.serializers import ProfileSerializer
+from users.enums import UserGroups
 
 User = get_user_model()
 
@@ -70,6 +72,12 @@ class SignupSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data.get("password"))
         user.save()
+        # add to group
+        # TODO: condition group based on user created
+        admin_group = Group.objects.get(name=UserGroups.admin.name)
+        user.groups.add(admin_group)
+
+        # add to profile
         Profile.objects.create(
             user=user,
             phoneNo=validated_data.get('phone_number', ''),

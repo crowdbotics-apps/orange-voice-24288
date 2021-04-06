@@ -3,6 +3,7 @@ from django.db import models
 
 from core.models import TimestampModel
 from .enums import OrderStatusEnum
+from .utils import validate_search_order_params
 
 Order_status = (
     (OrderStatusEnum.OrderPlaced.name, OrderStatusEnum.OrderPlaced.value),
@@ -16,7 +17,8 @@ Order_status = (
 
 class OrderQueryset(models.QuerySet):
     def search(self, search_query=None, **kwargs):
-        queryset = self.all()
+        params = validate_search_order_params(kwargs.get('params', {}))
+        queryset = self.filter(**params)
         if search_query:
             queryset = queryset.filter(
                 # Todo: filter orders
@@ -53,6 +55,9 @@ class Order(TimestampModel):
     driver = models.ForeignKey('driver.Driver', related_name='orders', on_delete=models.CASCADE, blank=True, null=True)
 
     objects = OrderQueryset.as_manager()
+
+    class Meta:
+        ordering = ('-modified_on',)
 
 
 class OrderDetail(models.Model):
