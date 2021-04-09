@@ -14,7 +14,7 @@ export class CategoryEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/category/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[title]=${payload.search}`,
+            `api/v1/category/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
           );
         }).pipe(
           pluck('response'),

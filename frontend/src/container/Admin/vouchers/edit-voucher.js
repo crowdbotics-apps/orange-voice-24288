@@ -190,7 +190,7 @@ function EditVoucher({ history }) {
             isActive: formValues.isActive,
             id: formValues.id
         };
-        dispatch(VoucherActions.editVoucher(body, history));
+        dispatch(VoucherActions.editVoucher(body, formValues.id, history));
 
     }, [formValues, dispatch, notValid, history]);
 

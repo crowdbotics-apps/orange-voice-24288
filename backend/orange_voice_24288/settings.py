@@ -56,6 +56,8 @@ LOCAL_APPS = [
     'order',
     'service',
     'location',
+    'voucher',
+    'faq',
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",

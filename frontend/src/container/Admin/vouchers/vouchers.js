@@ -26,6 +26,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { VoucherActions } from '../../../store/actions/VoucherActions';
 import DeleteModal from '../../../components/Modals/DeleteModal';
 import moment from 'moment';
+import { getPage } from '../../../utils';
 
 
 
@@ -236,7 +237,7 @@ function Vouchers({ history }) {
 
                                 :
                                 <>
-                                    <Badge color="primary">{paging.totalCount} Vouchers</Badge>
+                                    <Badge color="primary">{paging.count} Vouchers</Badge>
                                     <ToolkitProvider
                                         keyField='id'
                                         data={vouchers}
@@ -259,9 +260,9 @@ function Vouchers({ history }) {
                                                         onTableChange={onTableChange}
                                                         noDataIndication={() => <div className="text-center" >{'No results found'}</div>}
                                                         pagination={paginationFactory({
-                                                            page: paging.pageNumber,
+                                                            page: getPage(paging),
                                                             sizePerPage: 10,
-                                                            totalSize: paging.totalCount,
+                                                            totalSize: paging.count,
                                                             hideSizePerPage: true,
                                                         })}
                                                     />

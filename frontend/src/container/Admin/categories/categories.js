@@ -31,6 +31,7 @@ import EditCategoryModal from '../../../components/Modals/EditCategoryModal';
 import DeleteModal from '../../../components/Modals/DeleteModal';
 import { useSelector, useDispatch } from 'react-redux';
 import { CategoryActions } from '../../../store/actions/CategoryActions';
+import { getPage } from '../../../utils';
 
 
 function Categories() {
@@ -184,7 +185,7 @@ function Categories() {
                                     <div className='spinner-lg' ></div>
                                     :
                                     <>
-                                        <Badge color="primary">{paging.totalCount} Categories</Badge>
+                                        <Badge color="primary">{paging.count} Categories</Badge>
                                         <ToolkitProvider
                                             keyField={'id'}
                                             data={categories}
@@ -206,9 +207,9 @@ function Categories() {
                                                             onTableChange={onTableChange}
                                                             noDataIndication={() => <div className="text-center" >{'No results found'}</div>}
                                                             pagination={paginationFactory({
-                                                                page: paging.pageNumber,
+                                                                page: getPage(paging),
                                                                 sizePerPage: 10,
-                                                                totalSize: paging.totalCount,
+                                                                totalSize: paging.count,
                                                                 hideSizePerPage: true,
 
                                                             })}

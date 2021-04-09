@@ -20,7 +20,7 @@ export function faqReducer(state = INITIAL_STATE, action) {
         case FaqTypes.GET_FAQS_PROG:
             return { ...state, isProgressList: true, faqs: [] };
         case FaqTypes.GET_FAQS_SUCC:
-            return { ...state, isProgressList: false, faqs: action.payload.result, paging: action.payload.paging };
+            return { ...state, isProgressList: false, faqs: action.payload.results, paging: action.payload };
         case FaqTypes.GET_FAQS_FAIL:
             return { ...state, isProgressList: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 

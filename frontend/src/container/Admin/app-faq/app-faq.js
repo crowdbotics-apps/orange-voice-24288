@@ -29,6 +29,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FaqActions } from '../../../store/actions/FaqActions';
 import AddFaqModal from '../../../components/Modals/AddFaqModal';
 import EditFaqModal from '../../../components/Modals/EditFaqModal';
+import { getPage } from '../../../utils';
 
 function AppFaq() {
     const [search, setSearch] = useState('');
@@ -173,7 +174,7 @@ function AppFaq() {
                                 {isProgress ?
                                     <div className='spinner-lg' ></div> :
                                     <>
-                                        <Badge color="primary">{paging.totalCount}{' Faq\'s'}</Badge>
+                                        <Badge color="primary">{paging.count}{' Faq\'s'}</Badge>
                                         <ToolkitProvider
                                             keyField='id'
                                             data={faqs}
@@ -199,9 +200,9 @@ function AppFaq() {
                                                             onTableChange={onTableChange}
                                                             noDataIndication={() => <div className="text-center" >{'No results found'}</div>}
                                                             pagination={paginationFactory({
-                                                                page: paging.pageNumber,
+                                                                page: getPage(paging),
                                                                 sizePerPage: 10,
-                                                                totalSize: paging.totalCount,
+                                                                totalSize: paging.count,
                                                                 hideSizePerPage: true,
 
                                                             })}

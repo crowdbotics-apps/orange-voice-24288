@@ -30,6 +30,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import DeleteModal from '../../../components/Modals/DeleteModal';
 import { DriverActions } from '../../../store/actions/DriverActions';
 import { API_URL } from '../../../store/services/Config';
+import { getPage } from '../../../utils';
 
 
 function Drivers({ history }) {
@@ -220,7 +221,7 @@ function Drivers({ history }) {
                                 <div className='spinner-lg' ></div>
                                 :
                                 <>
-                                    <Badge color="primary">{paging.totalCount} Drivers</Badge>
+                                    <Badge color="primary">{paging.count} Drivers</Badge>
                                     <ToolkitProvider
                                         keyField={'id'}
                                         data={drivers}
@@ -242,9 +243,9 @@ function Drivers({ history }) {
                                                         onTableChange={onTableChange}
                                                         noDataIndication={() => <div className="text-center" >{'No results found'}</div>}
                                                         pagination={paginationFactory({
-                                                            page: paging.pageNumber,
+                                                            page: getPage(paging),
                                                             sizePerPage: 10,
-                                                            totalSize: paging.totalCount,
+                                                            totalSize: paging.count,
                                                             hideSizePerPage: true,
 
                                                         })}

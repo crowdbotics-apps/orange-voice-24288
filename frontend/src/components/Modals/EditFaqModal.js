@@ -7,7 +7,7 @@ import { FaqActions } from '../../store/actions/FaqActions';
 const EditFaqModal = () => {
 
     const dispatch = useDispatch();
-    const [formValues, setFormValues] = useState({ question: '', answer: '', serviceId: '', id: 0 });
+    const [formValues, setFormValues] = useState({ question: '', answer: '', service: '', id: 0 });
     const [notValid, setNotValid] = useState({ error: false, type: '', message: '' });
     const isProgress = useSelector(store => store?.faq?.isProgress);
     const services = useSelector(store => store?.service?.services);
@@ -20,8 +20,8 @@ const EditFaqModal = () => {
 
     useEffect(() => {
         if (faq) {
-            let { question, answer, serviceId, id } = faq;
-            setFormValues({ question, answer, serviceId, id });
+            let { question, answer, service, id } = faq;
+            setFormValues({ question, answer, service, id });
         }
     }, [faq]);
 
@@ -41,8 +41,8 @@ const EditFaqModal = () => {
         if (notValid.error) {
             setNotValid({ error: false, type: '', message: '' });
         }
-        // if (formValues.serviceId === '') {
-        //     setNotValid({ error: true, type: 'serviceId', message: 'Please select service' });
+        // if (formValues.service === '') {
+        //     setNotValid({ error: true, type: 'service', message: 'Please select service' });
         //     return;
         // }
         else if (!formValues.question) {
@@ -73,9 +73,9 @@ const EditFaqModal = () => {
             id: formValues.id,
             question: formValues.question,
             answer: formValues.answer,
-            serviceId: Number(formValues.serviceId)
+            service: Number(formValues.service)
         };
-        dispatch(FaqActions.editFaq(body));
+        dispatch(FaqActions.editFaq(body, formValues.id));
 
     }, [formValues, dispatch, notValid]);
     const closeBtn = <button className="close" onClick={toggle}>&times;</button>;
@@ -92,8 +92,8 @@ const EditFaqModal = () => {
                                     autoFocus
                                     type="select"
                                     name="select"
-                                    value={formValues.serviceId}
-                                    onChange={(e) => setFormValues({ ...formValues, serviceId: e.target.value })}
+                                    value={formValues.service}
+                                    onChange={(e) => setFormValues({ ...formValues, service: e.target.value })}
                                     id="exampleSelect">
                                     <option value={''} >Select Service</option>
                                     {
@@ -103,7 +103,7 @@ const EditFaqModal = () => {
                                         })
                                     }
                                 </Input>
-                                {notValid.error && notValid.type === 'serviceId' &&
+                                {notValid.error && notValid.type === 'service' &&
                                     <label className=" ml-3 text-danger" >{notValid.message}</label>
                                 }
                             </FormGroup>

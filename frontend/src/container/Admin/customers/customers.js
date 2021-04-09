@@ -137,7 +137,7 @@ function Customers({ history }) {
                                 <div className='spinner-lg' ></div>
                                 :
                                 <>
-                                    <Badge color="primary">{paging.totalCount} Customers</Badge>
+                                    <Badge color="primary">{paging.count} Customers</Badge>
                                     <ToolkitProvider
                                         keyField={'id'}
                                         data={users}

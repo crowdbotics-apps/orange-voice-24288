@@ -14,10 +14,10 @@ export class FaqActions {
             payload: { body }
         };
     }
-    static editFaq(body) {
+    static editFaq(body, id) {
         return {
             type: FaqTypes.EDIT_FAQ_PROG,
-            payload: { body }
+            payload: { body, id }
         };
     }
     static delFaq(id) {

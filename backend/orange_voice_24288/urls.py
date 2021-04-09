@@ -45,6 +45,8 @@ urlpatterns = [
         path("", include("order.api.v1.urls")),
         path("", include("service.api.v1.urls")),
         path("", include("user_profile.api.v1.urls")),
+        path("", include("voucher.api.v1.urls")),
+        path("", include("faq.api.v1.urls")),
     ])),
     re_path(r'.*', include("home.urls")),
     path("home/", include("home.urls")),

@@ -35,7 +35,7 @@ export class ServiceEpics {
     static getServicesByCategory(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(ServiceTypes.GET_SERVICES_BY_CATEGORY_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`api/v1/service/?page[number]=1&page[size]=1000&category=${payload.categoryId}`);
+                return ajaxGet(`api/v1/service/?page=1&page[size]=1000&category=${payload.categoryId}`);
             })
                 .pipe(pluck('response'), flatMap(obj => {
                     let services = obj.results;

@@ -18,7 +18,7 @@ export function voucherReducer(state = INITIAL_STATE, action) {
         case VoucherTypes.GET_VOUCHERS_PROG:
             return { ...state, isProgressList: true, vouchers: [] };
         case VoucherTypes.GET_VOUCHERS_SUCC:
-            return { ...state, isProgressList: false, vouchers: action.payload.result, paging: action.payload.paging };
+            return { ...state, isProgressList: false, vouchers: action.payload.results, paging: action.payload };
         case VoucherTypes.GET_VOUCHERS_FAIL:
             return { ...state, isProgressList: false, isError: true, errorText: action.payload.message, errorStatus: action.payload.status };
 

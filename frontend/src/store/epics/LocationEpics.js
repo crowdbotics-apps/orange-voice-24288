@@ -11,7 +11,7 @@ export class LocationEpics {
     static getLocations(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(LocationTypes.GET_LOCATIONS_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`api/v1/location/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&search=${payload.search}`);
+                return ajaxGet(`api/v1/location/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`);
             }).pipe(pluck('response'), map(obj => {
                 return {
                     type: LocationTypes.GET_LOCATIONS_SUCC,

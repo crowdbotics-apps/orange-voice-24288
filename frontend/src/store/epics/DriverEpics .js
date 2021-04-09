@@ -14,7 +14,7 @@ export class DriverEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/driver/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[name%2BcontactNumber]=${payload.search}`,
+            `api/v1/driver/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
           );
         }).pipe(
           pluck('response'),
@@ -51,7 +51,7 @@ export class DriverEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/driver/${payload.driverId}/order?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&filters[name]=${payload.search}`,
+            `api/v1/driver/${payload.driverId}/order?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
           );
         }).pipe(
           pluck('response'),
