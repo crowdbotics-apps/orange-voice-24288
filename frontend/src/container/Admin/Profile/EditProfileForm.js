@@ -65,19 +65,19 @@ const EditProfileForm = ({profile}) => {
                 placeholder="Last Name"
               />
               <TextField
-                label="Bussiness Name"
+                label="Business Name"
                 name="businessName"
                 type="text"
                 placeholder="Business Name"
               />
               <TextField
-                label="Bussiness Phone Number"
+                label="Business Phone Number"
                 name="phoneNo"
                 type="text"
                 placeholder="Business Phone Number"
               />
               <TextField
-                label="Bussiness Address"
+                label="Business Address"
                 name="businessAddress"
                 type="text"
                 placeholder="Business Address"
