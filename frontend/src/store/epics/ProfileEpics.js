@@ -9,7 +9,7 @@ export class ProfileEpics {
     return action$.pipe(
       ofType(ProfileTypes.PROFILE_EDIT_PROG),
       switchMap(({payload}) => {
-        return ajaxPut(`api/v1/profile/${payload.id}/`, payload.body).pipe(
+        return ajaxPut(`api/v1/${state$.value.auth.user.domain}/profile/${payload.id}/`, payload.body).pipe(
           pluck('response'),
           map((obj) => {
             history.push('/admin/profile');

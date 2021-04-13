@@ -13,4 +13,4 @@ class VoucherSerializer(serializers.ModelSerializer):
         return update_object(instance, validated_data)
 
     def create(self, validated_data):
-        return update_object(Voucher(), validated_data)
+        return update_object(Voucher(domain_id=self.context.get('domain')), validated_data)

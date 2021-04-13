@@ -15,8 +15,9 @@ Offer_type = (
 
 
 class VoucherQueryset(models.QuerySet):
-    def search(self, search_query=None, **kwargs):
-        queryset = self.all()
+    def search(self, lookup, **kwargs):
+        search_query = kwargs.get('params', {}).get('search')
+        queryset = self.filter(**lookup)
         if search_query:
             queryset = queryset.filter(
                 code__icontains=search_query
@@ -25,7 +26,7 @@ class VoucherQueryset(models.QuerySet):
 
 
 class Voucher(TimestampModel):
-    code = models.CharField(max_length=120)
+    code = models.CharField(max_length=120, blank=True, null=True)
     validFrom = models.DateTimeField(auto_now_add=True, )
     validTo = models.DateTimeField(auto_now_add=True, )
     couponType = models.CharField(choices=Coupon_type, default=CouponType.Promo.value,
@@ -41,6 +42,7 @@ class Voucher(TimestampModel):
     minAmount = models.IntegerField()
     isActive = models.BooleanField(default=True)
     objects = VoucherQueryset.as_manager()
+    domain = models.ForeignKey('domain.Domain', related_name='vouchers', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ('-pk',)

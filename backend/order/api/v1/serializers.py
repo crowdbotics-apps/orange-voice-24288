@@ -97,7 +97,10 @@ class OrderSerializer(serializers.ModelSerializer):
         return request
 
     def update(self, instance, validated_data):
-        validated_data.pop('order_details')
+        order_details = validated_data.pop('order_details')
+        instance.order_details.all().delete()
+        for order_detail in order_details:
+            update_object(OrderDetail(order=instance), order_detail)
         updated_instance = update_object(instance, validated_data)
         return updated_instance
 
@@ -105,7 +108,7 @@ class OrderSerializer(serializers.ModelSerializer):
         order_details = validated_data.pop('order_details')
         address = Address.objects.get(id=validated_data.pop('address'))
 
-        instance = update_object(Order(address=address), validated_data)
+        instance = update_object(Order(address=address, domain_id=self.context.get('domain')), validated_data)
 
         if order_details:
             for order_detail in order_details:

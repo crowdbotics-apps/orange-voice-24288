@@ -11,7 +11,7 @@ export class LocationEpics {
     static getLocations(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(LocationTypes.GET_LOCATIONS_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`api/v1/location/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`);
+                return ajaxGet(`api/v1/${state$.value.auth.user.domain}/location/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`);
             }).pipe(pluck('response'), map(obj => {
                 return {
                     type: LocationTypes.GET_LOCATIONS_SUCC,
@@ -35,7 +35,7 @@ export class LocationEpics {
     static addLocation(action$, state$, { ajaxPost, getRefreshToken }) {
         return action$.pipe(ofType(LocationTypes.ADD_LOCATION_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPost('api/v1/location/', payload.body);
+                return ajaxPost(`api/v1/${state$.value.auth.user.domain}/location/`, payload.body);
             }).pipe(pluck('response'), flatMap(obj => {
                 toast.success('location added successfully');
                 return of({
@@ -66,7 +66,7 @@ export class LocationEpics {
     static editLocation(action$, state$, { ajaxPut, getRefreshToken }) {
         return action$.pipe(ofType(LocationTypes.EDIT_LOCATION_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPut(`api/v1/location/${payload.id}/`, payload.body);
+                return ajaxPut(`api/v1/${state$.value.auth.user.domain}/location/${payload.id}/`, payload.body);
             }).pipe(pluck('response'), flatMap(obj => {
                 toast.success('location edited successfully');
                 return of({
@@ -97,7 +97,7 @@ export class LocationEpics {
     static delLocation(action$, state$, { ajaxDel, getRefreshToken }) {
         return action$.pipe(ofType(LocationTypes.DEL_LOCATION_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxDel(`api/v1/location/${payload.id}/`);
+                return ajaxDel(`api/v1/${state$.value.auth.user.domain}/location/${payload.id}/`);
             }).pipe(pluck('response'), flatMap(obj => {
                 toast.success('location deleted successfully');
                 return of({

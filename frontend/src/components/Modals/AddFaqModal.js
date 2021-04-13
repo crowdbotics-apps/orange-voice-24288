@@ -66,7 +66,7 @@ const AddFaqModal = () => {
         let body = {
             question: formValues.question,
             answer: formValues.answer,
-            serviceId: Number(formValues.serviceId)
+            service: Number(formValues.serviceId)
         };
         dispatch(FaqActions.addFaq(body));
 

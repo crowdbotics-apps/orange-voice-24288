@@ -11,7 +11,7 @@ export class ServiceEpics {
     static getServices(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(ServiceTypes.GET_SERVICES_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`api/v1/service/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&search=${payload.search}`);
+                return ajaxGet(`api/v1/${state$.value.auth.user.domain}/service/?page[number]=${payload?.page}&page[size]=${payload?.pageSize}&search=${payload.search}`);
             }).pipe(pluck('response'), map(obj => {
                 return {
                     type: ServiceTypes.GET_SERVICES_SUCC,
@@ -35,7 +35,7 @@ export class ServiceEpics {
     static getServicesByCategory(action$, state$, { ajaxGet, getRefreshToken }) {
         return action$.pipe(ofType(ServiceTypes.GET_SERVICES_BY_CATEGORY_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxGet(`api/v1/service/?page=1&page[size]=1000&category=${payload.categoryId}`);
+                return ajaxGet(`api/v1/${state$.value.auth.user.domain}/service/?page=1&page[size]=1000&category=${payload.categoryId}`);
             })
                 .pipe(pluck('response'), flatMap(obj => {
                     let services = obj.results;
@@ -64,7 +64,7 @@ export class ServiceEpics {
     static addService(action$, state$, { ajaxPost, getRefreshToken, history }) {
         return action$.pipe(ofType(ServiceTypes.ADD_SERVICE_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPost('api/v1/service/', payload.body, null);
+                return ajaxPost(`api/v1/${state$.value.auth.user.domain}/service/`, payload.body, null);
             }).pipe(pluck('response'), flatMap(obj => {
                 toast.success('service added successfully');
 
@@ -92,7 +92,7 @@ export class ServiceEpics {
     static editService(action$, state$, { ajaxPut, getRefreshToken, history }) {
         return action$.pipe(ofType(ServiceTypes.EDIT_SERVICE_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxPut(`api/v1/service/${payload.id}/`, payload.body, null);
+                return ajaxPut(`api/v1/${state$.value.auth.user.domain}/service/${payload.id}/`, payload.body, null);
             }).pipe(pluck('response'), flatMap(obj => {
                 toast.success('service edited successfully');
 
@@ -120,7 +120,7 @@ export class ServiceEpics {
     static delService(action$, state$, { ajaxDel, getRefreshToken }) {
         return action$.pipe(ofType(ServiceTypes.DEL_SERVICE_PROG), switchMap(({ payload }) => {
             return defer(() => {
-                return ajaxDel(`api/v1/service/${payload.id}/`);
+                return ajaxDel(`api/v1/${state$.value.auth.user.domain}/service/${payload.id}/`);
             }).pipe(pluck('response'), flatMap(obj => {
                 toast.success('service deleted successfully');
                 return of({

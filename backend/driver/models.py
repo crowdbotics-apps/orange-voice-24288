@@ -8,6 +8,18 @@ def media_directory(instance, filename):
     return os.path.join('media/media_%s' % instance.id, filename)
 
 
+class DriverQuerySet(models.QuerySet):
+    def search(self, lookup, params):
+        search_query = params.get('search')
+        queryset = self.filter(**lookup)
+
+        if search_query:
+            queryset = queryset.filter(
+                models.Q(contactNumber__icontains=search_query)
+            )
+        return queryset
+
+
 class Driver(TimestampModel):
     name = models.CharField(max_length=150)
     email = models.CharField(max_length=150, blank=True)
@@ -18,15 +30,5 @@ class Driver(TimestampModel):
     lng = models.CharField(max_length=150, default='', blank=True)
     mainAddress = models.TextField(default='', )
     avatar = models.FileField(default=None, upload_to=media_directory, null=True, blank=True)
-
-    # class Meta:
-    #     unique_together = ['license', 'pk']
-
-    @classmethod
-    def search(cls, search_query=None, **kwargs):
-        queryset = cls.objects.all()
-        if search_query:
-            queryset = queryset.filter(
-                models.Q(contactNumber__icontains=search_query)
-            )
-        return queryset
+    domain = models.ForeignKey('domain.Domain', related_name='drivers', on_delete=models.CASCADE, blank=True, null=True)
+    objects = DriverQuerySet.as_manager()

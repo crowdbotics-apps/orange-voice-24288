@@ -14,7 +14,7 @@ export class VoucherEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/voucher/?page=${payload?.page}&offset=${
+            `api/v1/${state$.value.auth.user.domain}/voucher/?page=${payload?.page}&offset=${
               (payload?.page - 1) * 10
             }&search=${payload.search}`,
           );
@@ -52,7 +52,7 @@ export class VoucherEpics {
       ofType(VoucherTypes.ADD_VOUCHER_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxPost('api/v1/voucher/', payload.body);
+          return ajaxPost(`api/v1/${state$.value.auth.user.domain}/voucher/`, payload.body);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {
@@ -94,7 +94,7 @@ export class VoucherEpics {
       ofType(VoucherTypes.EDIT_VOUCHER_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxPut(`api/v1/voucher/${payload.id}/`, payload.body);
+          return ajaxPut(`api/v1/${state$.value.auth.user.domain}/voucher/${payload.id}/`, payload.body);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {
@@ -135,7 +135,7 @@ export class VoucherEpics {
       ofType(VoucherTypes.DEL_VOUCHER_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxDel(`api/v1/voucher/${payload.id}/`);
+          return ajaxDel(`api/v1/${state$.value.auth.user.domain}/voucher/${payload.id}/`);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {

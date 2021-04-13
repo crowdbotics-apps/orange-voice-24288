@@ -4,9 +4,10 @@ from .utils import validate_search_profile_params
 
 
 class ProfileQueryset(models.QuerySet):
-    def search(self, search_query=None, **kwargs):
+    def search(self, lookup, **kwargs):
+        search_query = kwargs.get('params', {}).get('search')
         params = validate_search_profile_params(kwargs.get('params', {}))
-        queryset = self.all()
+        queryset = self.filter(**lookup)
         if search_query:
             queryset = queryset.filter(
                 models.Q(user__last_name__icontains=search_query) |
@@ -32,6 +33,7 @@ class Profile(TimestampModel):
     stripeCustomerId = models.CharField(max_length=160, null=True, blank=True)
     oneSignalPlayerId = models.CharField(max_length=160, null=True, blank=True)
     objects = ProfileQueryset.as_manager()
+    domain = models.ForeignKey('domain.Domain', related_name='profiles', on_delete=models.CASCADE, blank=True, null=True)
 
     def firstName(self):
         return self.user.first_name

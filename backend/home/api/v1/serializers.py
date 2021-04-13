@@ -14,6 +14,7 @@ from home.models import CustomText, HomePage
 from user_profile.models import Profile
 from user_profile.api.v1.serializers import ProfileSerializer
 from users.enums import UserGroups
+from domain.models import Domain
 
 User = get_user_model()
 
@@ -77,8 +78,13 @@ class SignupSerializer(serializers.ModelSerializer):
         admin_group = Group.objects.get(name=UserGroups.admin.name)
         user.groups.add(admin_group)
 
+        # add to domain
+        domain = Domain.objects.create()
+        domain.users.add(user)
+
         # add to profile
         Profile.objects.create(
+            domain=domain,
             user=user,
             phoneNo=validated_data.get('phone_number', ''),
             postalCode=validated_data.get('postal_code', ''),
@@ -126,16 +132,20 @@ class TokenSerializer(serializers.ModelSerializer):
     id = serializers.SerializerMethodField()
     isProfileCompleted = serializers.SerializerMethodField()
     profile = serializers.SerializerMethodField()
+    domain = serializers.SerializerMethodField()
 
     class Meta:
         model = Token
-        fields = ("id", 'token', 'firstName', 'lastName', 'userName', 'role', 'profile', 'isProfileCompleted')
+        fields = ("id", "domain", 'token', 'firstName', 'lastName', 'userName', 'role', 'profile', 'isProfileCompleted')
 
     def get_role(self, instance):
         return 'Admin'  # TODO: get role from user groups
 
     def get_id(self, _):
         return self.instance.user.id
+
+    def get_domain(self, _):
+        return self.instance.user.profile.domain.id
 
     def get_profile(self, _):
         user = self.instance.user

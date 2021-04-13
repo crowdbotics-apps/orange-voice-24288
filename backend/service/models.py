@@ -4,8 +4,28 @@ from core.models import TitleImageTimestamp
 
 from .utils import validate_search_params
 
+
+class CategoryQuerySet(models.QuerySet):
+    def search(self, lookup, **kwargs):
+        return self.filter(**lookup)
+
+
 class Category(TitleImageTimestamp):
-    pass
+    domain = models.ForeignKey('domain.Domain', related_name='categories', on_delete=models.CASCADE, blank=True,
+                               null=True)
+    objects = CategoryQuerySet.as_manager()
+
+
+class SeriviceQuerySet(models.QuerySet):
+    def search(self, lookup, **kwargs):
+        search_query = kwargs.get('params', {}).get('search')
+        params = validate_search_params(kwargs.get('params', {}))
+        queryset = self.filter(**lookup)
+        if search_query:
+            queryset = queryset.filter(
+                models.Q(title__icontains=search_query)
+            )
+        return queryset.filter(**params)
 
 
 class Service(TitleImageTimestamp):
@@ -18,13 +38,6 @@ class Service(TitleImageTimestamp):
     )
     minQty = models.IntegerField(default=0)
     isActive = models.BooleanField(default=True)
-
-    @classmethod
-    def search(cls, search_query=None, **kwargs):
-        params = validate_search_params(kwargs.get('params', {}))
-        queryset = cls.objects.all()
-        if search_query:
-            queryset = queryset.filter(
-                models.Q(title__icontains=search_query)
-            )
-        return queryset.filter(**params)
+    domain = models.ForeignKey('domain.Domain', related_name='services', on_delete=models.CASCADE, blank=True,
+                               null=True)
+    objects = SeriviceQuerySet.as_manager()

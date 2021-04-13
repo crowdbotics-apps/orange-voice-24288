@@ -14,7 +14,7 @@ export class CategoryEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/category/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
+            `api/v1/${state$.value.auth.user.domain}/category/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
           );
         }).pipe(
           pluck('response'),
@@ -50,7 +50,7 @@ export class CategoryEpics {
       ofType(CategoryTypes.ADD_CATEGORY_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxPost('api/v1/category/', payload.body, null);
+          return ajaxPost(`api/v1/${state$.value.auth.user.domain}/category/`, payload.body, null);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {
@@ -93,7 +93,7 @@ export class CategoryEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxPut(
-            'api/v1/category/' + payload.id + '/',
+            `api/v1/${state$.value.auth.user.domain}/category/${payload.id}/`,
             payload.body,
             null,
           );
@@ -140,7 +140,7 @@ export class CategoryEpics {
       ofType(CategoryTypes.DEL_CATEGORY_PROG),
       switchMap(({payload, id}) => {
         return defer(() => {
-          return ajaxDel(`api/v1/category/${payload.id}/`);
+          return ajaxDel(`api/v1/${state$.value.auth.user.domain}/category/${payload.id}/`);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {

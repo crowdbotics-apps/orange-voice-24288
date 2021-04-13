@@ -18,6 +18,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('search', None)
-        queryset = Profile.objects.search(search_query, params=self.request.query_params)
+        queryset = Profile.objects.search(self.kwargs, params=self.request.query_params)
         return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['domain'] = self.kwargs.get('domain')
+        return context

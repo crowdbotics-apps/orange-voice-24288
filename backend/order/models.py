@@ -16,14 +16,16 @@ Order_status = (
 
 
 class OrderQueryset(models.QuerySet):
-    def search(self, search_query=None, **kwargs):
+    def search(self, lookup, **kwargs):
+        search_query = kwargs.get('params', {}).get('search')
         params = validate_search_order_params(kwargs.get('params', {}))
-        queryset = self.filter(**params)
+        queryset = self.filter(**lookup)
         if search_query:
             queryset = queryset.filter(
-                # Todo: filter orders
+                models.Q(profile__user__first_name__icontains=search_query) |
+                models.Q(profile__user__last_name__icontains=search_query)
             )
-        return queryset
+        return queryset.filter(**params)
 
 
 class Order(TimestampModel):
@@ -55,6 +57,7 @@ class Order(TimestampModel):
     driver = models.ForeignKey('driver.Driver', related_name='orders', on_delete=models.CASCADE, blank=True, null=True)
 
     objects = OrderQueryset.as_manager()
+    domain = models.ForeignKey('domain.Domain', related_name='orders', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         ordering = ('-modified_on',)

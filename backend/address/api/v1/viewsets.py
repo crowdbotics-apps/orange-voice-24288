@@ -18,6 +18,10 @@ class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('search', None)
-        queryset = Address.search(search_query, params=self.request.query_params)
+        queryset = Address.objects.search(self.kwargs, params=self.request.query_params)
         return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['domain'] = self.kwargs.get('domain')
+        return context

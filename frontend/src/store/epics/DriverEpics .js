@@ -14,7 +14,7 @@ export class DriverEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/driver/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
+            `api/v1/${state$.value.auth.user.domain}/driver/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
           );
         }).pipe(
           pluck('response'),
@@ -51,7 +51,7 @@ export class DriverEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/driver/${payload.driverId}/order?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
+            `api/v1/${state$.value.auth.user.domain}/driver/${payload.driverId}/order?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}`,
           );
         }).pipe(
           pluck('response'),
@@ -87,7 +87,7 @@ export class DriverEpics {
       ofType(DriverTypes.ADD_DRIVER_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxPost('api/v1/driver/', payload.body, null);
+          return ajaxPost(`api/v1/${state$.value.auth.user.domain}/driver/`, payload.body, null);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {
@@ -126,7 +126,7 @@ export class DriverEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxPut(
-            'api/v1/driver/' + payload.id + '/',
+            `api/v1/${state$.value.auth.user.domain}/driver/${payload.id}/`,
             payload.body,
             null,
           );
@@ -167,7 +167,7 @@ export class DriverEpics {
       ofType(DriverTypes.DEL_DRIVER_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxDel(`api/v1/driver/${payload.id}/`);
+          return ajaxDel(`api/v1/${state$.value.auth.user.domain}/driver/${payload.id}/`);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {

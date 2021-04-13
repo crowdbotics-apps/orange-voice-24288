@@ -14,7 +14,7 @@ export class FaqEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/faq/?page=${payload?.page}&offset=${
+            `api/v1/${state$.value.auth.user.domain}/faq/?page=${payload?.page}&offset=${
               (payload?.page - 1) * 10
             }&search=${payload.search}`,
           );
@@ -52,7 +52,7 @@ export class FaqEpics {
       ofType(FaqTypes.ADD_FAQ_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxPost('api/v1/faq/', payload.body);
+          return ajaxPost(`api/v1/${state$.value.auth.user.domain}/faq/`, payload.body);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {
@@ -91,7 +91,7 @@ export class FaqEpics {
       ofType(FaqTypes.EDIT_FAQ_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxPut(`api/v1/faq/${payload.id}/`, payload.body);
+          return ajaxPut(`api/v1/${state$.value.auth.user.domain}/faq/${payload.id}/`, payload.body);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {
@@ -130,7 +130,7 @@ export class FaqEpics {
       ofType(FaqTypes.DEL_FAQ_PROG),
       switchMap(({payload}) => {
         return defer(() => {
-          return ajaxDel(`api/v1/faq/${payload.id}/`);
+          return ajaxDel(`api/v1/${state$.value.auth.user.domain}/faq/${payload.id}/`);
         }).pipe(
           pluck('response'),
           flatMap((obj) => {

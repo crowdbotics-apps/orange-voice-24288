@@ -13,4 +13,4 @@ class LocationSerializers(serializers.ModelSerializer):
         return update_object(instance, validated_data)
 
     def create(self, validated_data):
-        return update_object(Location(), validated_data)
+        return update_object(Location(domain_id=self.context.get('domain')), validated_data)

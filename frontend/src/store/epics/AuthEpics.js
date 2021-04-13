@@ -17,6 +17,7 @@ export class AuthEpics {
           map((obj) => {
             let {
               id,
+              domain,
               userName,
               firstName,
               lastName,
@@ -26,7 +27,7 @@ export class AuthEpics {
               profile
             } = obj;
             if (role === 'Admin') {
-              let user = {id, userName, firstName, lastName, role, profile};
+              let user = {id, domain, userName, firstName, lastName, role, profile};
               StorageService.setToken(token);
               StorageService.setRefreshToken(refreshToken);
               StorageService.setUser(user);
@@ -144,7 +145,7 @@ export class AuthEpics {
       switchMap(({payload}) => {
         return defer(() => {
           return ajaxGet(
-            `api/v1/profile/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}&type=customer&limit=10`,
+            `api/v1/${state$.value.auth.user.domain}/profile/?page=${payload?.page}&offset=${(payload?.page -1) * 10}&search=${payload.search}&type=customer&limit=10`,
           );
         }).pipe(
           pluck('response'),
@@ -209,7 +210,7 @@ export class AuthEpics {
     return action$.pipe(
         ofType(AuthTypes.PROFILE_EDIT_PROG),
         switchMap(({payload}) => {
-            return ajaxPut(`api/v1/profile/${payload.id}/`, payload.body).pipe(
+            return ajaxPut(`api/v1/${state$.value.auth.user.domain}/profile/${payload.id}/`, payload.body).pipe(
                 pluck('response'),
                 map((obj) => {
                     history.push('/admin/profile')

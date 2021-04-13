@@ -1,6 +1,7 @@
 
 /*eslint-disable*/
 import React from "react";
+import { connect } from 'react-redux'
 import { NavLink } from "react-router-dom";
 import { Nav } from "reactstrap";
 // javascript plugin used to create scrollbars on windows
@@ -15,6 +16,7 @@ class Sidebar extends React.Component {
     super(props);
     this.activeRoute.bind(this);
   }
+  
   // verifies if routeName is the one active (in browser input)
   activeRoute(routeName) {
     return this.props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -33,6 +35,7 @@ class Sidebar extends React.Component {
     }
   }
   render() {
+    const {profile} = this.props
     return (
       <div className="sidebar" data-color={this.props.backgroundColor}>
         <div className="logo">
@@ -50,7 +53,7 @@ class Sidebar extends React.Component {
             className="simple-text logo-normal"
            
           >
-            <span className="text-lowercase" > launder</span><span className="text-uppercase" >EZ</span>
+            <span className="text-transform-none" > {profile?.businessName || 'lauderEZ'} </span>
           </a>
         </div>
         <div className="sidebar-wrapper" ref="sidebar">
@@ -90,4 +93,14 @@ Sidebar.propTypes = {
   backgroundColor: PropTypes.string,
   pathname: PropTypes.string
 }
-export default Sidebar;
+
+const mapStateToProps = state => ({
+  profile: state.auth.user?.profile
+})
+
+const mapDispatchToProps = dispatch => ({})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Sidebar)

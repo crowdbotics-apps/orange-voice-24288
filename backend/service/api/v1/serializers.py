@@ -9,6 +9,9 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = "__all__"
 
+    def create(self, validated_data):
+        return update_object(Category(domain_id=self.context.get('domain')), validated_data)
+
 
 class ServiceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,4 +33,4 @@ class ServiceSerializer(serializers.ModelSerializer):
         return updated_instance
 
     def create(self, validated_data):
-        return update_object(Service(), validated_data)
+        return update_object(Service(domain_id=self.context.get('domain')), validated_data)

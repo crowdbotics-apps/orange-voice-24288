@@ -15,6 +15,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = (
             "id",
+            "domain",
             "fullname",
             "firstName",
             "role",
@@ -77,7 +78,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"error": _("This User has a profile!")}
             )
-        profile = Profile(user=user)
+        profile = Profile(user=user, domain_id=self.context.get('domain'))
         fullname = validated_data.get('fullname', False)
         if fullname:
             fullname = fullname.split(' ')

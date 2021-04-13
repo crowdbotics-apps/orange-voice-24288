@@ -200,7 +200,13 @@ function Orders({history}) {
 
       const csvExporter = new ExportToCsv(options);
 
-      csvExporter.generateCsv(csvData);
+      csvExporter.generateCsv(csvData.map(item => {
+        delete item.order_details
+        delete item.address
+        return {
+          ...item
+        }
+      }));
       dispatch(OrderActions.clearCSVData());
     }
   }, [csvData, dispatch]);

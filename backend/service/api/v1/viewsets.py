@@ -19,6 +19,15 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     queryset = Category.objects.all()
 
+    def get_queryset(self):
+        queryset = Category.objects.search(self.kwargs, params=self.request.query_params)
+        return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['domain'] = self.kwargs.get('domain')
+        return context
+
 
 class ServiceViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
@@ -30,6 +39,10 @@ class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('search', None)
-        queryset = Service.search(search_query, params=self.request.query_params)
+        queryset = Service.objects.search(self.kwargs, params=self.request.query_params)
         return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['domain'] = self.kwargs.get('domain')
+        return context

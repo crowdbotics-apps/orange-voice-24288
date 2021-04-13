@@ -22,7 +22,6 @@ def create_customers():
         } for i in range(100)
     ]
 
-
     for user in users:
         user = User.objects.create(**user)
         user.set_password(password)
@@ -43,3 +42,16 @@ def create_customers():
             state='SA', postalCode='M5A', phone=fake.phone_number()[:19],
             isPrimary=True
         )
+
+
+def add_customer_to_superuser_domain():
+    user = User.objects.get(email='laundrezuser@gmail.com')
+    customer_group = Group.objects.get(name=UserGroups.customer.name)
+    for customer in customer_group.user_set.all():
+        profile = customer.profile
+        profile.domain = user.profile.domain
+        profile.save()
+        for address in profile.addresses.all():
+            address.domain = user.profile.domain
+            address.save()
+

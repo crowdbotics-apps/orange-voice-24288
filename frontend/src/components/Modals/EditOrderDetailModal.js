@@ -19,7 +19,7 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
         if (order) {
             let array = order?.order_details?.map((v) => {
                 let obj = v;
-                obj['id'] = undefined;
+                // obj['id'] = undefined;
                 return (
                     obj
                 );
@@ -171,7 +171,7 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
                                     <Col md={12}>
                                         <div className="d-flex flex-column align-items-end">
                                             <span className="font-weight-bold">Order Ref:</span>
-                                            <span>{order?.orderNumber}</span>
+                                            <span>{order?.id}</span>
                                         </div>
                                     </Col>
                                 </Row>
@@ -179,7 +179,7 @@ const EditOrderDetailModal = memo(({ isOpen, toggle }) => {
                                     <Col md={12}>
                                         <div className="d-flex flex-column align-items-end">
                                             <span className="font-weight-bold">Order Date:</span>
-                                            <span>{moment(new Date(order?.orderDate)).format('DD-MM-YYYY')}</span>
+                                            <span>{moment(new Date(order?.created_on)).format('DD-MM-YYYY')}</span>
                                         </div>
                                     </Col>
                                 </Row>

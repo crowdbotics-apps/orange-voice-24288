@@ -23,7 +23,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         queryset = self.filter_queryset(self.get_queryset())
 
-        driver_pk = kwargs.get('driver_pk')
+        driver_pk = kwargs.get('driver_id')
         if driver_pk:
             queryset = queryset.filter(driver=driver_pk)
 
@@ -36,22 +36,26 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('search', None)
-        queryset = Order.objects.search(search_query, params=self.request.query_params)
+        queryset = Order.objects.search(self.kwargs, params=self.request.query_params)
         return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['domain'] = self.kwargs.get('domain')
+        return context
 
 
 class ListTimeslotsView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
-    def get(self, request, format=None):
+    def get(self, request, domain, format=None):
         return Response({'result': time_slots})
 
 
 class ValidateSlotView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
-    def post(self, request, format=None):
+    def post(self, request, domain, format=None):
         return Response({
             "result": "valid",
             "paging": None,
@@ -67,8 +71,8 @@ class OrderStatusAPIView(APIView):
     authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
     permission_classes = [IsAuthenticated, ]
 
-    def put(self, request, pk, format=None):
-        order = Order.objects.get(pk=pk)
+    def put(self, request, pk, domain, format=None):
+        order = Order.objects.get(pk=pk, domain_id=domain)
         data = {
             "status": request.data.get('status')
         }

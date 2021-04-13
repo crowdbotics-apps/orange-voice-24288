@@ -24,4 +24,4 @@ class AddressSerializer(serializers.ModelSerializer):
         return updated_instance
 
     def create(self, validated_data):
-        return update_object(Address(), validated_data)
+        return update_object(Address(domain_id=self.context.get('domain')), validated_data)

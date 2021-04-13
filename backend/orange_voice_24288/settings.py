@@ -58,6 +58,7 @@ LOCAL_APPS = [
     'location',
     'voucher',
     'faq',
+    'domain',
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",

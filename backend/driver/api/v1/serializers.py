@@ -24,4 +24,4 @@ class DriverSerializer(serializers.ModelSerializer):
         return updated_instance
 
     def create(self, validated_data):
-        return update_object(Driver(), validated_data)
+        return update_object(Driver(domain_id=self.context.get('domain')), validated_data)

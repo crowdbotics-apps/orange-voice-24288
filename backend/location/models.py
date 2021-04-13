@@ -4,8 +4,9 @@ from core.models import TimestampModel
 
 
 class LocationQueryset(models.QuerySet):
-    def search(self, search_query, **kwargs):
-        queryset = self.filter()
+    def search(self, lookup, params):
+        queryset = self.filter(**lookup)
+        search_query = params.get('search')
 
         if search_query:
             queryset = queryset.filter(
@@ -18,5 +19,6 @@ class LocationQueryset(models.QuerySet):
 class Location(TimestampModel):
     name = models.CharField(max_length=150)
     postalCode = models.CharField(max_length=160)
+    domain = models.ForeignKey('domain.Domain', related_name='locations', on_delete=models.CASCADE, blank=True, null=True)
 
     objects = LocationQueryset.as_manager()
