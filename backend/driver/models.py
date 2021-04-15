@@ -29,6 +29,6 @@ class Driver(TimestampModel):
     lat = models.CharField(max_length=150, default='', blank=True)
     lng = models.CharField(max_length=150, default='', blank=True)
     mainAddress = models.TextField(default='', )
-    avatar = models.FileField(default=None, upload_to=media_directory, null=True, blank=True)
+    file = models.FileField(default=None, upload_to=media_directory, null=True, blank=True)
     domain = models.ForeignKey('domain.Domain', related_name='drivers', on_delete=models.CASCADE, blank=True, null=True)
     objects = DriverQuerySet.as_manager()

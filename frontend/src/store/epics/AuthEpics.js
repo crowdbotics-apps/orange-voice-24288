@@ -43,7 +43,7 @@ export class AuthEpics {
           catchError((err) => {
             let errText = '';
             for (const [key, value] of Object.entries(err?.response || {})) {
-              errText += `${key}: ${value}`;
+              errText += `${key.replace('non_field_errors', '')}: ${value}`;
             }
             return of({
               type: AuthTypes.SIGNIN_FAIL,

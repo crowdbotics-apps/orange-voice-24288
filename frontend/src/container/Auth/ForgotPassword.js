@@ -130,7 +130,7 @@ function ForgotPassword({history}) {
                         {isProgress ? (
                           <div className="spinner"></div>
                         ) : (
-                          <span> Login </span>
+                          <span> Send </span>
                         )}
                       </Button>
                       {isError && (

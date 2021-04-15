@@ -44,6 +44,7 @@ function Signup({history}) {
         [authFields.username]: '',
         [authFields.email]: '',
         [authFields.password]: '',
+        [authFields.confirmPassword]: '',
       }}
       onSubmit={(values) => {
         onLoginClick(values);
@@ -86,6 +87,13 @@ function Signup({history}) {
                           placeholder="Password"
                         />
                       </Col>
+                      <Col sm="12">
+                        <TextField
+                          name="confirmPassword"
+                          type="password"
+                          placeholder="Confirm Password"
+                        />
+                      </Col>
                     </Row>
 
                     <Row className="justify-content-center">
@@ -117,6 +125,17 @@ function Signup({history}) {
                             {errorMessage}
                           </label>
                         )}
+                      </Col>
+                    </Row>
+                    <Row className="justify-content-center margin-top-0">
+                      <Col sm="12">
+                        <Button
+                          className="btn-block"
+                          size="lg"
+                          onClick={() => history.goBack()}
+                          disabled={isProgress}>
+                          <span> Cancel </span>
+                        </Button>
                       </Col>
                     </Row>
                   </Form>

@@ -172,14 +172,7 @@ function Orders({history}) {
     if (notValid.error) {
       setNotValid({error: false, type: '', message: ''});
     }
-    if (!filterStatus) {
-      setNotValid({
-        error: true,
-        type: 'orderStatus',
-        message: 'Please select status to export the csv file',
-      });
-      return;
-    }
+   
     dispatch(OrderActions.getCSVData(filterStatus));
   }, [dispatch, filterStatus, notValid]);
 
@@ -203,8 +196,12 @@ function Orders({history}) {
       csvExporter.generateCsv(csvData.map(item => {
         delete item.order_details
         delete item.address
+        delete item.created_on
+        delete item.modified_on
+        delete item.driver
         return {
-          ...item
+          ...item,
+          deliveryAddress: item.deliveryAddress.replace(',', '')
         }
       }));
       dispatch(OrderActions.clearCSVData());

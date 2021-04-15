@@ -11,6 +11,9 @@ class ProfileQueryset(models.QuerySet):
         if search_query:
             queryset = queryset.filter(
                 models.Q(user__last_name__icontains=search_query) |
+                models.Q(phoneNo__icontains=search_query) |
+                models.Q(user__email__icontains=search_query) |
+                models.Q(postalCode__icontains=search_query) |
                 models.Q(user__first_name__icontains=search_query)
             )
         return queryset.filter(**params)
