@@ -24,13 +24,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
 
         driver_pk = kwargs.get('driver_id', 0)
-        if driver_pk:
+        request_path = request._request.path
+        if driver_pk and 'driver' in request_path:
             queryset = queryset.filter(driver=driver_pk)
-
-        profile_id = kwargs.get('profile_id', -1)
-        print(kwargs)
-        if profile_id:
-            print(request.user.profile.id)
+        elif kwargs.get('profile_id'):
+            profile_id = kwargs.get('profile_id', -1)
             queryset = queryset.filter(profile_id=profile_id)
 
         page = self.paginate_queryset(queryset)
