@@ -25,6 +25,7 @@ class SignupSerializer(serializers.ModelSerializer):
     referral_code = serializers.CharField(required=False)
     firstName = serializers.CharField(required=False)
     lastName = serializers.CharField(required=False)
+    username = serializers.CharField(required=False)
 
     class Meta:
         model = User
@@ -69,13 +70,17 @@ class SignupSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User(
             email=validated_data.get("email"),
-            username=validated_data.get('username'),
+            username=validated_data.get('username', generate_unique_username(
+                [validated_data.get("name"), validated_data.get("email"), "user"]
+            )),
         )
+        user.first_name = validated_data.get('firstName')
+        user.last_name = validated_data.get('lastName')
         user.set_password(validated_data.get("password"))
         user.save()
         # add to group
         # TODO: condition group based on user created
-        admin_group = Group.objects.get(name=UserGroups.admin.name)
+        admin_group = Group.objects.get(name=validated_data.get('type', UserGroups.admin.name))
         user.groups.add(admin_group)
 
         # add to domain
@@ -133,10 +138,13 @@ class TokenSerializer(serializers.ModelSerializer):
     isProfileCompleted = serializers.SerializerMethodField()
     profile = serializers.SerializerMethodField()
     domain = serializers.SerializerMethodField()
+    site = serializers.SerializerMethodField()
 
     class Meta:
         model = Token
-        fields = ("id", "domain", 'token', 'firstName', 'lastName', 'userName', 'role', 'profile', 'isProfileCompleted')
+        fields = (
+            "id", "domain", 'site', 'token', 'firstName', 'lastName', 'userName', 'role', 'profile',
+            'isProfileCompleted')
 
     def get_role(self, instance):
         return 'Admin'  # TODO: get role from user groups
@@ -145,7 +153,17 @@ class TokenSerializer(serializers.ModelSerializer):
         return self.instance.user.id
 
     def get_domain(self, _):
-        return self.instance.user.profile.domain.id
+        try:
+            return self.instance.user.profile.domain.id
+        except AttributeError:
+            return 0
+
+    def get_site(self, _):
+        try:
+            site = self.instance.user.profile.domain.site
+            return site.domain
+        except AttributeError:
+            return ''
 
     def get_profile(self, _):
         user = self.instance.user

@@ -6,7 +6,7 @@ from .serializers import (
     OrderSerializer
 )
 from order.models import Order
-from order.utils import time_slots
+from order.utils import time_slots, lovs
 from core.utils import update_object
 
 
@@ -23,7 +23,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         queryset = self.filter_queryset(self.get_queryset())
 
-        driver_pk = kwargs.get('driver_id')
+        driver_pk = kwargs.get('driver_id', 0)
         if driver_pk:
             queryset = queryset.filter(driver=driver_pk)
 
@@ -47,15 +47,32 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 class ListTimeslotsView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated, ]
 
-    def get(self, request, domain, format=None):
+    def get(self, request, domain=None, format=None):
         return Response({'result': time_slots})
+
+    def post(self, request, domain=None, format=None):
+        return Response({'result': time_slots})
+
+
+class ListLovView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, domain=None, format=None):
+        return Response({'results': lovs, "paging": None,
+                         "filter": None,
+                         "orderBy": None,
+                         "includes": None,
+                         "hasErrors": False,
+                         "error": None})
 
 
 class ValidateSlotView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
-    def post(self, request, domain, format=None):
+    def post(self, request, domain=None, format=None):
         return Response({
             "result": "valid",
             "paging": None,
