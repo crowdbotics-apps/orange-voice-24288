@@ -13,10 +13,13 @@ class CategoryQuerySet(models.QuerySet):
 class Category(TitleImageTimestamp):
     domain = models.ForeignKey('domain.Domain', related_name='categories', on_delete=models.CASCADE, blank=True,
                                null=True)
+    startingFrom = models.DecimalField(
+        max_digits=5, decimal_places=2, default=Decimal("0.0")
+    )
     objects = CategoryQuerySet.as_manager()
 
 
-class SeriviceQuerySet(models.QuerySet):
+class ServiceQuerySet(models.QuerySet):
     def search(self, lookup, **kwargs):
         search_query = kwargs.get('params', {}).get('search')
         params = validate_search_params(kwargs.get('params', {}))
@@ -40,4 +43,4 @@ class Service(TitleImageTimestamp):
     isActive = models.BooleanField(default=True)
     domain = models.ForeignKey('domain.Domain', related_name='services', on_delete=models.CASCADE, blank=True,
                                null=True)
-    objects = SeriviceQuerySet.as_manager()
+    objects = ServiceQuerySet.as_manager()

@@ -59,6 +59,8 @@ LOCAL_APPS = [
     'voucher',
     'faq',
     'domain',
+    'device',
+    'payment',
 ]
 THIRD_PARTY_APPS = [
     "rest_framework",
@@ -90,6 +92,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
 ]
 
 ROOT_URLCONF = "orange_voice_24288.urls"
@@ -170,7 +173,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # allauth / users
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
@@ -209,6 +212,8 @@ AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME", "")
 AWS_STORAGE_REGION = env.str("AWS_STORAGE_REGION", "")
 AWS_S3_SIGNATURE_VERSION = 's3v4'
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_FILE_OVERWRITE = True
 
 USE_S3 = (
         AWS_ACCESS_KEY_ID
@@ -224,7 +229,7 @@ if USE_S3:
     AWS_MEDIA_LOCATION = env.str("AWS_MEDIA_LOCATION", "media")
     AWS_AUTO_CREATE_BUCKET = env.bool("AWS_AUTO_CREATE_BUCKET", True)
     DEFAULT_FILE_STORAGE = env.str(
-        "DEFAULT_FILE_STORAGE", "home.storage_backends.MediaStorage"
+        "DEFAULT_FILE_STORAGE", "storages.backends.s3boto3.S3Boto3Storage"
     )
     MEDIA_URL = "/mediafiles/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")

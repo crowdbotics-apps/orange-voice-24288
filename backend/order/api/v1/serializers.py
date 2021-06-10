@@ -3,21 +3,8 @@ from django.http import HttpRequest
 from core.utils import update_object
 from order.models import Order, OrderDetail
 from address.models import Address
-
-
-class OrderDetailsSerializer(serializers.ModelSerializer):
-    order = serializers.SerializerMethodField(required=False)
-    service__title = serializers.SerializerMethodField()
-
-    class Meta:
-        model = OrderDetail
-        fields = "__all__"
-
-    def get_service__title(self, instance):
-        return instance.service.title
-
-    def get_order(self, instance):
-        return instance.order.id
+from service.models import Service
+from order.enums import OrderStatusEnum
 
 
 class ReadWriteSerializerMethodField(serializers.SerializerMethodField):
@@ -30,6 +17,33 @@ class ReadWriteSerializerMethodField(serializers.SerializerMethodField):
         return {self.field_name: data}
 
 
+class OrderDetailsSerializer(serializers.ModelSerializer):
+    order = serializers.SerializerMethodField(required=False)
+    service__title = serializers.SerializerMethodField()
+    service = ReadWriteSerializerMethodField(required=False)
+    orderNumber = serializers.SerializerMethodField(required=False)
+
+    class Meta:
+        model = OrderDetail
+        fields = "__all__"
+
+    def get_orderNumber(self, instance):
+        return instance.order.id
+
+    def get_service(self, instance):
+        return {
+            'image': instance.service.image.url if instance.service.image else '',
+            'category': instance.service.category.title,
+            'title': instance.service.title
+        }
+
+    def get_service__title(self, instance):
+        return instance.service.title
+
+    def get_order(self, instance):
+        return instance.order.id
+
+
 class OrderSerializer(serializers.ModelSerializer):
     order_details = OrderDetailsSerializer(many=True)  # serializers.SerializerMethodField(required=False)
     address = ReadWriteSerializerMethodField(required=False)
@@ -37,10 +51,35 @@ class OrderSerializer(serializers.ModelSerializer):
     lastName = serializers.SerializerMethodField()
     phoneNo = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
+    orderNumber = serializers.SerializerMethodField(required=False)
+    jobType = serializers.SerializerMethodField(required=False)
+    taskDate = serializers.SerializerMethodField(required=False)
+    orderId = serializers.SerializerMethodField(required=False)
+    driverId = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = Order
         fields = "__all__"
+
+    def get_orderId(self, instance):
+        return instance.id
+
+    def get_driverId(self, instance):
+        if instance.driver:
+            return instance.driver.id
+
+    def get_orderNumber(self, instance):
+        return instance.id
+
+    def get_jobType(self, instance):
+        return instance.status
+
+    def get_taskDate(self, instance):
+        if instance.status == OrderStatusEnum.PickUp.name:
+            return instance.pickupDate
+        if instance.status == OrderStatusEnum.DropOff.name:
+            return instance.dropoffDate
+        return instance.modified_on
 
     def get_firstName(self, instance):
         return instance.profile.firstName()
@@ -99,12 +138,19 @@ class OrderSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         order_details = validated_data.pop('order_details')
         instance.order_details.all().delete()
+        address = Address.objects.get(id=validated_data.pop('address'))
+        validated_data['address'] = address
         for order_detail in order_details:
+            service = Service.objects.get(id=order_detail.pop('service'))
+            order_detail['service'] = service
             update_object(OrderDetail(order=instance), order_detail)
         updated_instance = update_object(instance, validated_data)
         return updated_instance
 
     def create(self, validated_data):
+        import pprint
+        pp = pprint.PrettyPrinter()
+        pp.pprint(validated_data)
         order_details = validated_data.pop('order_details')
         address = Address.objects.get(id=validated_data.pop('address'))
 
@@ -112,6 +158,8 @@ class OrderSerializer(serializers.ModelSerializer):
 
         if order_details:
             for order_detail in order_details:
+                service = Service.objects.get(id=order_detail.pop('service'))
+                order_detail['service'] = service
                 order_details_instance = OrderDetail(order=instance)
                 update_object(order_details_instance, order_detail)
         return instance

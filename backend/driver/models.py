@@ -31,4 +31,5 @@ class Driver(TimestampModel):
     mainAddress = models.TextField(default='', )
     image = models.FileField(default=None, upload_to=media_directory, null=True, blank=True)
     domain = models.ForeignKey('domain.Domain', related_name='drivers', on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey('users.User', related_name='drivers', on_delete=models.CASCADE, blank=True, null=True)
     objects = DriverQuerySet.as_manager()

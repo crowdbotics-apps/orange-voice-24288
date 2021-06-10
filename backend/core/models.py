@@ -33,6 +33,9 @@ class TitleImageTimestamp(TitleImageModel, TimestampModel):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return f'{self.title}'
+
 
 Address_type = (
     (AddressTypeEnum.residential.name, AddressTypeEnum.residential.value),

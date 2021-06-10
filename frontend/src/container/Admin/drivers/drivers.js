@@ -29,7 +29,6 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { useSelector, useDispatch } from 'react-redux';
 import DeleteModal from '../../../components/Modals/DeleteModal';
 import { DriverActions } from '../../../store/actions/DriverActions';
-import { API_URL } from '../../../store/services/Config';
 import { getPage } from '../../../utils';
 
 
@@ -91,7 +90,7 @@ function Drivers({ history }) {
             formatter: (cell) => {
                 if (cell)
                     return (
-                        <img src={`${API_URL}/${cell}`} alt={'img'} className="img-thumbnail table-image" />
+                        <img src={`${cell}`} alt={'img'} className="img-thumbnail table-image" />
                     );
                 else {
                     return (
