@@ -13,6 +13,7 @@ urlpatterns = [
     path("validatetimeslot", ValidateSlotView.as_view()),
     path("lov/all", ListLovView.as_view()),
     path("order/status/<int:pk>/", OrderStatusAPIView.as_view()),
-    path("driver/<int:driver_id>/order", OrderViewSet.as_view({'get': 'list'}))
+    path("driver/<int:driver_id>/order", OrderViewSet.as_view({'get': 'list'})),
+    path("customer/<int:profile_id>/order", OrderViewSet.as_view({'get': 'list'})),
 
 ]

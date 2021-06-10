@@ -12,7 +12,7 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_auth.registration.views import RegisterView, LoginView
-from rest_auth.views import PasswordResetView
+from rest_auth.views import PasswordResetView, LogoutView
 from users.models import User
 from allauth.account.models import EmailAddress
 
@@ -71,6 +71,10 @@ class LoginViewToken(LoginView):
 
 
 class ResetPasswordViewToken(PasswordResetView):
+    authentication_classes = ()
+
+
+class LogOutView(LogoutView):
     authentication_classes = ()
 
 
