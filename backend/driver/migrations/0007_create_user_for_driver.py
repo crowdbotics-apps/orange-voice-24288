@@ -1,8 +1,6 @@
 from django.db import migrations
 from allauth.utils import email_address_exists, generate_unique_username
 from django.contrib.auth.models import Group
-from django.contrib.auth import get_user_model
-from allauth.account.adapter import get_adapter
 
 from driver.models import Driver
 from users.enums import UserGroups
@@ -40,11 +38,10 @@ def create_user_drivers(_, __):
         driver.save()
 
 
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ('driver', '0006_driver_user'),
+        ('users', '0005_create_driver_group')
     ]
 
     operations = [
