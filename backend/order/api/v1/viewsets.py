@@ -27,6 +27,12 @@ class OrderViewSet(viewsets.ModelViewSet):
         if driver_pk:
             queryset = queryset.filter(driver=driver_pk)
 
+        profile_id = kwargs.get('profile_id', -1)
+        print(kwargs)
+        if profile_id:
+            print(request.user.profile.id)
+            queryset = queryset.filter(profile_id=profile_id)
+
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "473058359900",
+    "firebase_url": "https://warm-utility-271513.firebaseio.com",
+    "project_id": "warm-utility-271513",
+    "storage_bucket": "warm-utility-271513.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473058359900:android:2441f58782503bca1c0499",
+        "android_client_info": {
+          "package_name": "ca.laundrez.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473058359900-bgrahflmlipf5h97di80gkma18ahhdv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0-SvPcQfGEAvGpRcgFreJTKVYVg1_2Ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473058359900-bgrahflmlipf5h97di80gkma18ahhdv4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "473058359900-hghp3u2jg8269jnebeh2d40buh90mdl3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "LaundrEZ-Driver"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473058359900:android:417b51c8eae3f4ce1c0499",
+        "android_client_info": {
+          "package_name": "ca.laundrez.app.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473058359900-bgrahflmlipf5h97di80gkma18ahhdv4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0-SvPcQfGEAvGpRcgFreJTKVYVg1_2Ic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473058359900-bgrahflmlipf5h97di80gkma18ahhdv4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "473058359900-hghp3u2jg8269jnebeh2d40buh90mdl3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "LaundrEZ-Driver"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

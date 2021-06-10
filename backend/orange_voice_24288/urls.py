@@ -21,7 +21,7 @@ from allauth.account.views import confirm_email
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from home.api.v1.viewsets import LoginViewToken, ResetPasswordViewToken, RegisterViewToken
+from home.api.v1.viewsets import LoginViewToken, ResetPasswordViewToken, RegisterViewToken, LogOutView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -34,6 +34,7 @@ urlpatterns = [
     path('rest-auth/login', csrf_exempt(LoginViewToken.as_view()), name='rest_login'),
     path('rest-auth/registration/', csrf_exempt(RegisterViewToken.as_view()), name='rest_register'),
     path('rest-auth/password/reset/', csrf_exempt(ResetPasswordViewToken.as_view()), name='rest_reset_password'),
+    path('rest-auth/logout/', csrf_exempt(LogOutView.as_view())),
     path("rest-auth/", include("rest_auth.urls")),
     # Override email confirm to use allauth's HTML view instead of rest_auth's API view
     path("rest-auth/registration/account-confirm-email/<str:key>/", confirm_email),
