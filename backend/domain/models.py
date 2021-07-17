@@ -13,4 +13,7 @@ class Domain(TimestampModel):
     site = models.OneToOneField(Site, related_name="domains", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f'{self.pk} - {self.name}'
+        name = ''
+        if self.users.all().exists():
+            name = self.users.first().email
+        return f'{self.pk} - {name}'
