@@ -2,15 +2,26 @@ from rest_framework import serializers
 from django.http import HttpRequest
 from core.utils import update_object
 from service.models import Service, Category
+from django.db import models
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    startingFrom = serializers.SerializerMethodField()
+
     class Meta:
         model = Category
         fields = "__all__"
 
-    def create(self, validated_data):
-        return update_object(Category(domain_id=self.context.get('domain')), validated_data)
+    def get_startingFrom(self, instance):
+        try:
+            res = instance.services.filter().annotate(models.Min('price')).order_by('price')[0]
+            return res.price__min
+        except:
+            return 0
+
+
+def create(self, validated_data):
+    return update_object(Category(domain_id=self.context.get('domain')), validated_data)
 
 
 class ServiceSerializer(serializers.ModelSerializer):

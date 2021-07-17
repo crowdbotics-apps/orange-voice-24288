@@ -18,6 +18,11 @@ class Category(TitleImageTimestamp):
     )
     objects = CategoryQuerySet.as_manager()
 
+    def get_startingFrom(self):
+        print(self.startingFrom)
+        return self.services.filter().values_list('name').annotate(models.Min('price')).order_by('price')[0]
+        # (u'First1', 10)
+
 
 class ServiceQuerySet(models.QuerySet):
     def search(self, lookup, **kwargs):

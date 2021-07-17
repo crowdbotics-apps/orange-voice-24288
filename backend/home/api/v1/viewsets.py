@@ -86,16 +86,18 @@ class SignupAPIView(APIView):
 
     def post(self, request):
         token = request.data.get('token')
-        resp = requests.get(
-            self.profile_url,
-            params={"access_token": token, "fields": "email", "alt": "json"},
-        )
-        if resp.json().get('error'):
-            raise serializers.ValidationError(
-                resp.json().get('error', {}).get('message'))
-        email = resp.json().get('email')
+        email = request.data.get('email', None)
+        if token:
+            resp = requests.get(
+                self.profile_url,
+                params={"access_token": token, "fields": "email", "alt": "json"},
+            )
+            if resp.json().get('error'):
+                raise serializers.ValidationError(
+                    resp.json().get('error', {}).get('message'))
+            email = resp.json().get('email')
         if email and email_address_exists(email):
-            user = User.objects.get(email=email)
+            user = User.objects.filter(email=email).first()
         else:
             user = User(
                 email=email,
