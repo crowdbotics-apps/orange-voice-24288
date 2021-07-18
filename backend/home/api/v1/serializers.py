@@ -67,6 +67,14 @@ class SignupSerializer(serializers.ModelSerializer):
                 )
         return email
 
+    def validate_username(self, username):
+        user_qs = User.objects.filter(username=username)
+        if user_qs.exists():
+            raise serializers.ValidationError(
+                _("A user is already registered with this username.")
+            )
+        return username
+
     def create(self, validated_data):
         user = User(
             email=validated_data.get("email"),
@@ -74,8 +82,8 @@ class SignupSerializer(serializers.ModelSerializer):
                 [validated_data.get("name"), validated_data.get("email"), "user"]
             )),
         )
-        user.first_name = validated_data.get('firstName')
-        user.last_name = validated_data.get('lastName')
+        user.first_name = validated_data.get('firstName', '')
+        user.last_name = validated_data.get('lastName', '')
         user.set_password(validated_data.get("password"))
         user.save()
         # add to group

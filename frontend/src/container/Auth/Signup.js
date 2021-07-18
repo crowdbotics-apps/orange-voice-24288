@@ -51,7 +51,7 @@ function Signup({history}) {
       }}
       validationSchema={registerValidationSchema}
       validateOnChange={true}>
-      {({formBag, submitForm}) => (
+      {({formBag, submitForm, errors}) => (
         <div className="full-height">
           <Row className="full-height">
             <Col sm="12" md="9" lg="6" className="zero-padding">
@@ -112,7 +112,10 @@ function Signup({history}) {
                           className="btn-block"
                           color="primary"
                           size="lg"
-                          onClick={submitForm}
+                          onClick={() => {
+                            console.warn(errors);
+                            submitForm();
+                          }}
                           disabled={isProgress}>
                           {isProgress ? (
                             <div className="spinner"></div>

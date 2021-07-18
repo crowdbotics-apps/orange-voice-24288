@@ -5,6 +5,7 @@ export const authFields = {
     phoneNumber: 'phoneNumber',
     email: 'email',
     password: 'password',
+    confirmPassword: 'confirmPassword',
     postalCode: 'postalCode',
     referralCode: 'referralCode',
     businessName: 'businessName',
