@@ -100,15 +100,17 @@ export class AuthEpics {
           map((obj) => {
             let {
               id,
+              domain,
               userName,
               firstName,
               lastName,
               role,
               token,
               refreshToken,
+              profile
             } = obj;
             if (role === 'Admin') {
-              let user = {id, userName, firstName, lastName, role};
+              let user = {id, userName, firstName, lastName, role, domain, profile};
               StorageService.setToken(token);
               StorageService.setRefreshToken(refreshToken);
               StorageService.setUser(user);
