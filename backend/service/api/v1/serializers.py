@@ -19,9 +19,8 @@ class CategorySerializer(serializers.ModelSerializer):
         except:
             return 0
 
-
-def create(self, validated_data):
-    return update_object(Category(domain_id=self.context.get('domain')), validated_data)
+    def create(self, validated_data):
+        return update_object(Category(domain_id=self.context.get('domain')), validated_data)
 
 
 class ServiceSerializer(serializers.ModelSerializer):
