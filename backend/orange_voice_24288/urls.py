@@ -50,10 +50,11 @@ urlpatterns = [
         path("<int:domain>/", include("faq.api.v1.urls")),
         path("", include("device.api.v1.urls")),
         path("", include("payment.api.v1.urls")),
+        path("<int:domain>/", include("payment.api.v1.urls")),
         path("", include("user_profile.api.v1.urls")),
         path("", include("order.api.v1.urls")),
     ])),
-    re_path(r'.*', include("home.urls")),
+    # re_path(r'.*', include("home.urls")),
     path("home/", include("home.urls")),
 ]
 

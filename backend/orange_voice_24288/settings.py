@@ -203,8 +203,12 @@ AUTH_USER_MODEL = "users.User"
 EMAIL_HOST = env.str("EMAIL_HOST", "smtp.sendgrid.net")
 EMAIL_HOST_USER = env.str("SENDGRID_USERNAME", "")
 EMAIL_HOST_PASSWORD = env.str("SENDGRID_PASSWORD", "")
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_PORT = env.str("EMAIL_PORT", 587)
+EMAIL_USE_TLS = env.str("EMAIL_USE_TLS", True)
+SERVER_EMAIL = 'root@my-domain.com'
+DEFAULT_FROM_EMAIL = 'tayub.bilwani@laundrez.ca'
+SENDGRID_API_KEY = env.str("SENDGRID_PASSWORD", "")
+SENDGRID_ECHO_TO_STDOUT = True
 
 # AWS S3 config
 AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID", "")
@@ -261,3 +265,7 @@ if DEBUG or not (EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):
         )
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     CORS_ORIGIN_ALLOW_ALL = True
+else:
+    EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+
+STRIPE_API_KEY = env.str('STRIPE_API_KEY', "")
