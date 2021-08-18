@@ -33,7 +33,6 @@ class Profile(TimestampModel):
     stripeCustomerId = models.CharField(max_length=160, null=True, blank=True)
     businessName = models.CharField(max_length=160, null=True, blank=True)
     businessAddress = models.CharField(max_length=260, null=True, blank=True)
-    stripeCustomerId = models.CharField(max_length=160, null=True, blank=True)
     oneSignalPlayerId = models.CharField(max_length=160, null=True, blank=True)
     objects = ProfileQueryset.as_manager()
     domain = models.ForeignKey('domain.Domain', related_name='profiles', on_delete=models.CASCADE, blank=True, null=True)

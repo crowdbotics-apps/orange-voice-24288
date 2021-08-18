@@ -10,6 +10,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(required=False)
     addresses = AddressSerializer(many=True, required=False)
     role = serializers.SerializerMethodField(required=False)
+    stripe_connected = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
@@ -27,8 +28,12 @@ class ProfileSerializer(serializers.ModelSerializer):
             "addresses",
             "postalCode",
             "referralCode",
+            "stripe_connected",
             "created_on"
         )
+
+    def get_stripe_connected(self, instance):
+        return True if instance.stripeCustomerId else False
 
     def get_email(self, instance):
         return instance.user.email

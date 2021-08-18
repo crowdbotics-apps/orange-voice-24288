@@ -5,6 +5,7 @@ import {AuthTypes} from '../action-types/AuthTypes';
 import {StorageService} from '../services/StorageService';
 import {toast} from 'react-toastify';
 import {AuthActions} from '../actions/AuthActions';
+import {StripeTypes} from '../action-types/StripeTypes'
 const ErrorMsg = 'something went wrong !';
 
 export class AuthEpics {
@@ -237,5 +238,37 @@ export class AuthEpics {
             )
         })
     )
+}
+
+static stripeConnect(action$, state$, {ajaxPost, history}) {
+  return action$.pipe(
+      ofType(StripeTypes.STRIPE_CONNECT),
+      switchMap(({payload}) => {
+          return ajaxPost(`api/v1/${state$.value.auth.user.domain}/stripe-connect`, payload.body).pipe(
+              pluck('response'),
+              map((obj) => {
+                  if (payload.callBack) payload.callBack(obj)
+                  return {                      
+                      type: StripeTypes.STRIPE_CONNECT_SUCCESS,
+                      payload: obj
+                  }
+              }),
+              catchError((err) => {
+                  let errText = '';
+                  console.warn(err);
+                  for (const [key, value] of Object.entries(err?.response || {})) {
+                    errText += `${key}: ${value}`;
+                  }
+                  return of({                     
+                      type: StripeTypes.STRIPE_CONNECT_FAIL,
+                      payload: {
+                          message: errText,
+                          status: err?.status
+                      }
+                  })
+              })
+          )
+      })
+  )
 }
 }

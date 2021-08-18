@@ -1,10 +1,12 @@
 import stripe
 from django.conf import settings
+from django.db import transaction
 from rest_framework import authentication, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from payment.models import Card, OrderPayment
+from user_profile.api.v1.serializers import ProfileSerializer
 from .serializers import (
     CardSerializer
 )
@@ -19,28 +21,26 @@ class StripeConnectAPIView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [IsAuthenticated, ]
 
-    def get(self, request, domain=None, format=None):
+    def post(self, request, domain=None, format=None):
         if hasattr(request.user, 'profile'):
             profile = request.user.profile
         else:
             profile = Profile.objects.create(user=request.user)
-        if not profile.stripeCustomerId:
-            account = stripe.Account.create(
-                type='standard',
+        try:
+            authorization_code = request.data.get('code')
+            response = stripe.OAuth.token(
+                code=authorization_code,
+                grant_type='authorization_code'
             )
-            profile.stripeCustomerId = account.id
-            print('Stripe account created :: ', account.id)
-        else:
-            print('Stripe account exists :: ', profile.stripeCustomerId)
-            account = stripe.Account.retrieve(profile.stripeCustomerId)
-        account_links = stripe.AccountLink.create(
-            account=account.id,
-            refresh_url='http://192.168.0.100:8000/',
-            return_url='http://192.168.0.100:8000/',
-            type='account_onboarding',
-        )
-        print('Stripe account links ::: ', account_links)
-        return Response({'result': {"account_link": account_links}})
+            with transaction.atomic():
+                profile.stripeCustomerId = response.get(
+                    'stripe_user_id'
+                )
+                profile.save()
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': "Error connecting to stripe."})
 
 
 class MakePaymentView(APIView):

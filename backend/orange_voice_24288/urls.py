@@ -54,7 +54,7 @@ urlpatterns = [
         path("", include("user_profile.api.v1.urls")),
         path("", include("order.api.v1.urls")),
     ])),
-    # re_path(r'.*', include("home.urls")),
+    re_path(r'.*', include("home.urls")),
     path("home/", include("home.urls")),
 ]
 

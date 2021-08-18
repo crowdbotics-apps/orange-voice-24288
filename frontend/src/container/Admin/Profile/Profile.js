@@ -13,6 +13,7 @@ import {
 } from 'reactstrap';
 
 import {useSelector} from 'react-redux';
+import { stripeClientId, stripeConnectOAuthURL, stripeConnectRedirectURL } from '../../../store/services/Config';
 
 const Profile = () => {
   const history = useHistory();
@@ -68,6 +69,15 @@ const Profile = () => {
                       <small>Postal Code</small>
                     </td>
                     <td>{profile?.postalCode}</td>
+                  </tr>
+                  <tr>
+                    <td className="td-name">
+                      <small>Connect your Stripe account to Laundrez to receive instant payouts on all orders.</small>
+                    </td>
+                    <td>
+                      {profile?.stripe_connected && <div>Connected</div>}
+                      {!profile?.stripe_connected && (<a href={`${stripeConnectOAuthURL}${stripeClientId}&scope=read_write&redirect_uri=${stripeConnectRedirectURL}`}>Connect with Stripe</a>)}
+                    </td>
                   </tr>
                 </tbody>
               </Table>

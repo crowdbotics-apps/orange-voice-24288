@@ -1,4 +1,5 @@
 import {AuthTypes} from '../action-types/AuthTypes';
+import {StripeTypes} from '../action-types/StripeTypes'
 
 let INITIAL_STATE = {
   isProgress: false,
@@ -10,6 +11,7 @@ let INITIAL_STATE = {
   user: {},
   users: [],
   paging: {},
+  stripeConnecting: false
 };
 
 export function authReducer(state = INITIAL_STATE, action) {
@@ -34,6 +36,26 @@ export function authReducer(state = INITIAL_STATE, action) {
       return {
         ...state,
         isProgress: false,
+        isError: true,
+        errorText: action.payload.message,
+        errorStatus: action.payload.status,
+
+      }
+
+    case StripeTypes.STRIPE_CONNECT:
+      return {...state, stripeConnecting: true};
+
+    case StripeTypes.STRIPE_CONNECT_SUCCESS:
+      return {
+        ...state,
+        stripeConnecting: false,
+        user: {...state.user, profile: action.payload},
+      };
+    
+    case StripeTypes.STRIPE_CONNECT_FAIL:
+      return {
+        ...state,
+        stripeConnecting: false,
         isError: true,
         errorText: action.payload.message,
         errorStatus: action.payload.status,

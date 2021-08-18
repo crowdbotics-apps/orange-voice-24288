@@ -68,6 +68,7 @@ var dashRoutes = [
     icon: 'fas fa-question',
     component: AppFaq,
     layout: '/admin'
-  }
+  },
+  
 ];
 export default dashRoutes;

@@ -13,6 +13,7 @@
     "moment": "^2.24.0",
     "node-sass": "4.13.0",
     "perfect-scrollbar": "1.4.0",
+    "query-string": "^7.0.1",
     "react": "16.8.6",
     "react-bootstrap": "^1.5.2",
     "react-bootstrap-table-next": "^3.3.5",
@@ -67,5 +68,4 @@
     "eslint-plugin-react": "^7.19.0",
     "husky": "^4.2.3"
   }
-  
 }

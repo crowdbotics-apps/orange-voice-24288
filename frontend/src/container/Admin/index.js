@@ -14,6 +14,7 @@ import { StorageService } from '../../store/services/StorageService';
 import { AuthActions } from '../../store/actions/AuthActions';
 import { connect } from 'react-redux';
 import Profile from './Profile'
+import StripeContainer from './Stripe';
 
 var ps;
 
@@ -69,6 +70,7 @@ class Dashboard extends React.Component {
               );
             })}
             <Route path="/admin/profile" component={Profile} />
+            <Route path="/admin/stripe-connect" component={StripeContainer} />
             <Redirect from="/admin" to="/admin/orders" />
           </Switch>
           {/* <Footer fluid /> */}
