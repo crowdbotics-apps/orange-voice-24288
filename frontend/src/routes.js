@@ -9,6 +9,7 @@ import VouchersContainer from './container/Admin/vouchers';
 import Locations from './container/Admin/locations/locations';
 
 import { createBrowserHistory } from 'history';
+import SettingsContainer from './container/Admin/settings';
 const hist = createBrowserHistory();
 export { hist };
 
@@ -69,6 +70,14 @@ var dashRoutes = [
     component: AppFaq,
     layout: '/admin'
   },
+  {
+    path: "/settings",
+    name: "Settings",
+    state: "openPages",
+    icon: "now-ui-icons ui-1_settings-gear-63",
+    component: SettingsContainer,
+    layout: '/admin' 
+    }
   
 ];
 export default dashRoutes;

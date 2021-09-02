@@ -13,6 +13,8 @@ import {
   orderReducer,
   driverReducer,
   profileReducer,
+  timeSlotReducer,
+  domainReducer
 } from './reducers';
 
 import {HttpService} from './services/HttpService';
@@ -28,6 +30,8 @@ import {
   VoucherEpics,
   OrderEpics,
   DriverEpics,
+  TimeSlotEpics,
+  DomainEpics
 } from './epics';
 import {RefreshTokenService} from './services/RefreshTokenService';
 import {hist} from '../routes';
@@ -44,6 +48,8 @@ const appReducer = combineReducers({
   order: orderReducer,
   driver: driverReducer,
   profile: profileReducer,
+  timeSlots: timeSlotReducer,
+  domain: domainReducer
 });
 const rootReducer = (state, action) => {
   if (action.type === AuthTypes.SIGNOUT_USER) {
@@ -83,6 +89,12 @@ export const rootEpic = combineEpics(
   LocationEpics.addLocation,
   LocationEpics.editLocation,
   LocationEpics.delLocation,
+
+  TimeSlotEpics.getTimeSlots,
+  TimeSlotEpics.editTimeSlots,
+
+  DomainEpics.getDomain,
+  DomainEpics.editDomain,
 
   ServiceEpics.getServices,
   ServiceEpics.getServicesByCategory,

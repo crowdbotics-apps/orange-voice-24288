@@ -7,17 +7,17 @@ export const emailValidation = yup
   .required('Email field is required.');
 
 const stringRequired = yup.string().required('Field is required');
-
-const passwordValidation = yup.string()
-.required('No password provided.') 
-.min(8, 'Password is too short - should be 8 chars minimum.')
-
+const numberRequired = yup.number().required('Field required');
+const passwordValidation = yup
+  .string()
+  .required('No password provided.')
+  .min(8, 'Password is too short - should be 8 chars minimum.');
 
 export const passwordConfirmationValidation = yup
   .string()
   .oneOf(
     [yup.ref(authFields.password)],
-    'Password and confirm password should match.'
+    'Password and confirm password should match.',
   )
   .required('Confirm password is required.');
 export const registerValidationSchema = () =>
@@ -28,8 +28,14 @@ export const registerValidationSchema = () =>
     [authFields.username]: stringRequired,
   });
 
+export const domainValidationSchema = () =>
+  yup.object().shape({
+    contactEmail: emailValidation,
+    tax: numberRequired,
+    dropOffThreshold: numberRequired,
+  });
 
-  export const profileValidationSchema = () =>
+export const profileValidationSchema = () =>
   yup.object().shape({
     [authFields.email]: emailValidation,
     [authFields.firstName]: stringRequired,

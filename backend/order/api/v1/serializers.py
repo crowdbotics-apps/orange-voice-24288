@@ -1,10 +1,19 @@
 from rest_framework import serializers
 from django.http import HttpRequest
 from core.utils import update_object
-from order.models import Order, OrderDetail
+from order.models import Order, OrderDetail, TimeSlot
 from address.models import Address
 from service.models import Service
 from order.enums import OrderStatusEnum
+
+
+class TimeSlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot
+        fields = "__all__"
+
+    def create(self, validated_data):
+        return update_object(TimeSlot(domain_id=self.context.get('domain')), validated_data)
 
 
 class ReadWriteSerializerMethodField(serializers.SerializerMethodField):
@@ -148,9 +157,6 @@ class OrderSerializer(serializers.ModelSerializer):
         return updated_instance
 
     def create(self, validated_data):
-        import pprint
-        pp = pprint.PrettyPrinter()
-        pp.pprint(validated_data)
         order_details = validated_data.pop('order_details')
         address = Address.objects.get(id=validated_data.pop('address'))
 

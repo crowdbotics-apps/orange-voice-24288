@@ -7,6 +7,8 @@ import {LocationEpics} from './LocationEpics';
 import {OrderEpics} from './OrderEpics';
 import {DriverEpics} from './DriverEpics ';
 import {ProfileEpics} from './ProfileEpics';
+import {TimeSlotEpics} from './TimeSlotEpics';
+import {DomainEpics} from './domainEpics';
 export {
   CategoryEpics,
   LocationEpics,
@@ -17,4 +19,6 @@ export {
   OrderEpics,
   DriverEpics,
   ProfileEpics,
+  TimeSlotEpics,
+  DomainEpics,
 };

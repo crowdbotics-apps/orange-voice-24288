@@ -15,6 +15,19 @@ Order_status = (
 )
 
 
+class TimeSlotQueryset(models.QuerySet):
+    def search(self, lookup, **kwargs):
+        return self.filter(**lookup)
+
+
+class TimeSlot(TimestampModel):
+    domain = models.ForeignKey('domain.Domain', related_name='timeslots', on_delete=models.CASCADE, blank=True,
+                               null=True)
+    start = models.TimeField()
+    end = models.TimeField()
+    objects = TimeSlotQueryset.as_manager()
+
+
 class OrderQueryset(models.QuerySet):
     def search(self, lookup, **kwargs):
         search_query = kwargs.get('params', {}).get('search')

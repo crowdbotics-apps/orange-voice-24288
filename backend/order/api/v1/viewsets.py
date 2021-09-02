@@ -1,13 +1,35 @@
-from rest_framework import authentication, viewsets, status, generics
+from django.db import transaction
+from rest_framework import authentication, viewsets, status, serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import (
-    OrderSerializer
+    OrderSerializer, TimeSlotSerializer
 )
-from order.models import Order
+
+from domain.models import Domain
+from order.models import Order, TimeSlot
 from order.utils import time_slots, lovs
 from core.utils import update_object
+
+
+class TimeSlotViewSet(viewsets.ModelViewSet):
+    serializer_class = TimeSlotSerializer
+    authentication_classes = (
+        authentication.TokenAuthentication,
+        authentication.SessionAuthentication
+    )
+    permission_classes = [IsAuthenticated, ]
+    queryset = TimeSlot.objects.all()
+
+    def get_queryset(self):
+        queryset = TimeSlot.objects.search(self.kwargs, params=self.request.query_params)
+        return queryset
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['domain'] = self.kwargs.get('domain')
+        return context
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -60,12 +82,73 @@ class ListTimeslotsView(APIView):
         return Response({'result': time_slots})
 
 
+class BulkTimeSlotAPIView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [IsAuthenticated, ]
+
+    @transaction.atomic()
+    def post(self, request, domain=None, format=None):
+        if not Domain.objects.filter(id=domain, users__in=[request.user.id]).exists():
+            raise serializers.ValidationError(
+                "You do not have permissions to edit this Timeslot."
+            )
+
+        TimeSlot.objects.filter(domain_id=domain).delete()
+        for slot in request.data.get('timeslots'):
+            TimeSlot.objects.update_or_create(
+                domain_id=domain,
+                start=slot.get('start'),
+                end=slot.get('end')
+            )
+
+        return Response({'result': [{'id': i.id, 'start': i.start, 'end': i.end} for i in
+                                    TimeSlot.objects.filter(domain_id=domain)]})
+
+
 class ListLovView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request, domain=None, format=None):
-        return Response({'results': lovs, "paging": None,
+        time_slots_qs = TimeSlot.objects.filter(domain_id=domain)
+        time_slots = []
+        for slot in time_slots_qs:
+            time_slots.append({
+                "groupName": "TimeSlot",
+                "key": "Slot11",
+                "value": f"{slot.start.strftime('%I:%M %p', )} - {slot.end.strftime('%I:%M %p', )}",
+            })
+
+        domain_qs = Domain.objects.filter(id=domain)
+        if domain_qs.exists():
+            domain_brand = domain_qs.first()
+            time_slots.append({
+                "groupName": "System",
+                "key": "ContactEmail",
+                "value": domain_brand.contactEmail,
+            })
+            time_slots.append({
+                "groupName": "System",
+                "key": "DropOfThreshold",
+                "value": domain_brand.dropOffThreshold,
+            }, )
+            time_slots.append({
+                "groupName": "System",
+                "key": "HSTPercentage",
+                "value": domain_brand.tax,
+            })
+            time_slots.append({
+                "groupName": "MaxOrderPerSlot",
+                "key": "DropOff",
+                "value": "2",
+            })
+            time_slots.append({
+                "groupName": "MaxOrderPerSlot",
+                "key": "PickUp",
+                "value": "2",
+            })
+
+        return Response({'results': time_slots, "paging": None,
                          "filter": None,
                          "orderBy": None,
                          "includes": None,

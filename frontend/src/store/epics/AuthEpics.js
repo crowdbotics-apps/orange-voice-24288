@@ -255,7 +255,6 @@ static stripeConnect(action$, state$, {ajaxPost, history}) {
               }),
               catchError((err) => {
                   let errText = '';
-                  console.warn(err);
                   for (const [key, value] of Object.entries(err?.response || {})) {
                     errText += `${key}: ${value}`;
                   }

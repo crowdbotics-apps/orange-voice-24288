@@ -49,6 +49,7 @@ urlpatterns = [
         path("<int:domain>/", include("voucher.api.v1.urls")),
         path("<int:domain>/", include("faq.api.v1.urls")),
         path("", include("device.api.v1.urls")),
+        path("", include("domain.api.v1.urls")),
         path("", include("payment.api.v1.urls")),
         path("<int:domain>/", include("payment.api.v1.urls")),
         path("", include("user_profile.api.v1.urls")),
