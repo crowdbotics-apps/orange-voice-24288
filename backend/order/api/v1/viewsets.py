@@ -134,6 +134,11 @@ class ListLovView(APIView):
             }, )
             time_slots.append({
                 "groupName": "System",
+                "key": "DeliveryFee",
+                "value": domain_brand.deliveryFee,
+            }, )
+            time_slots.append({
+                "groupName": "System",
                 "key": "HSTPercentage",
                 "value": domain_brand.tax,
             })

@@ -30,6 +30,7 @@ const Domain = ({location}) => {
           tax: domain?.tax || '',
           dropOffThreshold: domain?.dropOffThreshold || '',
           contactEmail: domain?.contactEmail || '',
+          deliveryFee: domain?.deliveryFee || ''
         }}
         validationSchema={domainValidationSchema}
         validateOnChange={true}>
@@ -37,6 +38,14 @@ const Domain = ({location}) => {
           <Form>
             <Row>
               <Col xs={12} md={12}>
+                <TextField
+                  label="Contact email address"
+                  name={'contactEmail'}
+                  type="email"
+                  placeholder="Email"
+                  value={formBag.values.contactEmail}
+                  required
+                />
                 <TextField
                   label="Tax"
                   name="tax"
@@ -53,13 +62,12 @@ const Domain = ({location}) => {
                   value={formBag.values.dropOffThreshold}
                   required
                 />
-
                 <TextField
-                  label="Contact email address"
-                  name={'contactEmail'}
-                  type="email"
-                  placeholder="Email"
-                  value={formBag.values.contactEmail}
+                  label="Delivery Fee"
+                  name="deliveryFee"
+                  type="number"
+                  placeholder="Delivery Fee"
+                  value={formBag.values.deliveryFee}
                   required
                 />
               </Col>

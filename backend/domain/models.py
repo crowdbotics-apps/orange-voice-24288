@@ -1,4 +1,5 @@
 import jsonfield
+from decimal import Decimal
 from django.contrib.sites.models import Site
 from django.db import models
 from core.models import TimestampModel
@@ -13,6 +14,9 @@ class Domain(TimestampModel):
     site = models.OneToOneField(Site, related_name="domains", on_delete=models.CASCADE, null=True)
     tax = models.CharField(max_length=5, default=13)
     dropOffThreshold = models.IntegerField(default=48)
+    deliveryFee = models.DecimalField(
+        max_digits=5, decimal_places=2, default=Decimal("0.0")
+    )
     contactEmail = models.CharField(max_length=50, default='info@laundrez.ca')
 
     def __str__(self):
