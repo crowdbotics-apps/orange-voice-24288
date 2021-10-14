@@ -20,3 +20,4 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(create_superuser, reverse_code=migrations.RunPython.noop)
+    ]
