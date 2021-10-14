@@ -3,9 +3,7 @@ from users.models import User
 
 
 def create_superuser(_, __):
-    users_qs = User.objects.filter(
-        email='laundrezuser@gmail.com'
-    )
+    users_qs = User.objects.filter(        username='laundrezuser@gmail.com'    )
     if users_qs.exists():
         user = users_qs.first()
         user.username = 'laundrezuser@gmail.com'
@@ -22,4 +20,4 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(create_superuser, reverse_code=migrations.RunPython.noop)
-    ]
+   
