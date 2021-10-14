@@ -126,7 +126,7 @@ export class AuthEpics {
           }),
           catchError((err) => {
             let errText = '';
-            for (const [key, value] of Object.entries(err?.response)) {
+            for (const [key, value] of Object.entries(err?.response||{})) {
               errText += `${key}: ${value}`;
             }
             return of({

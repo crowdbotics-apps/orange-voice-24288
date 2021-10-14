@@ -269,5 +269,6 @@ else:
     EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    'http://192.168.0.11:3000',
 ]
 STRIPE_API_KEY = env.str('STRIPE_API_KEY', "")
