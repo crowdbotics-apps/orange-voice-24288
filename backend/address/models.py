@@ -27,3 +27,6 @@ class Address(AddressModel, TimestampModel):
 
     class Meta:
         ordering = ("pk",)
+
+    def __str__(self):
+        return f'{self.mainAddress}'

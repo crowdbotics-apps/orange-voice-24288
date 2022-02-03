@@ -8,7 +8,13 @@ from .serializers import (
     DomainSeriazer
 )
 
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
+
+
+class GetDomainViewSet(viewsets.ModelViewSet):
+    serializer_class = DomainSeriazer
+    queryset = Domain.objects.all()
+    http_method_names = ['get']
 
 
 class DomainViewSet(viewsets.ModelViewSet):

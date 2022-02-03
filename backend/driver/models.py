@@ -33,3 +33,6 @@ class Driver(TimestampModel):
     domain = models.ForeignKey('domain.Domain', related_name='drivers', on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey('users.User', related_name='drivers', on_delete=models.CASCADE, blank=True, null=True)
     objects = DriverQuerySet.as_manager()
+
+    def __str__(self):
+        return f'{self.name}'

@@ -14,7 +14,7 @@ export class DomainEpics {
         return defer(() => {
           return ajaxPut(
             `api/v1/domain/${state$.value.auth.user.domain}/`,
-            payload.body,
+            payload.body, null
           );
         }).pipe(
           pluck('response'),

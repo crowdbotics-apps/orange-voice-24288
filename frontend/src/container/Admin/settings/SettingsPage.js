@@ -52,6 +52,9 @@ const SettingsPage = ({location}) => {
                 <TabPane tabId="ht1">
                   <Domain />
                 </TabPane>
+                <TabPane tabId="ht3">
+                  <Domain />
+                </TabPane>
                 <TabPane tabId="ht2">
                   <TimeSlot />
                 </TabPane>

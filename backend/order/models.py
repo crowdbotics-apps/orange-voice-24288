@@ -42,7 +42,7 @@ class OrderQueryset(models.QuerySet):
 
 
 class Order(TimestampModel):
-    profile = models.ForeignKey('user_profile.Profile', related_name='orders', on_delete=models.CASCADE)
+    profile = models.ForeignKey('user_profile.Profile', verbose_name="Customer", related_name='orders', on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     deliveryAddress = models.TextField(blank=True)
     status = models.CharField('Order status', choices=Order_status, default=OrderStatusEnum.OrderPlaced.value,

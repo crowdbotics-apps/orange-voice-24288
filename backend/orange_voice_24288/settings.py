@@ -79,6 +79,7 @@ THIRD_PARTY_APPS = [
     "fcm_django",
     # end fcm_django push notifications
     'corsheaders',
+    "colorfield",
 ]
 INSTALLED_APPS += LOCAL_APPS + THIRD_PARTY_APPS
 
