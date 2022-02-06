@@ -1,8 +1,8 @@
-import React, {useEffect, useCallback, useState} from 'react';
+import React, {useEffect, useCallback, useState, useRef} from 'react';
 import 'react-datetime/css/react-datetime.css';
 import {Formik, Form} from 'formik';
 // reactstrap components
-import {Row, Col, Button, Input} from 'reactstrap';
+import {Row, Col, Button} from 'reactstrap';
 import {useDispatch, useSelector} from 'react-redux';
 import {DomainActions} from '../../../store/actions/DomainActions';
 import TextField from '../../../components/Forms/TextField';
@@ -18,6 +18,7 @@ const Domain = ({location}) => {
   const isProgress = useSelector((store) => store?.domain?.isProgress);
   const domain = useSelector((store) => store?.domain?.domain);
   const [logo, setLogo] = useState(domain?.logo);
+  const fileInput = useRef();
 
   useEffect(() => {
     dispatch(DomainActions.getDomain()); // eslint-disable-next-line
@@ -55,8 +56,8 @@ const Domain = ({location}) => {
       } else {
         setImageNotValid({error: false, message: ''});
       }
-    },// eslint-disable-next-line
-    [imageNotValid],// eslint-disable-next-line
+    }, // eslint-disable-next-line
+    [imageNotValid], // eslint-disable-next-line
   );
 
   if (isProgress && Object.keys(domain).length === 0) {
@@ -88,6 +89,106 @@ const Domain = ({location}) => {
         {(formBag) => (
           <Form>
             <Row>
+              <Col xs={12} md={6}>
+                <Row>
+                  <Col md={3}>
+                    <div style={{width: 63, height: 63}}>
+                      <img src={logo} alt="logo" />
+                    </div>
+                  </Col>
+                  <Col md={9}>
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        if (fileInput.current) {
+                          fileInput.current.click();
+                        }
+                      }}>
+                      Upload Logo
+                    </Button>
+                    <input
+                      style={{display: 'none'}}
+                      type="file"
+                      placeholder="Image"
+                      accept="image/x-png,image/jpg,image/jpeg,image/svg+xml"
+                      onChange={onImageSelect}
+                      ref={fileInput}
+                    />
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <ColorPickerField
+                      label="Primary Dark"
+                      onChange={(value) =>
+                        formBag.setFieldValue('darkOrange', value)
+                      }
+                      color={formBag.values.darkOrange}
+                    />
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <ColorPickerField
+                      label="Primary Light"
+                      onChange={(value) =>
+                        formBag.setFieldValue('lightOrange', value)
+                      }
+                      color={formBag.values.lightOrange}
+                    />
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <ColorPickerField
+                      label="Background "
+                      onChange={(value) =>
+                        formBag.setFieldValue('white', value)
+                      }
+                      color={formBag.values.white}
+                    />
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <ColorPickerField
+                      label="Text"
+                      onChange={(value) =>
+                        formBag.setFieldValue('steelBlue', value)
+                      }
+                      color={formBag.values.steelBlue}
+                    />
+                  </Col>
+                  {/* <Col xs={12} md={6}>
+                    <ColorPickerField
+                      label="Light Blue"
+                      onChange={(value) =>
+                        formBag.setFieldValue('lightBlue', value)
+                      }
+                      color={formBag.values.lightBlue}
+                    />
+                  </Col> */}
+                  <Col xs={12} md={6}>
+                    <ColorPickerField
+                      label="Facebook"
+                      onChange={(value) =>
+                        formBag.setFieldValue('fbBlue', value)
+                      }
+                      color={formBag.values.fbBlue}
+                    />
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <ColorPickerField
+                      label="boxShadow"
+                      onChange={(value) =>
+                        formBag.setFieldValue('boxShadow', value)
+                      }
+                      color={formBag.values.boxShadow}
+                    />
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <ColorPickerField
+                      label="Field Label"
+                      onChange={(value) =>
+                        formBag.setFieldValue('fieldLabel', value)
+                      }
+                      color={formBag.values.fieldLabel}
+                    />
+                  </Col>
+                </Row>
+              </Col>
               <Col xs={12} md={6}>
                 <TextField
                   label="Contact email address"
@@ -121,97 +222,6 @@ const Domain = ({location}) => {
                   value={formBag.values.deliveryFee}
                   required
                 />
-              </Col>
-              <Col xs={12} md={6}>
-                <Row>
-                  <Col md={4}>
-                    <div style={{width: 63, height: 63}}>
-                      <img src={logo} alt="logo" />
-                    </div>
-                  </Col>
-                  <Col md={8}>
-                    <label> Upload Logo</label>
-                    <Input
-                      type="file"
-                      placeholder="Image"
-                      accept="image/x-png,image/jpg,image/jpeg,image/svg+xml"
-                      onChange={onImageSelect}
-                    />
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <ColorPickerField
-                      label="Dark Orange"
-                      onChange={(value) =>
-                        formBag.setFieldValue('darkOrange', value)
-                      }
-                      color={formBag.values.darkOrange}
-                    />
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <ColorPickerField
-                      label="Light Orange"
-                      onChange={(value) =>
-                        formBag.setFieldValue('lightOrange', value)
-                      }
-                      color={formBag.values.lightOrange}
-                    />
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <ColorPickerField
-                      label="White "
-                      onChange={(value) =>
-                        formBag.setFieldValue('white', value)
-                      }
-                      color={formBag.values.white}
-                    />
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <ColorPickerField
-                      label="Steel Blue"
-                      onChange={(value) =>
-                        formBag.setFieldValue('steelBlue', value)
-                      }
-                      color={formBag.values.steelBlue}
-                    />
-                  </Col>
-                  <Col xs={12} md={6}>
-                    {' '}
-                    <ColorPickerField
-                      label="Light Blue"
-                      onChange={(value) =>
-                        formBag.setFieldValue('lightBlue', value)
-                      }
-                      color={formBag.values.lightBlue}
-                    />
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <ColorPickerField
-                      label="fbBlue"
-                      onChange={(value) =>
-                        formBag.setFieldValue('fbBlue', value)
-                      }
-                      color={formBag.values.fbBlue}
-                    />
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <ColorPickerField
-                      label="boxShadow"
-                      onChange={(value) =>
-                        formBag.setFieldValue('boxShadow', value)
-                      }
-                      color={formBag.values.boxShadow}
-                    />
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <ColorPickerField
-                      label="Field Label"
-                      onChange={(value) =>
-                        formBag.setFieldValue('fieldLabel', value)
-                      }
-                      color={formBag.values.fieldLabel}
-                    />
-                  </Col>
-                </Row>
               </Col>
             </Row>
             <Row>
