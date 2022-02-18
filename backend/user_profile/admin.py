@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib import admin
+from driver.models import Driver
 from .models import Profile
-from .views import business_csv_export_view
+from .views import business_csv_export_view, profile_csv_export_view, driver_csv_export_view
 
 list_display = ["id", "user", "phoneNo", "postalCode", "referralCode", "stripeCustomerId", "oneSignalPlayerId",
                 "domain"]
@@ -12,7 +13,7 @@ class Customer(Profile):
         proxy = True
 
 
-class Driver(Profile):
+class Driver(Driver):
     list_display = list_display
 
     class Meta:
@@ -37,7 +38,7 @@ class CustomerAdmin(admin.ModelAdmin):
         return ''
 
     def download_csv(modeladmin, request, queryset):
-        return business_csv_export_view(request, queryset)
+        return profile_csv_export_view(request, queryset)
 
     download_csv.short_description = 'Download CSV'
 
@@ -50,18 +51,21 @@ class CustomerAdmin(admin.ModelAdmin):
 
 @admin.register(Driver)
 class DriverAdmin(admin.ModelAdmin):
-    list_display = list_display
+    list_display = ['id', 'name', 'email', 'contactNumber', 'nationality', 'license', 'lat', 'lng', 'mainAddress',
+                    'domain', 'last_sale_update']
 
     actions = ['download_csv']
 
+    def last_sale_update(self, obj):
+        order = obj.orders.first()
+        if order:
+            return order.created_on
+        return ''
+
     def download_csv(modeladmin, request, queryset):
-        return business_csv_export_view(request, queryset)
+        return driver_csv_export_view(request, queryset)
 
     download_csv.short_description = 'Download CSV'
-
-    def get_queryset(self, request):
-        qs = Profile.objects.filter(user__groups__name='driver')
-        return qs
 
 
 #
