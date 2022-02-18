@@ -26,8 +26,15 @@ class Business(Profile):
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = list_display
+    list_display = list_display + ['last_sale_update']
     actions = ['download_csv']
+    readonly_fields = ('last_sale_update',)
+
+    def last_sale_update(self, obj):
+        order = obj.orders.first()
+        if order:
+            return order.created_on
+        return ''
 
     def download_csv(modeladmin, request, queryset):
         return business_csv_export_view(request, queryset)
