@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.contrib import admin
 from .models import Profile
+from .views import business_csv_export_view
 
-list_display = ["id", "user", "phoneNo", "postalCode", "referralCode", "stripeCustomerId", "oneSignalPlayerId", "domain"]
+list_display = ["id", "user", "phoneNo", "postalCode", "referralCode", "stripeCustomerId", "oneSignalPlayerId",
+                "domain"]
 
 
 class Customer(Profile):
@@ -25,6 +27,12 @@ class Business(Profile):
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_display = list_display
+    actions = ['download_csv']
+
+    def download_csv(modeladmin, request, queryset):
+        return business_csv_export_view(request, queryset)
+
+    download_csv.short_description = 'Download CSV'
 
     def get_queryset(self, request):
         # qs = super(Profile, self).get_queryset(request)
@@ -37,6 +45,13 @@ class CustomerAdmin(admin.ModelAdmin):
 class DriverAdmin(admin.ModelAdmin):
     list_display = list_display
 
+    actions = ['download_csv']
+
+    def download_csv(modeladmin, request, queryset):
+        return business_csv_export_view(request, queryset)
+
+    download_csv.short_description = 'Download CSV'
+
     def get_queryset(self, request):
         qs = Profile.objects.filter(user__groups__name='driver')
         return qs
@@ -47,6 +62,12 @@ class DriverAdmin(admin.ModelAdmin):
 @admin.register(Business)
 class BusinessAdmin(admin.ModelAdmin):
     list_display = ['businessName', 'businessAddress'] + list_display
+    actions = ['download_csv']
+
+    def download_csv(modeladmin, request, queryset):
+        return business_csv_export_view(request, queryset)
+
+    download_csv.short_description = 'Download CSV'
 
     def get_queryset(self, request):
         qs = Profile.objects.filter(user__groups__name='admin')
