@@ -1,8 +1,8 @@
 import React, {memo, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
 import {AccordionList} from 'accordion-collapse-react-native';
+import useCustomTheme from '../../theme/useTheme';
 
 const ServiceFAQs = memo(
   ({
@@ -14,7 +14,8 @@ const ServiceFAQs = memo(
     faqs,
   }) => {
     const [selectedSection, setSelectedSection] = useState(-1);
-
+    const {colors} = useCustomTheme();
+    const styles = _styles(colors);
     const _head = (item, index) => {
       return (
         <View
@@ -63,7 +64,7 @@ const ServiceFAQs = memo(
               textAlign: 'center',
               fontFamily: Fonts.poppinsBold,
               fontSize: 14,
-              color: Colors.steelBlue,
+              color: colors.steelBlue,
               lineHeight: 21,
             }}>
             FAQ Not Available
@@ -85,37 +86,39 @@ const ServiceFAQs = memo(
 
 export default ServiceFAQs;
 
-const styles = StyleSheet.create({
-  itemBodyContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#949eae',
-    marginHorizontal: 20,
-    paddingBottom: 15,
-    backgroundColor: Colors.white,
-  },
-  itemBody: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 10,
-    color: '#2c436a',
-    marginHorizontal: 0,
-    textAlign: 'left',
-  },
-  itemTitleContainer: (index, section) => ({
-    borderBottomWidth: index === section ? 0 : 1,
-    borderBottomColor: '#949eae',
-    alignItems: 'center',
-    backgroundColor: Colors.white,
-    marginHorizontal: 20,
-    paddingLeft: 0,
-    paddingVertical: 10,
-  }),
-  itemTitle: (index, section) => ({
-    fontFamily: index === section ? Fonts.poppinsMedium : Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: index === section ? 'rgba(237,143,49,1)' : '#2c436a',
-    width: '100%',
-    textAlign: 'left',
-    marginHorizontal: 0,
-  }),
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    itemBodyContainer: {
+      borderBottomWidth: 1,
+      borderBottomColor: '#949eae',
+      marginHorizontal: 20,
+      paddingBottom: 15,
+      backgroundColor: colors.white,
+    },
+    itemBody: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 10,
+      color: colors.steelBlue,
+      marginHorizontal: 0,
+      textAlign: 'left',
+    },
+    itemTitleContainer: (index, section) => ({
+      borderBottomWidth: index === section ? 0 : 1,
+      borderBottomColor: '#949eae',
+      alignItems: 'center',
+      backgroundColor: colors.white,
+      marginHorizontal: 20,
+      paddingLeft: 0,
+      paddingVertical: 10,
+    }),
+    itemTitle: (index, section) => ({
+      fontFamily:
+        index === section ? Fonts.poppinsMedium : Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: index === section ? 'rgba(237,143,49,1)' : colors.steelBlue,
+      width: '100%',
+      textAlign: 'left',
+      marginHorizontal: 0,
+    }),
+  });

@@ -2,7 +2,6 @@ import React, {memo, useEffect} from 'react';
 import {StyleSheet, View, Platform, Text} from 'react-native';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
-import {Colors} from '../../theme/color';
 import {Menu} from '../../../assets/img/menu';
 import ServiceFAQs from '../../components/ServiceFAQs';
 import {isEqual} from 'lodash';
@@ -10,12 +9,15 @@ import {Fonts} from '../../theme/fonts';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../../redux/actions';
 import {errorMessage} from '../../redux/utils/alerts';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const CustomerLegal = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const faqs = useSelector((state) => state.products.faqs);
 
   const isFAQ = isEqual(navigation.getParam('title'), 'FAQs');
@@ -39,7 +41,7 @@ const CustomerLegal = memo(({navigation}) => {
   }, []);
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <AppHeader
         headerTitle={navigation.getParam('title')}
         headerStyle={{
@@ -50,8 +52,8 @@ const CustomerLegal = memo(({navigation}) => {
         onLeftButtonPress={() => navigation.openDrawer()}
       />
       <View style={styles.listContainer}>
-        {(isEqual(navigation.getParam('title'), 'Terms & Conditions') ||
-          isEqual(navigation.getParam('title'), 'Privacy Policy')) && (
+        {isEqual(navigation.getParam('title'), 'Terms & Conditions') ||
+        isEqual(navigation.getParam('title'), 'Privacy Policy') ? (
           <View style={{flex: 1, marginHorizontal: 15, marginVertical: 20}}>
             <Text
               style={{
@@ -59,7 +61,7 @@ const CustomerLegal = memo(({navigation}) => {
                 fontFamily: Fonts.poppinsMedium,
                 fontSize: 14,
                 letterSpacing: 0.2,
-                color: '#ed8f31',
+                color: colors.darkOrange,
                 lineHeight: 18,
               }}>
               <Text>Last Update: </Text>
@@ -70,7 +72,7 @@ const CustomerLegal = memo(({navigation}) => {
                 fontFamily: Fonts.poppinsRegular,
                 fontSize: 12,
                 marginTop: 10,
-                color: '#2c436a',
+                color: colors.steelBlue,
                 textAlign: 'justify',
                 lineHeight: 16,
               }}>
@@ -108,8 +110,8 @@ const CustomerLegal = memo(({navigation}) => {
               or conditions of any other agreement you may have with us.
             </Text>
           </View>
-        )}
-        {isFAQ && (
+        ) : null}
+        {!!isFAQ && (
           <View style={{flex: 1, marginTop: 20}}>
             <ServiceFAQs
               faqs={faqs}
@@ -124,8 +126,9 @@ const CustomerLegal = memo(({navigation}) => {
 
 export default CustomerLegal;
 
-const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    listContainer: {
+      flex: 1,
+    },
+  });

@@ -6,12 +6,18 @@ const getAllOrders = () => {
   return api.get(`${API_URL_SUFFIX}order/`);
 };
 
-const getAllActiveOrders = () => {
-  return api.get(`${API_URL_SUFFIX}order/?page=${1}&status=InProgress`);
+const getAllActiveOrders = (params) => {
+  return api.get(
+    `${API_URL_SUFFIX}customer/${
+      params?.profile_id
+    }/order?page=${1}&status=InProgress`,
+  );
 };
 
-const getOrderHistory = ({pageSize = 1000}) => {
-  return api.get(`${API_URL_SUFFIX}order/?page=${1}&limit=${pageSize}`);
+const getOrderHistory = ({pageSize = 1000, profile_id}) => {
+  return api.get(
+    `${API_URL_SUFFIX}customer/${profile_id}/order?page=${1}&limit=${pageSize}`,
+  );
 };
 
 const getOrderById = (id) => {
@@ -27,8 +33,7 @@ const updateOrderCheckout = (params) => {
 };
 
 const makeOrderPayment = (params) => {
-  alert(JSON.stringify(params));
-  return api.post(`${API_URL_SUFFIX}order/makepayment`, params);
+  return api.post(`${API_URL_SUFFIX}order-payment`, params);
 };
 
 const cancelOrder = (id) => api.put(`/order/cancel/${id}`);

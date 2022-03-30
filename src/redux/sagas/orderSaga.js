@@ -65,7 +65,10 @@ export function* fetchOrderDetails({onSuccess, onFail}) {
 
 export function* fetchAllOrders(action) {
   try {
-    const response = yield call(allAPIServices.orderApi.getAllOrders);
+    const response = yield call(
+      allAPIServices.orderApi.getAllOrders,
+      action.params,
+    );
     yield put(
       allActions.orderActions.fetchAllOrdersSuccess({
         allOrders: response.data.results,
@@ -82,7 +85,10 @@ export function* fetchAllOrders(action) {
 
 export function* fetchAllActiveOrders(action) {
   try {
-    const response = yield call(allAPIServices.orderApi.getAllActiveOrders);
+    const response = yield call(
+      allAPIServices.orderApi.getAllActiveOrders,
+      action,
+    );
     yield put(
       allActions.orderActions.fetchAllActiveOrdersSuccess({
         allActiveOrders: response.data.results,

@@ -9,7 +9,6 @@ import {
   ScrollView,
 } from 'react-native';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
 import {Form, Item, Label, Input} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import Button from '../../components/Button';
@@ -22,6 +21,7 @@ import {errorMessage} from '../../redux/utils/alerts';
 import {Formik} from 'formik';
 import {validationSchemaEmail} from '../../redux/utils/validation';
 import AppLoader from '../../components/AppLoader';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isTablet = DeviceInfo.isTablet();
@@ -29,6 +29,8 @@ const isAndroid = Platform.OS === 'android';
 
 const CustomerForgotPassword = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const meta = useSelector((state) => state.auth.meta);
 
   const handleSubmitPress = useCallback((values) => {
@@ -98,11 +100,11 @@ const CustomerForgotPassword = memo(({navigation}) => {
                         onChangeText={handleChange('email')}
                       />
                     </Item>
-                    {touched.email && errors.email && (
+                    {touched.email && errors.email ? (
                       <Text style={styles.fieldError}>{errors.email}</Text>
-                    )}
+                    ) : null}
                     <LinearGradient
-                      colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+                      colors={[colors.lightOrange, colors.darkOrange]}
                       start={{y: 0.0, x: 1.0}}
                       style={{width: '100%', marginTop: '20%', marginLeft: 15}}
                       end={{y: 0.0, x: 0.0}}>
@@ -126,83 +128,84 @@ const CustomerForgotPassword = memo(({navigation}) => {
 
 export default CustomerForgotPassword;
 
-const styles = StyleSheet.create({
-  customerForgotPasswordHeader: {
-    height: hasNotch && !isTablet ? 280 : !hasNotch && !isTablet ? 240 : 350,
-  },
-  customerForgotPasswordHeaderImage: {
-    height: isTablet ? '91%' : isAndroid ? '79%' : '86%',
-    width: isTablet ? '42%' : '51%',
-  },
-  authHeader: {
-    flex: 1,
-    width: '100%',
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: Colors.white,
-  },
-  formContainer: {
-    marginRight: 40,
-    marginLeft: 25,
-    marginTop: '15%',
-    width: '80%',
-    alignItems: 'center',
-  },
-  fieldLabel: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: Colors.fieldLabel,
-    lineHeight: 18,
-  },
-  fieldInput: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: Colors.steelBlue,
-    lineHeight: 21,
-  },
-  fieldError: {
-    fontSize: 10,
-    alignSelf: 'flex-start',
-    marginLeft: 15,
-    marginTop: 10,
-    color: 'red',
-  },
-  textForgotPassword: {
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 30,
-    marginTop: '8%',
-    letterSpacing: 0.6,
-    textAlign: 'center',
-    color: Colors.darkOrange,
-    lineHeight: 46,
-  },
-  buttonSubmit: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonSubmitText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-  textSubHeading: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 14,
-    width: '55%',
-    marginTop: 5,
-    letterSpacing: 0.3,
-    textAlign: 'center',
-    color: '#2c436a',
-    lineHeight: 21,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    customerForgotPasswordHeader: {
+      height: hasNotch && !isTablet ? 280 : !hasNotch && !isTablet ? 240 : 350,
+    },
+    customerForgotPasswordHeaderImage: {
+      height: isTablet ? '91%' : isAndroid ? '79%' : '86%',
+      width: isTablet ? '42%' : '51%',
+    },
+    authHeader: {
+      flex: 1,
+      width: '100%',
+      alignContent: 'center',
+      alignItems: 'center',
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: colors.white,
+    },
+    formContainer: {
+      marginRight: 40,
+      marginLeft: 25,
+      marginTop: '15%',
+      width: '80%',
+      alignItems: 'center',
+    },
+    fieldLabel: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: colors.fieldLabel,
+      lineHeight: 18,
+    },
+    fieldInput: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    fieldError: {
+      fontSize: 10,
+      alignSelf: 'flex-start',
+      marginLeft: 15,
+      marginTop: 10,
+      color: 'red',
+    },
+    textForgotPassword: {
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 30,
+      marginTop: '8%',
+      letterSpacing: 0.6,
+      textAlign: 'center',
+      color: colors.darkOrange,
+      lineHeight: 46,
+    },
+    buttonSubmit: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonSubmitText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+    textSubHeading: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 14,
+      width: '55%',
+      marginTop: 5,
+      letterSpacing: 0.3,
+      textAlign: 'center',
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+  });

@@ -62,6 +62,7 @@ import {
   watchAddCard,
   watchDeleteCard,
 } from './paymentsSaga';
+import {watchFetchDomain} from './domainSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -75,6 +76,7 @@ export default function* rootSaga() {
     watchChangeQuantity(),
     watchRemoveItem(),
     watchClear(),
+    watchFetchDomain(),
     watchOrderDetails(),
     watchFetchOrderDetails(),
     watchFetchUserProfile(),

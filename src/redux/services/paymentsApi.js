@@ -5,9 +5,7 @@ const allCards = () => {
 };
 
 const addCard = (params) => {
-  return api.post('api/v1/cards/', params).then(res => res).catch(err => {
-    alert(JSON.stringify(err))
-  })
+  return api.post('api/v1/cards/', params);
 };
 
 const deleteCard = (params) => {

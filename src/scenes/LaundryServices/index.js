@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, FlatList, Platform, Text} from 'react-native';
 import ServicesListItem from '../../components/ServicesListItem';
-import {Colors} from '../../theme/color';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
 import {BackArrow} from '../../../assets/img/backArrow';
@@ -13,13 +12,15 @@ import {errorMessage} from '../../redux/utils/alerts';
 import FastImage from 'react-native-fast-image';
 import {Toast} from 'native-base';
 import {Fonts} from '../../theme/fonts';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const LaundryServices = ({navigation}) => {
   const category = navigation.getParam('category');
-
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
   const cart = useSelector((state) => state.cart.cart);
@@ -86,8 +87,8 @@ const LaundryServices = ({navigation}) => {
         leftButtonImage={<BackArrow />}
         rightButtonImage={
           <View style={{minWidth: 25, height: 25}}>
-            <Cart color={Colors.white} height={22} width={35} />
-            {cart.length > 0 && (
+            <Cart color={colors.white} height={22} width={35} />
+            {cart.length > 0 ? (
               <View
                 style={{
                   position: 'absolute',
@@ -109,7 +110,7 @@ const LaundryServices = ({navigation}) => {
                   {cart.length}
                 </Text>
               </View>
-            )}
+            ) : null}
           </View>
         }
         onRightButtonPress={() => navigation.navigate('CustomerOrderBasket')}
@@ -172,14 +173,15 @@ const LaundryServices = ({navigation}) => {
 
 export default LaundryServices;
 
-const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
-  servicesList: {
-    marginHorizontal: 22,
-    marginVertical: 10,
-    flex: 1,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    listContainer: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+    servicesList: {
+      marginHorizontal: 22,
+      marginVertical: 10,
+      flex: 1,
+    },
+  });

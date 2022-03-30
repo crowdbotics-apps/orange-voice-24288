@@ -1,0 +1,236 @@
+import * as React from 'react';
+import Svg, {Defs, Path, Ellipse} from 'react-native-svg';
+/* SVGR has dropped some elements not supported by react-native-svg: style */
+
+const Receipt = (props) => (
+  <Svg
+    xmlns="http://www.w3.org/2000/svg"
+    id="prefix__receipt"
+    width={15.619}
+    height={16}
+    {...props}>
+    <Defs></Defs>
+    <Path
+      id="prefix__Path_214"
+      d="M15.619 1.37A1.061 1.061 0 0 0 14.578.293H1.041A1.061 1.061 0 0 0 0 1.37a1.07 1.07 0 0 0 .781 1.039v13.076l.781-.808 1.562 1.616 1.562-1.616 1.562 1.616 1.562-1.616 1.562 1.616 1.562-1.616 1.566 1.616 1.562-1.616.781.808V2.409a1.07 1.07 0 0 0 .776-1.039zm-1.3 12.815-.26-.269-1.559 1.615-1.562-1.616-1.567 1.616-1.562-1.615-1.561 1.615-1.562-1.615-1.562 1.615-1.562-1.615-.26.269V1.639h13.015v12.546zm.521-12.349V1.1H.781v.735a.542.542 0 0 1-.26-.466.53.53 0 0 1 .52-.537h13.537a.53.53 0 0 1 .521.539.542.542 0 0 1-.261.465z"
+      className="prefix__cls-1"
+      data-name="Path 214"
+      transform="translate(0 -.293)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_215"
+      d="M32.165 40.293h-3.9a.269.269 0 0 0 0 .539h3.9a.269.269 0 0 0 0-.539z"
+      className="prefix__cls-1"
+      data-name="Path 215"
+      transform="translate(-20.711 -29.521)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_216"
+      d="M48.075 40.38a.282.282 0 0 0-.075.191.288.288 0 0 0 .075.191.258.258 0 0 0 .37 0 .288.288 0 0 0 .075-.191.282.282 0 0 0-.075-.191.266.266 0 0 0-.37 0z"
+      className="prefix__cls-1"
+      data-name="Path 216"
+      transform="translate(-35.505 -29.53)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_217"
+      d="M37.165 26.293h-3.9a.269.269 0 0 0 0 .539h3.9a.269.269 0 0 0 0-.539z"
+      className="prefix__cls-1"
+      data-name="Path 217"
+      transform="translate(-24.41 -19.291)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_218"
+      d="M40.863 33.293h-2.6a.269.269 0 0 0 0 .539h2.6a.269.269 0 0 0 0-.539z"
+      className="prefix__cls-1"
+      data-name="Path 218"
+      transform="translate(-28.108 -24.406)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_219"
+      d="M28 33.562a.265.265 0 0 0 .26.269h.521a.269.269 0 0 0 0-.539h-.521a.265.265 0 0 0-.26.27z"
+      className="prefix__cls-1"
+      data-name="Path 219"
+      transform="translate(-20.711 -24.406)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_220"
+      d="M32.425 19.562a.265.265 0 0 0-.26-.269h-3.9a.269.269 0 0 0 0 .539h3.9a.265.265 0 0 0 .26-.27z"
+      className="prefix__cls-1"
+      data-name="Path 220"
+      transform="translate(-20.711 -14.176)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_221"
+      d="M48.075 19.38a.282.282 0 0 0-.075.191.288.288 0 0 0 .075.191.269.269 0 0 0 .185.078.264.264 0 0 0 .185-.078.28.28 0 0 0 0-.382.266.266 0 0 0-.37 0z"
+      className="prefix__cls-1"
+      data-name="Path 221"
+      transform="translate(-35.505 -14.185)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_222"
+      d="M29.445 26.763a.28.28 0 0 0 0-.382.266.266 0 0 0-.37 0 .28.28 0 0 0 0 .382.258.258 0 0 0 .37 0z"
+      className="prefix__cls-1"
+      data-name="Path 222"
+      transform="translate(-21.451 -19.3)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_223"
+      d="M34.445 33.763a.283.283 0 0 0 .075-.191.278.278 0 0 0-.075-.191.266.266 0 0 0-.37 0 .28.28 0 0 0 0 .382.258.258 0 0 0 .37 0z"
+      className="prefix__cls-1"
+      data-name="Path 223"
+      transform="translate(-25.149 -24.415)"
+      fill={props.fill}
+    />
+    <Path
+      id="prefix__Path_224"
+      d="M12.562 19.859v-.3a.26.26 0 1 0-.521 0v.3a1.29 1.29 0 0 0-.734.449.948.948 0 0 0-.207.7.992.992 0 0 0 .36.671l.58.467v1.464a.805.805 0 0 1-.521-.758.26.26 0 1 0-.521 0 1.339 1.339 0 0 0 1.041 1.319v.236a.26.26 0 1 0 .521 0v-.238a1.291 1.291 0 0 0 .734-.449.949.949 0 0 0 .206-.7.991.991 0 0 0-.36-.67l-.58-.467V20.42a.805.805 0 0 1 .521.758.26.26 0 1 0 .521 0 1.339 1.339 0 0 0-1.04-1.319zm.261 2.918a.446.446 0 0 1 .162.3.4.4 0 0 1-.086.3.777.777 0 0 1-.336.236v-1.047zm-1.042-1.521a.446.446 0 0 1-.162-.3.4.4 0 0 1 .086-.3.777.777 0 0 1 .336-.236v1.044z"
+      className="prefix__cls-1"
+      data-name="Path 224"
+      transform="translate(-8.137 -14.176)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_16"
+      cx={0.338}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 16"
+      rx={0.338}
+      ry={0.233}
+      transform="translate(10.065 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_17"
+      cx={0.226}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 17"
+      rx={0.226}
+      ry={0.233}
+      transform="translate(9.163 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_18"
+      cx={0.226}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 18"
+      rx={0.226}
+      ry={0.233}
+      transform="translate(11.192 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_19"
+      cx={0.226}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 19"
+      rx={0.226}
+      ry={0.233}
+      transform="translate(8.035 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_20"
+      cx={0.226}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 20"
+      rx={0.226}
+      ry={0.233}
+      transform="translate(12.32 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_21"
+      cx={0.338}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 21"
+      rx={0.338}
+      ry={0.233}
+      transform="translate(4.878 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_22"
+      cx={0.226}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 22"
+      rx={0.226}
+      ry={0.233}
+      transform="translate(6.005 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_23"
+      cx={0.226}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 23"
+      rx={0.226}
+      ry={0.233}
+      transform="translate(7.133 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_24"
+      cx={0.338}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 24"
+      rx={0.338}
+      ry={0.233}
+      transform="translate(13.222 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_25"
+      cx={0.226}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 25"
+      rx={0.226}
+      ry={0.233}
+      transform="translate(3.976 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_26"
+      cx={0.226}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 26"
+      rx={0.226}
+      ry={0.233}
+      transform="translate(2.848 2.703)"
+      fill={props.fill}
+    />
+    <Ellipse
+      id="prefix__Ellipse_27"
+      cx={0.338}
+      cy={0.233}
+      className="prefix__cls-1"
+      data-name="Ellipse 27"
+      rx={0.338}
+      ry={0.233}
+      transform="translate(1.721 2.703)"
+      fill={props.fill}
+    />
+  </Svg>
+);
+
+export default Receipt;

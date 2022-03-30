@@ -13,7 +13,6 @@ import {
 import {Form, Item, Label, Input} from 'native-base';
 import Button from '../../components/Button';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
 import {Formik} from 'formik';
@@ -32,11 +31,14 @@ import {
   GraphRequest,
   GraphRequestManager,
 } from 'react-native-fbsdk';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 
 const CustomerSignUp = memo(({navigation}) => {
   const [userPhoneNo, setUserPhoneNo] = useState();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
 
   const dispatch = useDispatch();
   const meta = useSelector((state) => state.auth.meta);
@@ -137,7 +139,7 @@ const CustomerSignUp = memo(({navigation}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{flex: 1, backgroundColor: 'transparent'}}>
-      <View style={{flex: 1, backgroundColor: Colors.white}}>
+      <View style={{flex: 1, backgroundColor: colors.white}}>
         <AppHeader headerStyle={{height: hasNotch ? 192 : 150}}>
           <View style={styles.registerHeader}>
             <Text style={styles.textGetRegistered}>Get Register with</Text>
@@ -175,9 +177,9 @@ const CustomerSignUp = memo(({navigation}) => {
                       onChangeText={handleChange('fName')}
                     />
                   </Item>
-                  {touched.fName && errors.fName && (
+                  {touched.fName && errors.fName ? (
                     <Text style={styles.fieldError}>{errors.fName}</Text>
-                  )}
+                  ) : null}
                   <Item floatingLabel>
                     <Label style={styles.fieldLabel}>Last Name</Label>
                     <Input
@@ -186,9 +188,9 @@ const CustomerSignUp = memo(({navigation}) => {
                       onChangeText={handleChange('lName')}
                     />
                   </Item>
-                  {touched.lName && errors.lName && (
+                  {touched.lName && errors.lName ? (
                     <Text style={styles.fieldError}>{errors.lName}</Text>
-                  )}
+                  ) : null}
                   <Item stackedLabel>
                     <TextInputMask
                       value={values.phoneNo}
@@ -211,9 +213,9 @@ const CustomerSignUp = memo(({navigation}) => {
                       mask={'+1 ([000]) [000] [00] [00]'}
                     />
                   </Item>
-                  {touched.phoneNo && errors.phoneNo && (
+                  {touched.phoneNo && errors.phoneNo ? (
                     <Text style={styles.fieldError}>{errors.phoneNo}</Text>
-                  )}
+                  ) : null}
                   <Item floatingLabel>
                     <Label style={styles.fieldLabel}>Email Address</Label>
                     <Input
@@ -224,9 +226,9 @@ const CustomerSignUp = memo(({navigation}) => {
                       onChangeText={handleChange('email')}
                     />
                   </Item>
-                  {touched.email && errors.email && (
+                  {touched.email && errors.email ? (
                     <Text style={styles.fieldError}>{errors.email}</Text>
-                  )}
+                  ) : null}
 
                   <PasswordTextBox
                     label="Password"
@@ -234,9 +236,9 @@ const CustomerSignUp = memo(({navigation}) => {
                     onChangeText={handleChange('password')}
                   />
 
-                  {touched.password && errors.password && (
+                  {touched.password && errors.password ? (
                     <Text style={styles.fieldError}>{errors.password}</Text>
-                  )}
+                  ) : null}
                   <Item floatingLabel>
                     <Label style={styles.fieldLabel}>Postal Code</Label>
                     <Input
@@ -246,9 +248,9 @@ const CustomerSignUp = memo(({navigation}) => {
                       onChangeText={handleChange('postalCode')}
                     />
                   </Item>
-                  {touched.postalCode && errors.postalCode && (
+                  {touched.postalCode && errors.postalCode ? (
                     <Text style={styles.fieldError}>{errors.postalCode}</Text>
-                  )}
+                  ) : null}
 
                   <Item floatingLabel>
                     <Label style={styles.fieldLabel}>Referral Code</Label>
@@ -280,7 +282,7 @@ const CustomerSignUp = memo(({navigation}) => {
                     </Text>
                   </Text>
                   <LinearGradient
-                    colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+                    colors={[colors.lightOrange, colors.darkOrange]}
                     start={{y: 0.0, x: 1.0}}
                     style={{width: '100%', marginLeft: 12, marginTop: 5}}
                     end={{y: 0.0, x: 0.0}}>
@@ -320,113 +322,114 @@ const CustomerSignUp = memo(({navigation}) => {
 
 export default CustomerSignUp;
 
-const styles = StyleSheet.create({
-  textGetRegistered: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 21,
-    letterSpacing: 0.4,
-    textAlign: 'center',
-    color: '#ffffff',
-    lineHeight: 38,
-  },
-  textLaundrEZ: {
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 40,
-    letterSpacing: 0.8,
-    textAlign: 'center',
-    color: '#ffffff',
-    lineHeight: 42,
-  },
-  registerHeader: {
-    flex: 1,
-    width: '100%',
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  fieldLabel: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: '#949EAE',
-    lineHeight: 18,
-  },
-  fieldInput: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: '#2C436A',
-    lineHeight: 21,
-  },
-  fieldError: {
-    fontSize: 10,
-    marginLeft: 20,
-    alignSelf: 'flex-start',
-    color: 'red',
-  },
-  signUpContainer: {
-    flex: 1,
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  formContainer: {
-    flex: 1,
-    justifyContent: 'space-between',
-    marginRight: 40,
-    marginLeft: 25,
-  },
-  signUpButton: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  signUpButtonText: {
-    fontSize: 18,
-    textAlign: 'center',
-    flex: 1,
-    fontFamily: Fonts.poppinsRegular,
-    color: '#FFFFFF',
-    lineHeight: 27,
-  },
-  signInContainer: {
-    marginVertical: 30,
-  },
-  haveAccountText: {
-    color: '#2C436A',
-    fontSize: 12,
-    letterSpacing: 0.3,
-    lineHeight: 21,
-    fontFamily: Fonts.poppinsMedium,
-    textAlign: 'center',
-    marginVertical: 25,
-    marginLeft: 10,
-  },
-  signInButtonText: {
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 12,
-    letterSpacing: 0.3,
-    color: '#ED8F31',
-  },
-  buttonFb: {
-    height: 50,
-    width: '100%',
-    marginTop: 15,
-    marginLeft: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.fbBlue,
-  },
-  imageFb: {
-    height: 15,
-    resizeMode: 'contain',
-    marginRight: 10,
-    top: -2,
-  },
-  buttonLoginText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 16,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    textGetRegistered: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 21,
+      letterSpacing: 0.4,
+      textAlign: 'center',
+      color: '#ffffff',
+      lineHeight: 38,
+    },
+    textLaundrEZ: {
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 40,
+      letterSpacing: 0.8,
+      textAlign: 'center',
+      color: '#ffffff',
+      lineHeight: 42,
+    },
+    registerHeader: {
+      flex: 1,
+      width: '100%',
+      alignContent: 'center',
+      alignItems: 'center',
+    },
+    fieldLabel: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: '#949EAE',
+      lineHeight: 18,
+    },
+    fieldInput: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    fieldError: {
+      fontSize: 10,
+      marginLeft: 20,
+      alignSelf: 'flex-start',
+      color: 'red',
+    },
+    signUpContainer: {
+      flex: 1,
+      alignItems: 'center',
+      marginVertical: 5,
+    },
+    formContainer: {
+      flex: 1,
+      justifyContent: 'space-between',
+      marginRight: 40,
+      marginLeft: 25,
+    },
+    signUpButton: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    signUpButtonText: {
+      fontSize: 18,
+      textAlign: 'center',
+      flex: 1,
+      fontFamily: Fonts.poppinsRegular,
+      color: '#FFFFFF',
+      lineHeight: 27,
+    },
+    signInContainer: {
+      marginVertical: 30,
+    },
+    haveAccountText: {
+      color: colors.steelBlue,
+      fontSize: 12,
+      letterSpacing: 0.3,
+      lineHeight: 21,
+      fontFamily: Fonts.poppinsMedium,
+      textAlign: 'center',
+      marginVertical: 25,
+      marginLeft: 10,
+    },
+    signInButtonText: {
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 12,
+      letterSpacing: 0.3,
+      color: colors.darkOrange,
+    },
+    buttonFb: {
+      height: 50,
+      width: '100%',
+      marginTop: 15,
+      marginLeft: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colors.fbBlue,
+    },
+    imageFb: {
+      height: 15,
+      resizeMode: 'contain',
+      marginRight: 10,
+      top: -2,
+    },
+    buttonLoginText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 16,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+  });

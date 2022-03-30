@@ -13,7 +13,6 @@ import {
   SafeAreaView,
 } from 'react-native';
 import AppHeader from '../../components/AppHeader';
-import {Colors} from '../../theme/color';
 import DeviceInfo from 'react-native-device-info';
 import {Form, Item, Label, Input, CheckBox, Icon} from 'native-base';
 import {Picker} from '@react-native-community/picker';
@@ -28,6 +27,7 @@ import {errorMessage} from '../../redux/utils/alerts';
 import {BackArrow} from '../../../assets/img/backArrow';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../../redux/actions';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
@@ -48,6 +48,8 @@ const monthNames = [
 ];
 
 const CustomerMakePayment = memo(({navigation}) => {
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const [rememberDetails, setRememberDetails] = useState(false);
   const [cardSelected, setCardSelected] = useState(null);
 
@@ -141,7 +143,6 @@ const CustomerMakePayment = memo(({navigation}) => {
           });
         },
         onSuccess: (response) => {
-          alert(JSON.stringify(response))
           handleOrderPayment(response.cardId);
         },
       }),
@@ -170,7 +171,7 @@ const CustomerMakePayment = memo(({navigation}) => {
             marginLeft: 30,
             textAlign: 'left',
             marginTop: 20,
-            color: '#ed8f31',
+            color: colors.darkOrange,
             lineHeight: 25,
             marginBottom: 10,
           }}>
@@ -250,9 +251,9 @@ const CustomerMakePayment = memo(({navigation}) => {
                   </View>
                 </View>
 
-                {touched.cardNumber && errors.cardNumber && (
+                {touched.cardNumber && errors.cardNumber ? (
                   <Text style={styles.fieldError}>{errors.cardNumber}</Text>
-                )}
+                ) : null}
                 <Text
                   style={{
                     fontFamily: Fonts.poppinsRegular,
@@ -261,7 +262,7 @@ const CustomerMakePayment = memo(({navigation}) => {
                     marginLeft: 15,
                     textAlign: 'left',
                     marginVertical: 10,
-                    color: '#ed8f31',
+                    color: colors.darkOrange,
                     lineHeight: 25,
                   }}>
                   Expiry
@@ -300,7 +301,7 @@ const CustomerMakePayment = memo(({navigation}) => {
                         fontFamily: Fonts.poppinsMedium,
                         fontSize: 14,
                         letterSpacing: 0.3,
-                        color: '#2c436a',
+                        color: colors.steelBlue,
                         lineHeight: 21,
                         width: isAndroid ? 155 : 150,
                       }}
@@ -309,7 +310,7 @@ const CustomerMakePayment = memo(({navigation}) => {
                         fontFamily: Fonts.poppinsMedium,
                         fontSize: 14,
                         letterSpacing: 0.3,
-                        color: '#2c436a',
+                        color: colors.steelBlue,
                         lineHeight: 21,
                       }}
                       placeholderIconColor="#007aff">
@@ -348,7 +349,7 @@ const CustomerMakePayment = memo(({navigation}) => {
                         fontFamily: Fonts.poppinsMedium,
                         fontSize: 14,
                         letterSpacing: 0.3,
-                        color: '#2c436a',
+                        color: colors.steelBlue,
                         lineHeight: 21,
                         width: isAndroid ? 155 : 150,
                       }}
@@ -357,7 +358,7 @@ const CustomerMakePayment = memo(({navigation}) => {
                         fontFamily: Fonts.poppinsMedium,
                         fontSize: 14,
                         letterSpacing: 0.3,
-                        color: '#2c436a',
+                        color: colors.steelBlue,
                         lineHeight: 21,
                       }}
                       selectedValue={values.year}
@@ -391,9 +392,9 @@ const CustomerMakePayment = memo(({navigation}) => {
                     onChangeText={handleChange('cvv')}
                   />
                 </Item>
-                {touched.cvv && errors.cvv && (
+                {touched.cvv && errors.cvv ? (
                   <Text style={styles.fieldError}>{errors.cvv}</Text>
-                )}
+                ) : null}
                 <TouchableOpacity
                   onPress={() => {
                     //setOldValues(values);
@@ -410,9 +411,9 @@ const CustomerMakePayment = memo(({navigation}) => {
                     style={{
                       borderRadius: 0,
                       backgroundColor: rememberDetails
-                        ? '#ED8F31'
+                        ? colors.darkOrange
                         : 'transparent',
-                      borderColor: rememberDetails ? 'transparent' : '#2c436a',
+                      borderColor: rememberDetails ? 'transparent' : colors.steelBlue,
                     }}
                     checked={rememberDetails}
                   />
@@ -421,7 +422,7 @@ const CustomerMakePayment = memo(({navigation}) => {
               </Form>
             </View>,
             <LinearGradient
-              colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+              colors={[colors.lightOrange, colors.darkOrange]}
               start={{y: 0.0, x: 1.0}}
               end={{y: 0.0, x: 0.0}}
               style={{marginLeft: 30, marginRight: 30, marginTop: 10}}>
@@ -480,7 +481,7 @@ const CustomerMakePayment = memo(({navigation}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{flex: 1, backgroundColor: 'transparent'}}>
-      <View style={{flex: 1, backgroundColor: Colors.white}}>
+      <View style={{flex: 1, backgroundColor: colors.white}}>
         <AppHeader
           headerTitle="Payment Details"
           headerStyle={{
@@ -508,7 +509,7 @@ const CustomerMakePayment = memo(({navigation}) => {
                   fontSize: 14,
                   letterSpacing: 0.3,
                   textAlign: 'left',
-                  color: '#ed8f31',
+                  color: colors.darkOrange,
                   lineHeight: 25,
                 }}>
                 Select Card
@@ -543,7 +544,9 @@ const CustomerMakePayment = memo(({navigation}) => {
                     XXXX XXXX XXXX {item.cardNumber}
                   </Text>
                 </View>
-                {cardSelected === item && <TickOrange height={20} width={20} />}
+                {cardSelected === item ? (
+                  <TickOrange height={20} width={20} />
+                ) : null}
               </TouchableOpacity>
             )}
           />
@@ -556,60 +559,61 @@ const CustomerMakePayment = memo(({navigation}) => {
 
 export default CustomerMakePayment;
 
-const styles = StyleSheet.create({
-  formContainer: {
-    marginRight: 40,
-    marginLeft: 25,
-  },
-  fieldLabel: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: Colors.fieldLabel,
-    lineHeight: 18,
-  },
-  fieldInput: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: Colors.steelBlue,
-    lineHeight: 21,
-  },
-  fieldError: {
-    fontSize: 10,
-    alignSelf: 'flex-start',
-    marginLeft: 15,
-    color: 'red',
-  },
-  rememberDetails: {
-    flex: 1,
-    marginLeft: 25,
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: '#2c436a',
-    lineHeight: 21,
-  },
-  buttonSave: {
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonSaveText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-  cardRowContainer: (selected) => ({
-    width: '80%',
-    marginVertical: 5,
-    alignItems: 'center',
-    flexDirection: 'row',
-    borderColor: selected ? Colors.darkOrange : 'transparent',
-    borderWidth: 2,
-    padding: 10,
-    borderStyle: 'dashed',
-  }),
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    formContainer: {
+      marginRight: 40,
+      marginLeft: 25,
+    },
+    fieldLabel: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: colors.fieldLabel,
+      lineHeight: 18,
+    },
+    fieldInput: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    fieldError: {
+      fontSize: 10,
+      alignSelf: 'flex-start',
+      marginLeft: 15,
+      color: 'red',
+    },
+    rememberDetails: {
+      flex: 1,
+      marginLeft: 25,
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    buttonSave: {
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonSaveText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+    cardRowContainer: (selected) => ({
+      width: '80%',
+      marginVertical: 5,
+      alignItems: 'center',
+      flexDirection: 'row',
+      borderColor: selected ? colors.darkOrange : 'transparent',
+      borderWidth: 2,
+      padding: 10,
+      borderStyle: 'dashed',
+    }),
+  });

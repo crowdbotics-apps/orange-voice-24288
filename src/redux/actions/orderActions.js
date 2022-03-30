@@ -25,7 +25,8 @@ const fetchOrderDetailsSuccess = ({orderDetails}) => ({
   orderDetails,
 });
 
-const fetchAllOrders = ({onSuccess, onFail}) => ({
+const fetchAllOrders = ({profile_id, onSuccess, onFail}) => ({
+  profile_id,
   type: FETCH_ALL_ORDERS,
   onSuccess,
   onFail,
@@ -44,11 +45,14 @@ const fetchAllOrdersSuccess = ({allOrders, paging}) => ({
   paging,
 });
 
-const fetchAllActiveOrders = ({onSuccess, onFail}) => ({
-  type: FETCH_ALL_ACTIVE_ORDERS,
-  onSuccess,
-  onFail,
-});
+const fetchAllActiveOrders = ({profile_id, onSuccess, onFail}) => {
+  return {
+    profile_id,
+    type: FETCH_ALL_ACTIVE_ORDERS,
+    onSuccess,
+    onFail,
+  };
+};
 
 const fetchAllActiveOrdersSuccess = ({allActiveOrders, paging}) => ({
   type: FETCH_ALL_ACTIVE_ORDERS_SUCCESS,
@@ -56,11 +60,12 @@ const fetchAllActiveOrdersSuccess = ({allActiveOrders, paging}) => ({
   paging,
 });
 
-const fetchOrderHistory = ({onSuccess, onFail, params}) => ({
+const fetchOrderHistory = ({profile_id, onSuccess, onFail, params}) => ({
   type: FETCH_ORDER_HISTORY,
   onSuccess,
   onFail,
-  params: params,
+  params: {...params, profile_id},
+  profile_id,
 });
 
 const fetchOrderHistorySuccess = ({orderHistory}) => ({

@@ -17,7 +17,6 @@ import storage from '../../redux/utils/storage';
 import {Form, Item, Label, Input, Icon} from 'native-base';
 import Button from '../../components/Button';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
 import {BackArrow} from '../../../assets/img/backArrow';
@@ -29,11 +28,14 @@ import allActions from '../../redux/actions';
 import {validationSchemaProfile} from '../../redux/utils/validation';
 import TextInputMask from 'react-native-text-input-mask';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const CustomerViewProfile = memo(({navigation}) => {
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const address = useSelector((state) => state.address.address);
@@ -152,7 +154,7 @@ const CustomerViewProfile = memo(({navigation}) => {
   // onRightButtonPress={() => handleLogOut()}
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <AppHeader
         headerTitle="Customer Profile"
         headerStyle={{
@@ -205,9 +207,9 @@ const CustomerViewProfile = memo(({navigation}) => {
                   onChangeText={handleChange('fName')}
                 />
               </Item>
-              {touched.fName && errors.fName && (
+              {touched.fName && errors.fName ? (
                 <Text style={styles.fieldError}>{errors.fName}</Text>
-              )}
+              ) : null}
               <Item floatingLabel>
                 <Label style={styles.fieldLabel}>Last Name</Label>
                 <Input
@@ -217,9 +219,9 @@ const CustomerViewProfile = memo(({navigation}) => {
                   onChangeText={handleChange('lName')}
                 />
               </Item>
-              {touched.lName && errors.lName && (
+              {touched.lName && errors.lName ? (
                 <Text style={styles.fieldError}>{errors.lName}</Text>
-              )}
+              ) : null}
 
               <Item stackedLabel>
                 <TextInputMask
@@ -245,9 +247,9 @@ const CustomerViewProfile = memo(({navigation}) => {
                 />
               </Item>
 
-              {touched.phoneNo && errors.phoneNo && (
+              {touched.phoneNo && errors.phoneNo ? (
                 <Text style={styles.fieldError}>{errors.phoneNo}</Text>
-              )}
+              ) : null}
               <Item floatingLabel>
                 <Label style={styles.fieldLabel}>Email Address</Label>
                 <Input
@@ -257,7 +259,7 @@ const CustomerViewProfile = memo(({navigation}) => {
                 />
               </Item>
 
-              {!isSocial && (
+              {!isSocial ? (
                 <View
                   style={{
                     marginTop: 10,
@@ -288,12 +290,12 @@ const CustomerViewProfile = memo(({navigation}) => {
                       fontFamily: Fonts.poppinsSemiBold,
                       fontSize: 16,
                       letterSpacing: 0.3,
-                      color: '#ed8f31',
+                      color: colors.darkOrange,
                     }}
                     text="Change Password"
                   />
                 </View>
-              )}
+              ) : null}
 
               <Item floatingLabel>
                 <Label style={styles.fieldLabel}>Postal Code</Label>
@@ -305,9 +307,9 @@ const CustomerViewProfile = memo(({navigation}) => {
                   onChangeText={handleChange('postalCode')}
                 />
               </Item>
-              {touched.postalCode && errors.postalCode && (
+              {touched.postalCode && errors.postalCode ? (
                 <Text style={styles.fieldError}>{errors.postalCode}</Text>
-              )}
+              ) : null}
 
               <View
                 style={{
@@ -350,7 +352,7 @@ const CustomerViewProfile = memo(({navigation}) => {
                 keyExtractor={(item, index) => `list-address${index}`}
                 data={address}
                 ListFooterComponent={() =>
-                  isEditable && (
+                  isEditable ? (
                     <Button
                       text="Add New Address"
                       textStyle={styles.addCardBtnTxt}
@@ -360,7 +362,7 @@ const CustomerViewProfile = memo(({navigation}) => {
                         });
                       }}
                     />
-                  )
+                  ) : null
                 }
                 renderItem={({item, index}) => (
                   <TouchableOpacity
@@ -397,68 +399,69 @@ const CustomerViewProfile = memo(({navigation}) => {
 
 export default CustomerViewProfile;
 
-const styles = StyleSheet.create({
-  fieldLabel: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: '#949EAE',
-    lineHeight: 18,
-  },
-  fieldInput: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: '#2C436A',
-    lineHeight: 21,
-  },
-  fieldError: {
-    fontSize: 10,
-    marginLeft: 20,
-    alignSelf: 'flex-start',
-    color: 'red',
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  formContainer: {
-    marginRight: 40,
-    marginLeft: 20,
-    justifyContent: 'space-between',
-    flex: 1,
-    alignItems: 'center',
-  },
-  editButton: {
-    width: '100%',
-    marginTop: 30,
-    marginLeft: 15,
-    height: 50,
-    backgroundColor: '#ED8F31',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  editButtonText: {
-    fontSize: 18,
-    textAlign: 'center',
-    fontFamily: Fonts.poppinsRegular,
-    color: '#FFFFFF',
-    lineHeight: 27,
-  },
-  addCardBtnTxt: {
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 16,
-    letterSpacing: 0.3,
-    textAlign: 'left',
-    color: Colors.darkOrange,
-    lineHeight: 25,
-  },
-  cardRowContainer: {
-    marginBottom: 15,
-    paddingBottom: 5,
-    alignItems: 'center',
-    borderBottomColor: 'rgba(148, 158, 174, 0.2)',
-    borderBottomWidth: 1,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    fieldLabel: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: '#949EAE',
+      lineHeight: 18,
+    },
+    fieldInput: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    fieldError: {
+      fontSize: 10,
+      marginLeft: 20,
+      alignSelf: 'flex-start',
+      color: 'red',
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      marginVertical: 5,
+    },
+    formContainer: {
+      marginRight: 40,
+      marginLeft: 20,
+      justifyContent: 'space-between',
+      flex: 1,
+      alignItems: 'center',
+    },
+    editButton: {
+      width: '100%',
+      marginTop: 30,
+      marginLeft: 15,
+      height: 50,
+      backgroundColor: colors.darkOrange,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    editButtonText: {
+      fontSize: 18,
+      textAlign: 'center',
+      fontFamily: Fonts.poppinsRegular,
+      color: '#FFFFFF',
+      lineHeight: 27,
+    },
+    addCardBtnTxt: {
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 16,
+      letterSpacing: 0.3,
+      textAlign: 'left',
+      color: colors.darkOrange,
+      lineHeight: 25,
+    },
+    cardRowContainer: {
+      marginBottom: 15,
+      paddingBottom: 5,
+      alignItems: 'center',
+      borderBottomColor: 'rgba(148, 158, 174, 0.2)',
+      borderBottomWidth: 1,
+    },
+  });

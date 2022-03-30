@@ -4,7 +4,6 @@ import {Fonts} from '../../theme/fonts';
 import Button from '../../components/Button';
 import LinearGradient from 'react-native-linear-gradient';
 import ActiveOrderListItem from '../../components/ActiveOrderListItem';
-import {Colors} from '../../theme/color';
 import AppHeader from '../../components/AppHeader';
 import {hasNotch} from 'react-native-device-info';
 import CategoriesListItem from '../../components/CategoriesListItem';
@@ -16,6 +15,7 @@ import {errorMessage} from '../../redux/utils/alerts';
 import AppLoader from '../../components/AppLoader';
 import {NavigationEvents} from 'react-navigation';
 import TPFlatList from '../../components/TPFlatList';
+import useCustomTheme from '../../theme/useTheme';
 const isAndroid = Platform.OS === 'android';
 
 const headerHeight =
@@ -26,6 +26,9 @@ const CustomerHome = ({navigation}) => {
   const products = useSelector((state) => state.products);
   const order = useSelector((state) => state.order);
   const cart = useSelector((state) => state.cart.cart);
+  const user = useSelector((state) => state.user?.user);
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
 
   const getCartItems = () => {
     dispatch({
@@ -36,6 +39,7 @@ const CustomerHome = ({navigation}) => {
   const fetchAllCategories = () => {
     dispatch(
       allActions.productActions.fetchAllCategories({
+        profile_id: user?.profile_id,
         onFail: (_error) => {
           errorMessage({
             message: _error?.message || _error?.Message,
@@ -75,6 +79,7 @@ const CustomerHome = ({navigation}) => {
   const fetchAllActiveOrders = () => {
     dispatch(
       allActions.orderActions.fetchAllActiveOrders({
+        profile_id: user?.profile_id,
         onFail: (_error) => {
           errorMessage({
             message: _error?.message || _error?.Message,
@@ -93,14 +98,14 @@ const CustomerHome = ({navigation}) => {
       <View style={styles.orderContainer}>
         <Text>
           <Text style={styles.textActiveOrders}>Active Orders </Text>
-          {order?.allActiveOrders?.length > 0 && (
+          {order?.allActiveOrders?.length > 0 ? (
             <Text style={styles.textOrders}>
               ({order?.allActiveOrders?.length})
             </Text>
-          )}
+          ) : null}
         </Text>
         <LinearGradient
-          colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+          colors={[colors.lightOrange, colors.darkOrange]}
           style={{height: 36, width: 121}}
           start={{y: 0.0, x: 1.0}}
           end={{y: 0.0, x: 0.0}}>
@@ -116,7 +121,7 @@ const CustomerHome = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <NavigationEvents
         onDidFocus={() => {
           fetchAllActiveOrders();
@@ -128,8 +133,8 @@ const CustomerHome = ({navigation}) => {
         leftButtonImage={<Menu />}
         rightButtonImage={
           <View style={{minWidth: 25, height: 25}}>
-            <Cart color={Colors.white} height={22} width={35} />
-            {cart.length > 0 && (
+            <Cart color={colors.white} height={22} width={35} />
+            {cart.length > 0 ? (
               <View
                 style={{
                   position: 'absolute',
@@ -151,7 +156,7 @@ const CustomerHome = ({navigation}) => {
                   {cart.length}
                 </Text>
               </View>
-            )}
+            ) : null}
           </View>
         }
         onRightButtonPress={() => navigation.navigate('CustomerOrderBasket')}
@@ -175,9 +180,9 @@ const CustomerHome = ({navigation}) => {
                 categoryTitle={item.title}
                 categoryPrice={item.startingFrom}
                 categoryImage={item.image}
-                onPress={() =>
-                  navigation.navigate('LaundryServices', {category: item})
-                }
+                onPress={() => {
+                  navigation.navigate('LaundryServices', {category: item});
+                }}
               />
             )}
           />
@@ -236,60 +241,61 @@ const CustomerHome = ({navigation}) => {
 
 export default CustomerHome;
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flex: 1,
-    width: '100%',
-    alignContent: 'center',
-    alignItems: 'center',
-  },
-  headerHeading: {
-    marginTop: 20,
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 33,
-    letterSpacing: 0.6,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 46,
-  },
-  textActiveOrders: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 18,
-    color: Colors.steelBlue,
-    lineHeight: 27,
-  },
-  textOrders: {
-    fontFamily: Fonts.poppinsBold,
-    fontSize: 14,
-    color: Colors.darkOrange,
-    lineHeight: 21,
-  },
-  orderContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-  },
-  buttonOrderHistory: {
-    height: 36,
-    width: 121,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonOrderHistoryText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    color: Colors.white,
-    lineHeight: 18,
-  },
-  listContainer: {
-    flex: 1,
-    marginTop: 100,
-    marginBottom: 20,
-  },
-  categoryList: {
-    marginTop: isAndroid ? 45 : 60,
-    marginBottom: -100,
-    flex: 1,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    headerContainer: {
+      flex: 1,
+      width: '100%',
+      alignContent: 'center',
+      alignItems: 'center',
+    },
+    headerHeading: {
+      marginTop: 20,
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 33,
+      letterSpacing: 0.6,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 46,
+    },
+    textActiveOrders: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 18,
+      color: colors.steelBlue,
+      lineHeight: 27,
+    },
+    textOrders: {
+      fontFamily: Fonts.poppinsBold,
+      fontSize: 14,
+      color: colors.darkOrange,
+      lineHeight: 21,
+    },
+    orderContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 15,
+    },
+    buttonOrderHistory: {
+      height: 36,
+      width: 121,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonOrderHistoryText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      color: colors.white,
+      lineHeight: 18,
+    },
+    listContainer: {
+      flex: 1,
+      marginTop: 100,
+      marginBottom: 20,
+    },
+    categoryList: {
+      marginTop: isAndroid ? 45 : 60,
+      marginBottom: -100,
+      flex: 1,
+    },
+  });

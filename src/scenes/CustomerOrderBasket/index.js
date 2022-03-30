@@ -15,7 +15,6 @@ import AppHeader from '../../components/AppHeader';
 import {hasNotch} from 'react-native-device-info';
 import {Menu} from '../../../assets/img/menu';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
 import MyBasketOrderItem from '../../components/MyBasketOrderItem';
 import Button from '../../components/Button';
 import {Cart} from '../../../assets/img/cart';
@@ -27,7 +26,7 @@ import {calculateTotal} from '../../redux/utils/helper';
 import allActions from '../../redux/actions';
 import {errorMessage} from '../../redux/utils/alerts';
 import useDebounce from '../../redux/utils/useDebounce';
-import TPFlatList from '../../components/TPFlatList';
+import useCustomTheme from '../../theme/useTheme';
 
 const isAndroid = Platform.OS === 'android';
 const headerHeight =
@@ -35,6 +34,8 @@ const headerHeight =
 
 const CustomerOrderBasket = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const cart = useSelector((state) => state.cart.cart);
   const coupon = useSelector((state) => state.coupon.coupon);
   const config = useSelector((state) => state.products.config);
@@ -66,7 +67,8 @@ const CustomerOrderBasket = memo(({navigation}) => {
   let discountValue = getDiscountValue(total);
   let discount = total - (discountValue || 0);
   let HST = Math.trunc(discount * config?.system?.HSTPercentage) / 100;
-  let grandTotal = Number(discount + HST)?.toFixed(2);
+  let deliveryFee = Math.trunc(config?.system?.DeliveryFee);
+  let grandTotal = Number(discount + HST + deliveryFee)?.toFixed(2);
   const {minAmount = 0, minProduct = 0} = refferalCoupon || {};
 
   useEffect(() => {
@@ -220,7 +222,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
         nestedScrollEnabled={false}
         contentContainerStyle={{flexGrow: 1}}
         bounces={false}>
-        <View style={{flex: 1, backgroundColor: Colors.white}}>
+        <View style={{flex: 1, backgroundColor: colors.white}}>
           <AppHeader
             headerTitle="My Basket"
             headerTitleStyle={{marginRight: 20}}
@@ -240,6 +242,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
                 }}>
                 Grand Total
               </Text>
+
               <Text
                 style={{
                   fontFamily: Fonts.poppinsBold,
@@ -249,6 +252,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
                 }}>
                 {'$' + grandTotal}
               </Text>
+
               <View
                 style={{
                   flexDirection: 'row',
@@ -264,7 +268,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
                   <Text
                     style={{
                       fontFamily: Fonts.poppinsRegular,
-                      fontSize: 16,
+                      fontSize: 14,
                       color: '#ffffff',
                     }}>
                     Total Amount
@@ -272,49 +276,51 @@ const CustomerOrderBasket = memo(({navigation}) => {
                   <Text
                     style={{
                       fontFamily: Fonts.poppinsBold,
-                      fontSize: 21,
+                      fontSize: 18,
                       color: '#ffffff',
                     }}>
                     {'$' + total}
                   </Text>
                 </View>
-                {discountValue > 0 && [
-                  <Text
-                    style={{
-                      fontFamily: Fonts.poppinsBold,
-                      fontSize: 40,
-                      color: '#ffffff',
-                    }}>
-                    -
-                  </Text>,
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text
-                      style={{
-                        fontFamily: Fonts.poppinsRegular,
-                        fontSize: 16,
-                        color: '#ffffff',
-                      }}>
-                      Discount
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: Fonts.poppinsBold,
-                        fontSize: 21,
-                        color: '#ffffff',
-                      }}>
-                      {printableDiscount()}
-                    </Text>
-                  </View>,
-                ]}
+                {discountValue > 0
+                  ? [
+                      <Text
+                        style={{
+                          fontFamily: Fonts.poppinsBold,
+                          fontSize: 35,
+                          color: '#ffffff',
+                        }}>
+                        -
+                      </Text>,
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Text
+                          style={{
+                            fontFamily: Fonts.poppinsRegular,
+                            fontSize: 14,
+                            color: '#ffffff',
+                          }}>
+                          Discount
+                        </Text>
+                        <Text
+                          style={{
+                            fontFamily: Fonts.poppinsBold,
+                            fontSize: 18,
+                            color: '#ffffff',
+                          }}>
+                          {printableDiscount()}
+                        </Text>
+                      </View>,
+                    ]
+                  : null}
                 <Text
                   style={{
                     fontFamily: Fonts.poppinsBold,
-                    fontSize: 40,
+                    fontSize: 35,
                     color: '#ffffff',
                   }}>
                   +
@@ -328,7 +334,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
                   <Text
                     style={{
                       fontFamily: Fonts.poppinsRegular,
-                      fontSize: 16,
+                      fontSize: 14,
                       color: '#ffffff',
                     }}>
                     HST {config?.system?.HSTPercentage}%
@@ -342,6 +348,41 @@ const CustomerOrderBasket = memo(({navigation}) => {
                     {'$' + HST?.toFixed(2)}
                   </Text>
                 </View>
+                {deliveryFee ? (
+                  <>
+                    <Text
+                      style={{
+                        fontFamily: Fonts.poppinsBold,
+                        fontSize: 35,
+                        color: '#ffffff',
+                      }}>
+                      +
+                    </Text>
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text
+                        style={{
+                          fontFamily: Fonts.poppinsRegular,
+                          fontSize: 14,
+                          color: '#ffffff',
+                        }}>
+                        Delivery Fee
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: Fonts.poppinsBold,
+                          fontSize: 21,
+                          color: '#ffffff',
+                        }}>
+                        {'$' + deliveryFee?.toFixed(2)}
+                      </Text>
+                    </View>
+                  </>
+                ) : null}
               </View>
             </View>
           </AppHeader>
@@ -366,7 +407,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
                       fontSize: 16,
                       letterSpacing: 0.3,
                       marginTop: 15,
-                      color: '#ed8f31',
+                      color: colors.darkOrange,
                       lineHeight: 25,
                     }}>
                     Your cart is empty
@@ -379,7 +420,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
                       fontSize: 14,
                       letterSpacing: 0.3,
                       textAlign: 'center',
-                      color: '#2c436a',
+                      color: colors.steelBlue,
                       lineHeight: 21,
                     }}>
                     Start adding items by tapping add item button below
@@ -419,7 +460,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
                 onPress={() => navigation.navigate('CustomerHome')}
                 buttonStyle={{
                   borderWidth: 1,
-                  borderColor: Colors.darkOrange,
+                  borderColor: colors.darkOrange,
                   padding: 10,
                   borderStyle: 'dashed',
                 }}
@@ -428,10 +469,10 @@ const CustomerOrderBasket = memo(({navigation}) => {
                   marginHorizontal: 5,
                   fontSize: 16,
                   letterSpacing: 0.3,
-                  color: '#ed8f31',
+                  color: colors.darkOrange,
                 }}
               />
-              {isRefferal && cart.length > 0 && (
+              {isRefferal && cart.length > 0 ? (
                 <View style={{width: '85%'}}>
                   <TouchableOpacity
                     onPress={() => onRefferalChecked()}
@@ -448,11 +489,11 @@ const CustomerOrderBasket = memo(({navigation}) => {
                       style={{
                         borderRadius: 0,
                         backgroundColor: referralChecked
-                          ? '#ED8F31'
+                          ? colors.darkOrange
                           : 'transparent',
                         borderColor: referralChecked
                           ? 'transparent'
-                          : '#2c436a',
+                          : colors.steelBlue,
                       }}
                     />
                     <NBText
@@ -464,7 +505,7 @@ const CustomerOrderBasket = memo(({navigation}) => {
                       Coupon Refferal
                     </NBText>
                   </TouchableOpacity>
-                  {getReferralError() && (
+                  {getReferralError() ? (
                     <Text
                       numberOfLines={2}
                       style={{
@@ -475,16 +516,16 @@ const CustomerOrderBasket = memo(({navigation}) => {
                       }}>
                       {getReferralError()}
                     </Text>
-                  )}
+                  ) : null}
                 </View>
-              )}
-              {cart.length > 0 && (
+              ) : null}
+              {cart.length > 0 ? (
                 <Item
                   disabled={referralChecked}
                   style={{
                     paddingHorizontal: 5,
                     paddingVertical: 2,
-                    borderColor: referralChecked ? '#ddd' : Colors.darkOrange,
+                    borderColor: referralChecked ? '#ddd' : colors.darkOrange,
                     marginTop: 20,
                     borderTopWidth: 1,
                     borderRightWidth: 1,
@@ -505,16 +546,16 @@ const CustomerOrderBasket = memo(({navigation}) => {
                   <Input
                     editable={!referralChecked}
                     placeholder="Add Promo Code"
-                    placeholderTextColor="#2c436a"
+                    placeholderTextColor={colors.steelBlue}
                     inlineLabel
                     returnKeyType={'done'}
                     value={couponValue}
                     onChangeText={(value) => setCouponValue(value)}
                   />
                 </Item>
-              )}
+              ) : null}
               <LinearGradient
-                colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+                colors={[colors.lightOrange, colors.darkOrange]}
                 start={{y: 0.0, x: 1.0}}
                 style={{width: '85%', marginVertical: 25}}
                 end={{y: 0.0, x: 0.0}}>
@@ -536,36 +577,37 @@ const CustomerOrderBasket = memo(({navigation}) => {
 
 export default CustomerOrderBasket;
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flex: 1,
-    paddingBottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerHeading: {
-    marginTop: 20,
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 33,
-    letterSpacing: 0.6,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 46,
-  },
-  listContainer: {
-    flex: 1,
-  },
-  buttonPlaceOrder: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonPlaceOrderText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    headerContainer: {
+      flex: 1,
+      paddingBottom: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    headerHeading: {
+      marginTop: 20,
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 33,
+      letterSpacing: 0.6,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 46,
+    },
+    listContainer: {
+      flex: 1,
+    },
+    buttonPlaceOrder: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonPlaceOrderText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+  });

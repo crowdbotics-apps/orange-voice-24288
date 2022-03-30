@@ -2,7 +2,6 @@ import React, {memo, useEffect} from 'react';
 import {StyleSheet, Text, View, FlatList, Platform} from 'react-native';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
-import {Colors} from '../../theme/color';
 import {BackArrow} from '../../../assets/img/backArrow';
 import {Cart} from '../../../assets/img/cart';
 import OrderListItem from '../../components/OrderListItem';
@@ -11,8 +10,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import Button from '../../components/Button';
 import ProgressCircle from 'react-native-progress-circle';
 import PinOrange from '../../../assets/img/pin.svg';
-import Calendar from '../../../assets/img/calendar.svg';
-import Clock from '../../../assets/img/clock.svg';
+import Calendar from '../../../assets/img/Calendar';
+import Clock from '../../../assets/img/Clock';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../../redux/actions';
 import {errorMessage} from '../../redux/utils/alerts';
@@ -25,6 +24,7 @@ import {
   progressImageLarge,
 } from '../../redux/utils/orderUtil';
 import TPFlatList from '../../components/TPFlatList';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
@@ -32,6 +32,8 @@ const headerHeight =
   hasNotch && !isAndroid ? 100 : !hasNotch && !isAndroid ? 85 : 60;
 
 const CustomerOrderDetails = memo(({navigation}) => {
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const orderId = navigation.getParam('orderId');
   const isDriver = navigation?.getParam('isDriver', false);
   const dispatch = useDispatch();
@@ -99,26 +101,26 @@ const CustomerOrderDetails = memo(({navigation}) => {
             ${`${taxAmount}`.slice(0, `${taxAmount}`.indexOf('.') + 3)}
           </Text>
         </View>
-        {discountAmount > 0 && (
+        {discountAmount > 0 ? (
           <View style={styles.discountContainer}>
             <Text style={styles.receiptTitle}>Discount</Text>
             <Text style={styles.receiptValue}>
               ${discountAmount?.toFixed(2)}
             </Text>
           </View>
-        )}
+        ) : null}
 
         <View style={styles.grandTotalContainer}>
-          <Text style={{...styles.receiptTitle, color: Colors.white}}>
+          <Text style={{...styles.receiptTitle, color: colors.white}}>
             Grand Total
           </Text>
-          <Text style={{...styles.receiptValue, color: Colors.white}}>
+          <Text style={{...styles.receiptValue, color: colors.white}}>
             ${totalAmount}
           </Text>
         </View>
-        {status === 'OrderPlaced' && (
+        {status === 'OrderPlaced' ? (
           <LinearGradient
-            colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+            colors={[colors.lightOrange, colors.darkOrange]}
             start={{y: 0.0, x: 1.0}}
             style={{width: '90%', alignSelf: 'center', marginTop: 18}}
             end={{y: 0.0, x: 0.0}}>
@@ -129,7 +131,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
               onPress={() => cancelOrderById()}
             />
           </LinearGradient>
-        )}
+        ) : null}
       </View>
     );
   };
@@ -161,8 +163,8 @@ const CustomerOrderDetails = memo(({navigation}) => {
             radius={60}
             borderWidth={6}
             color={progressColor[status]}
-            shadowColor={Colors.progressShadow}
-            bgColor={Colors.white}>
+            shadowColor={colors.progressShadow}
+            bgColor={colors.white}>
             {progressImageLarge[status]}
           </ProgressCircle>
           <View style={{flex: 1, marginLeft: 30}}>
@@ -176,9 +178,9 @@ const CustomerOrderDetails = memo(({navigation}) => {
             <Text style={styles.textOrderStatus(status)}>
               {statusTitle[status]}
             </Text>
-            {!isDriver && (
+            {!isDriver ? (
               <LinearGradient
-                colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+                colors={[colors.lightOrange, colors.darkOrange]}
                 style={{height: 36, width: 113, marginTop: 10}}
                 start={{y: 0.0, x: 1.0}}
                 end={{y: 0.0, x: 0.0}}>
@@ -193,7 +195,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   }
                 />
               </LinearGradient>
-            )}
+            ) : null}
           </View>
         </View>
         <View
@@ -210,7 +212,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                 fontFamily: Fonts.poppinsRegular,
                 fontSize: 14,
                 letterSpacing: 0.3,
-                color: '#ed8f31',
+                color: colors.darkOrange,
                 marginVertical: 10,
               }}>
               Pick Up Date & Time
@@ -221,7 +223,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Calendar />
+              <Calendar fill={colors.steelBlue} />
               <Text
                 style={{
                   fontFamily: Fonts.poppinsRegular,
@@ -229,7 +231,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   flex: 1,
                   paddingLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                 }}>
                 {moment(pickupDate).format('ddd, DD MMM YYYY')}
               </Text>
@@ -242,7 +244,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                 width: 150,
                 alignItems: 'center',
               }}>
-              <Clock />
+              <Clock fill={colors.steelBlue} />
               <Text
                 style={{
                   fontFamily: Fonts.poppinsRegular,
@@ -250,7 +252,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   flex: 1,
                   paddingLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                 }}>
                 {pickupTime}
               </Text>
@@ -266,7 +268,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                 fontSize: 14,
                 marginVertical: 10,
                 letterSpacing: 0.3,
-                color: '#ed8f31',
+                color: colors.darkOrange,
               }}>
               Drop Off Date & Time
             </Text>
@@ -276,7 +278,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Calendar />
+              <Calendar fill={colors.steelBlue} />
               <Text
                 style={{
                   fontFamily: Fonts.poppinsRegular,
@@ -284,7 +286,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   flex: 1,
                   paddingLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                 }}>
                 {moment(dropoffDate).format('ddd, DD MMM YYYY')}
               </Text>
@@ -295,7 +297,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Clock />
+              <Clock fill={colors.steelBlue} />
               <Text
                 style={{
                   fontFamily: Fonts.poppinsRegular,
@@ -304,7 +306,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   fontSize: 12,
                   letterSpacing: 0.2,
                   marginVertical: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                 }}>
                 {dropoffTime}
               </Text>
@@ -317,7 +319,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
             borderColor: '#332c436a',
             borderTopWidth: 0.3,
           }}>
-          {isDriver && !isBlankString(buzzerCode) && (
+          {isDriver && !isBlankString(buzzerCode) ? (
             <View
               style={{
                 flexDirection: 'row',
@@ -336,7 +338,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   textAlign: 'left',
                   marginLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                   lineHeight: 18,
                 }}>
                 Buzzer Code
@@ -348,16 +350,16 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   textAlign: 'left',
                   marginLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                   lineHeight: 18,
                   fontWeight: 'bold',
                 }}>
                 {buzzerCode ?? ''}
               </Text>
             </View>
-          )}
+          ) : null}
 
-          {isDriver && !isBlankString(suite) && (
+          {isDriver && !isBlankString(suite) ? (
             <View
               style={{
                 flexDirection: 'row',
@@ -376,7 +378,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   textAlign: 'left',
                   marginLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                   lineHeight: 18,
                 }}>
                 Suite Number
@@ -388,14 +390,14 @@ const CustomerOrderDetails = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   textAlign: 'left',
                   marginLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                   lineHeight: 18,
                   fontWeight: 'bold',
                 }}>
                 {suite ?? ''}
               </Text>
             </View>
-          )}
+          ) : null}
 
           <View
             style={{
@@ -412,7 +414,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                 letterSpacing: 0.2,
                 textAlign: 'left',
                 marginLeft: 10,
-                color: '#2c436a',
+                color: colors.steelBlue,
                 lineHeight: 18,
               }}>
               {deliveryAddress}
@@ -424,7 +426,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <AppHeader
         headerTitle="Order Details"
         headerStyle={{
@@ -434,8 +436,8 @@ const CustomerOrderDetails = memo(({navigation}) => {
         rightButtonImage={
           !isDriver ? (
             <View style={{minWidth: 25, height: 25}}>
-              <Cart color={Colors.white} height={22} width={35} />
-              {cart.length > 0 && (
+              <Cart color={colors.white} height={22} width={35} />
+              {cart.length > 0 ? (
                 <View
                   style={{
                     position: 'absolute',
@@ -457,7 +459,7 @@ const CustomerOrderDetails = memo(({navigation}) => {
                     {cart.length}
                   </Text>
                 </View>
-              )}
+              ) : null}
             </View>
           ) : undefined
         }
@@ -507,121 +509,122 @@ const CustomerOrderDetails = memo(({navigation}) => {
 
 export default CustomerOrderDetails;
 
-const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-    marginVertical: 10,
-  },
-  buttonOrder: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonOrderText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-  receiptView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    marginHorizontal: 22,
-    borderBottomColor: '#332c436a',
-    paddingBottom: 12,
-  },
-  receiptTitle: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: '#2c436a',
-  },
-  receiptValue: {
-    fontFamily: Fonts.poppinsBold,
-    fontSize: 14,
-    color: '#2c436a',
-  },
-  grandTotalContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: 50,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    backgroundColor: '#357bf3',
-  },
-  discountContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 20,
-    paddingBottom: 12,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
-    marginHorizontal: 25,
-  },
-  textOrderId: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 18,
-    letterSpacing: 0.3,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 21,
-  },
-  textOrderNumber: {
-    fontFamily: Fonts.poppinsBold,
-    fontSize: 18,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 21,
-  },
-  textOrderDateTime: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 14,
-    letterSpacing: 0.2,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 18,
-  },
-  textOrderStatus: (status) => ({
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 14,
-    letterSpacing: 0.2,
-    textAlign: 'left',
-    color: progressColor[status],
-    lineHeight: 18,
-  }),
-  itemNumberContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  textItemCount: {
-    fontFamily: Fonts.poppinsBold,
-    fontSize: 16,
-    color: Colors.darkOrange,
-  },
-  textItems: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 10,
-    color: Colors.darkOrange,
-  },
-  buttonOrderHistory: {
-    height: 36,
-    width: 113,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonOrderHistoryText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    textAlign: 'left',
-    color: '#ffffff',
-    lineHeight: 18,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    listContainer: {
+      flex: 1,
+      marginVertical: 10,
+    },
+    buttonOrder: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonOrderText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+    receiptView: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      marginHorizontal: 22,
+      borderBottomColor: '#332c436a',
+      paddingBottom: 12,
+    },
+    receiptTitle: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: colors.steelBlue,
+    },
+    receiptValue: {
+      fontFamily: Fonts.poppinsBold,
+      fontSize: 14,
+      color: colors.steelBlue,
+    },
+    grandTotalContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      height: 50,
+      paddingHorizontal: 20,
+      alignItems: 'center',
+      backgroundColor: '#357bf3',
+    },
+    discountContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginHorizontal: 20,
+      paddingBottom: 12,
+    },
+    itemContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginTop: 10,
+      marginHorizontal: 25,
+    },
+    textOrderId: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 18,
+      letterSpacing: 0.3,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    textOrderNumber: {
+      fontFamily: Fonts.poppinsBold,
+      fontSize: 18,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    textOrderDateTime: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 14,
+      letterSpacing: 0.2,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 18,
+    },
+    textOrderStatus: (status) => ({
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 14,
+      letterSpacing: 0.2,
+      textAlign: 'left',
+      color: progressColor[status],
+      lineHeight: 18,
+    }),
+    itemNumberContainer: {
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    textItemCount: {
+      fontFamily: Fonts.poppinsBold,
+      fontSize: 16,
+      color: colors.darkOrange,
+    },
+    textItems: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 10,
+      color: colors.darkOrange,
+    },
+    buttonOrderHistory: {
+      height: 36,
+      width: 113,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonOrderHistoryText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      textAlign: 'left',
+      color: '#ffffff',
+      lineHeight: 18,
+    },
+  });

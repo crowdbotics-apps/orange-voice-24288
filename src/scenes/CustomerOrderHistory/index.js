@@ -4,7 +4,6 @@ import OrderHistoryListItem from '../../components/OrderHistoryListItem';
 import AppHeader from '../../components/AppHeader';
 import {BackArrow} from '../../../assets/img/backArrow';
 import {Cart} from '../../../assets/img/cart';
-import {Colors} from '../../theme/color';
 import DeviceInfo from 'react-native-device-info';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '../../redux/actions';
@@ -14,14 +13,18 @@ import {NavigationEvents} from 'react-navigation';
 import TPFlatList from '../../components/TPFlatList';
 import {Toast} from 'native-base';
 import {Fonts} from '../../theme/fonts';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const CustomerOrderHistory = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const order = useSelector((state) => state.order);
   const cart = useSelector((state) => state.cart.cart);
+  const user = useSelector((state) => state.user.user);
   const meta = order?.meta;
   const paging = order?.orderHistoryPaging || {};
   const {loading = false} = meta;
@@ -32,6 +35,7 @@ const CustomerOrderHistory = memo(({navigation}) => {
   const fetchOrderHistory = () => {
     dispatch(
       allActions.orderActions.fetchOrderHistory({
+        profile_id: user?.profile_id,
         onFail: (_error) => {
           errorMessage({
             message: _error?.message || _error?.Message,
@@ -109,7 +113,7 @@ const CustomerOrderHistory = memo(({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <NavigationEvents onDidFocus={() => fetchOrderHistory()} />
       <AppHeader
         headerTitle="Order History"
@@ -120,8 +124,8 @@ const CustomerOrderHistory = memo(({navigation}) => {
         leftButtonImage={<BackArrow />}
         rightButtonImage={
           <View style={{minWidth: 25, height: 25}}>
-            <Cart color={Colors.white} height={22} width={35} />
-            {cart.length > 0 && (
+            <Cart color={colors.white} height={22} width={35} />
+            {cart.length > 0 ? (
               <View
                 style={{
                   position: 'absolute',
@@ -143,7 +147,7 @@ const CustomerOrderHistory = memo(({navigation}) => {
                   {cart.length}
                 </Text>
               </View>
-            )}
+            ) : null}
           </View>
         }
         onRightButtonPress={() => navigation.navigate('CustomerOrderBasket')}
@@ -198,9 +202,10 @@ const CustomerOrderHistory = memo(({navigation}) => {
 
 export default CustomerOrderHistory;
 
-const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-    marginVertical: 10,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    listContainer: {
+      flex: 1,
+      marginVertical: 10,
+    },
+  });

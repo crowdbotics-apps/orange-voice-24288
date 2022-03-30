@@ -46,7 +46,7 @@ const getFAQsById = (id) => {
 };
 
 const getLovs = () => {
-  return api.get(`api/v1/lov/all`);
+  return api.get(`${API_URL_SUFFIX}lov/all`);
 };
 
 export default {

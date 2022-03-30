@@ -3,7 +3,6 @@ import {StyleSheet, Text, View, Platform} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import DeviceInfo from 'react-native-device-info';
 import AppHeader from '../../components/AppHeader';
-import {Colors} from '../../theme/color';
 import {BackArrow} from '../../../assets/img/backArrow';
 import {Cart} from '../../../assets/img/cart';
 import {Fonts} from '../../theme/fonts';
@@ -15,12 +14,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Toast} from 'native-base';
 import allActions from '../../redux/actions';
 import {errorMessage} from '../../../src/redux/utils/alerts';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const LaundryServiceDetails = memo(({navigation}) => {
   const service = navigation.getParam('service');
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const categoryTitle = navigation.getParam('categoryTitle');
   const {minQty = 1} = service || {};
   const dispatch = useDispatch();
@@ -102,14 +104,14 @@ const LaundryServiceDetails = memo(({navigation}) => {
           }}
         />
         <View style={styles.serviceInfoContainer}>
-          {serviceTitle && (
+          {serviceTitle ? (
             <Text style={styles.serviceTitle}>{serviceTitle}</Text>
-          )}
-          {serviceDesc && (
+          ) : null}
+          {serviceDesc ? (
             <Text numberOfLines={3} style={styles.serviceDescription}>
               {serviceDesc}
             </Text>
-          )}
+          ) : null}
           <Text
             style={[
               styles.serviceDescription,
@@ -122,12 +124,12 @@ const LaundryServiceDetails = memo(({navigation}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            {serviceCharges && (
+            {serviceCharges ? (
               <Text style={styles.serviceCharges}>
                 {serviceCharges}{' '}
-                <Text style={{color: '#2c436a', fontSize: 13}}>/ Item</Text>
+                <Text style={{color: colors.steelBlue, fontSize: 13}}>/ Item</Text>
               </Text>
-            )}
+            ) : null}
             <NumberCounter
               minValue={minQty}
               counterValue={counter}
@@ -143,7 +145,7 @@ const LaundryServiceDetails = memo(({navigation}) => {
     return (
       <View style={{marginHorizontal: 20, marginVertical: 10}}>
         <LinearGradient
-          colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+          colors={[colors.lightOrange, colors.darkOrange]}
           start={{y: 0.0, x: 1.0}}
           style={{width: '100%'}}
           end={{y: 0.0, x: 0.0}}>
@@ -160,7 +162,7 @@ const LaundryServiceDetails = memo(({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <AppHeader
         headerTitle={categoryTitle}
         headerStyle={{
@@ -170,8 +172,8 @@ const LaundryServiceDetails = memo(({navigation}) => {
         leftButtonImage={<BackArrow />}
         rightButtonImage={
           <View style={{minWidth: 25, height: 25}}>
-            <Cart color={Colors.white} height={22} width={35} />
-            {cart.length > 0 && (
+            <Cart color={colors.white} height={22} width={35} />
+            {cart.length > 0 ? (
               <View
                 style={{
                   position: 'absolute',
@@ -193,7 +195,7 @@ const LaundryServiceDetails = memo(({navigation}) => {
                   {cart.length}
                 </Text>
               </View>
-            )}
+            ) : null}
           </View>
         }
         onRightButtonPress={() => navigation.navigate('CustomerOrderBasket')}
@@ -212,55 +214,56 @@ const LaundryServiceDetails = memo(({navigation}) => {
 
 export default LaundryServiceDetails;
 
-const styles = StyleSheet.create({
-  listContainer: {
-    flex: 1,
-  },
-  buttonLogin: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonLoginText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-  serviceInfoContainer: {
-    height: 145,
-    padding: 10,
-    marginHorizontal: 20,
-    backgroundColor: '#ffffff',
-    shadowColor: '#2c436a26',
-    justifyContent: 'space-between',
-    marginTop: -15,
-    shadowOffset: {
-      width: 0,
-      height: 1.3,
+const _styles = (colors) =>
+  StyleSheet.create({
+    listContainer: {
+      flex: 1,
     },
-    shadowRadius: 5.3,
-    shadowOpacity: 1,
-    elevation: 5,
-  },
-  serviceTitle: {
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 30,
-    letterSpacing: 0.6,
-    color: '#2c436a',
-  },
-  serviceDescription: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 10,
-    textAlign: 'justify',
-    color: '#2c436a',
-  },
-  serviceCharges: {
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 21,
-    letterSpacing: 0.4,
-    color: '#ed8f31',
-  },
-});
+    buttonLogin: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonLoginText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+    serviceInfoContainer: {
+      height: 145,
+      padding: 10,
+      marginHorizontal: 20,
+      backgroundColor: '#ffffff',
+      shadowColor: '#2c436a26',
+      justifyContent: 'space-between',
+      marginTop: -15,
+      shadowOffset: {
+        width: 0,
+        height: 1.3,
+      },
+      shadowRadius: 5.3,
+      shadowOpacity: 1,
+      elevation: 5,
+    },
+    serviceTitle: {
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 30,
+      letterSpacing: 0.6,
+      color: colors.steelBlue,
+    },
+    serviceDescription: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 10,
+      textAlign: 'justify',
+      color: colors.steelBlue,
+    },
+    serviceCharges: {
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 21,
+      letterSpacing: 0.4,
+      color: colors.darkOrange,
+    },
+  });

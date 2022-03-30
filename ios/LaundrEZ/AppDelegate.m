@@ -12,7 +12,7 @@
 #import <React/RCTRootView.h>
 #import "RNSplashScreen.h"
 #import "React/RCTLinkingManager.h"
-#import "FBSDKCoreKit.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <Firebase.h>
 #import <FirebaseCore/FIRApp.h>
 

@@ -22,13 +22,12 @@ import {
   Picker,
 } from 'native-base';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
 import {BackArrow} from '../../../assets/img/backArrow';
 import MapView, {Marker} from 'react-native-maps';
 import {Pin} from '../../../assets/img/pin';
-import Calendar from '../../../assets/img/calendar.svg';
+import Calendar from '../../../assets/img/Calendar';
 import Clock from '../../../assets/img/clock.svg';
 import PinOrange from '../../../assets/img/pin.svg';
 import TickOrange from '../../../assets/img/tick_orange.svg';
@@ -41,6 +40,7 @@ import {Picker as RNPickerSelect} from '@react-native-community/picker';
 import allActions from '../../redux/actions';
 import {errorMessage} from '../../redux/utils/alerts';
 import {NavigationEvents} from 'react-navigation';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
@@ -51,7 +51,8 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
   const orderDetails = useSelector((state) => state.order);
   const address = useSelector((state) => state.address.address);
   const user = useSelector((state) => state.user.user);
-
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const mapRef = useRef(null);
   const config = useSelector((state) => state.products.config);
 
@@ -336,7 +337,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
 
   const RenderSelectHeader = ({backAction, title}) => {
     return (
-      <Header style={{backgroundColor: 'rgba(237,143,49,1.0)'}}>
+      <Header style={{backgroundColor: colors.lightOrange}}>
         <Left>
           <TouchableOpacity
             style={{marginLeft: 18}}
@@ -357,7 +358,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{flex: 1, backgroundColor: 'transparent'}}>
-      <View style={{flex: 1, backgroundColor: Colors.white}}>
+      <View style={{flex: 1, backgroundColor: colors.white}}>
         <NavigationEvents onDidFocus={() => fetchAllAddress()} />
         <AppHeader
           headerTitle="Pick and Drop"
@@ -392,7 +393,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
                   paddingHorizontal: 15,
                 }}>
                 <View style={styles.dateTimeContainer}>
-                  <Calendar />
+                  <Calendar fill={colors.steelBlue} />
                   <Picker
                     renderHeader={(backAction) => (
                       <RenderSelectHeader
@@ -403,7 +404,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
                     style={{width: '100%'}}
                     placeholder="Select Date"
                     selectedValue={pickUpDateSelected}
-                    placeholderStyle={{color: '#2c436a'}}
+                    placeholderStyle={{color: colors.steelBlue}}
                     textStyle={{fontSize: 12}}
                     onValueChange={(value) => {
                       setPickUpDateSelected(value);
@@ -435,7 +436,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
                   <View style={{width: 2}} />
                   <Picker
                     placeholder="Select Time"
-                    placeholderStyle={{color: '#2c436a'}}
+                    placeholderStyle={{color: colors.steelBlue}}
                     selectedValue={pickUpTimeSelected}
                     renderHeader={(backAction) => (
                       <RenderSelectHeader
@@ -475,7 +476,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
                   paddingHorizontal: 15,
                 }}>
                 <View style={styles.dateTimeContainer}>
-                  <Calendar />
+                  <Calendar fill={colors.steelBlue} />
                   <View style={{width: 2}} />
                   <Picker
                     renderHeader={(backAction) => (
@@ -488,7 +489,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
                     placeholder="Select Date"
                     selectedValue={dropOffDateSelected}
                     disabled={!pickUpDate || !pickUpTime || !validPickup}
-                    placeholderStyle={{color: '#2c436a'}}
+                    placeholderStyle={{color: colors.steelBlue}}
                     textStyle={{fontSize: 12}}
                     onValueChange={(value) => {
                       onPickerDonePressed('dropoff');
@@ -524,7 +525,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
                     )}
                     disabled={!pickUpTime || !pickUpDate || !validPickup}
                     placeholder="Select Time"
-                    placeholderStyle={{color: '#2c436a'}}
+                    placeholderStyle={{color: colors.steelBlue}}
                     selectedValue={dropOffTimeSelected}
                     textStyle={{fontSize: 12}}
                     onValueChange={(value) => {
@@ -578,7 +579,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
                     style={{flexDirection: 'row', alignItems: 'center'}}>
                     <PinOrange />
                     <Text style={styles.addressText}>{item.mainAddress}</Text>
-                    {item.id === selectedAddress.id && <TickOrange />}
+                    {item.id === selectedAddress.id ? <TickOrange /> : null}
                   </TouchableOpacity>
                 )}
               />
@@ -599,7 +600,7 @@ const CustomerPickAndDropOrder = memo(({navigation, dropOfThreshold}) => {
           </ScrollView>
           <View style={styles.bottomCardContainer}>
             <LinearGradient
-              colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+              colors={[colors.lightOrange, colors.darkOrange]}
               start={{y: 0.0, x: 1.0}}
               style={{width: '100%'}}
               end={{y: 0.0, x: 0.0}}>
@@ -624,139 +625,140 @@ const mapStateToProps = ({products}) => ({
 
 export default connect(mapStateToProps, null)(CustomerPickAndDropOrder);
 
-const styles = StyleSheet.create({
-  addressText: {
-    flex: 1,
-    textAlign: 'justify',
-    marginHorizontal: 10,
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: '#2c436a',
-    lineHeight: 18,
-  },
-  calloutText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    textAlign: 'center',
-    flex: 1,
-    marginVertical: 5,
-    borderRadius: 3,
-    color: Colors.white,
-    padding: 5,
-    backgroundColor: Colors.lightBlue,
-    shadowColor: Colors.boxShadow,
-    shadowOffset: {
-      width: 0,
+const _styles = (colors) =>
+  StyleSheet.create({
+    addressText: {
+      flex: 1,
+      textAlign: 'justify',
+      marginHorizontal: 10,
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: colors.steelBlue,
+      lineHeight: 18,
+    },
+    calloutText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      textAlign: 'center',
+      flex: 1,
+      marginVertical: 5,
+      borderRadius: 3,
+      color: colors.white,
+      padding: 5,
+      backgroundColor: colors.lightBlue,
+      shadowColor: colors.boxShadow,
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowRadius: 2,
+      shadowOpacity: 1,
+      elevation: 5,
+    },
+    container: {
+      flex: 1,
+    },
+    overlayContainer: {
+      top: 10,
+      position: 'absolute',
+      marginLeft: 20,
+      width: '90%',
+      bottom: 90, // 40 button bottom, 50 button height
+      alignSelf: 'center',
+    },
+    pickAndDropContainer: {
+      top: 5,
+      paddingVertical: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#ffffff',
+      shadowColor: 'rgba(44, 67, 106, 0.15)',
+      shadowOffset: {
+        width: 0,
+        height: 1.3,
+      },
+      elevation: 5,
+      shadowRadius: 5.3,
+      shadowOpacity: 1,
+    },
+    pickAndDropTitle: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 16,
+      letterSpacing: 0.3,
+      color: colors.darkOrange,
+      lineHeight: 25,
+    },
+    dateTimeContainer: {
+      marginRight: 10,
+      marginVertical: 5,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center',
+    },
+    dateText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: colors.steelBlue,
+    },
+    separator: {
+      alignSelf: 'center',
+      borderWidth: 0.5,
+      borderStyle: 'solid',
+      borderColor: '#cdd9ec',
+      height: '45%',
+      marginRight: 10,
+    },
+    buttonPlaceOrder: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonPlaceOrderText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+    itemSeparator: {
       height: 1,
+      opacity: 0.5,
+      backgroundColor: colors.steelBlue,
+      marginVertical: 10,
     },
-    shadowRadius: 2,
-    shadowOpacity: 1,
-    elevation: 5,
-  },
-  container: {
-    flex: 1,
-  },
-  overlayContainer: {
-    top: 10,
-    position: 'absolute',
-    marginLeft: 20,
-    width: '90%',
-    bottom: 90, // 40 button bottom, 50 button height
-    alignSelf: 'center',
-  },
-  pickAndDropContainer: {
-    top: 5,
-    paddingVertical: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    shadowColor: 'rgba(44, 67, 106, 0.15)',
-    shadowOffset: {
-      width: 0,
-      height: 1.3,
+    addressList: {
+      margin: 20,
+      borderBottomWidth: 1,
+      paddingBottom: 10,
+      borderColor: 'rgba(44, 67, 106, 0.5)',
     },
-    elevation: 5,
-    shadowRadius: 5.3,
-    shadowOpacity: 1,
-  },
-  pickAndDropTitle: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 16,
-    letterSpacing: 0.3,
-    color: '#ed8f31',
-    lineHeight: 25,
-  },
-  dateTimeContainer: {
-    marginRight: 10,
-    marginVertical: 5,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  dateText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: '#2c436a',
-  },
-  separator: {
-    alignSelf: 'center',
-    borderWidth: 0.5,
-    borderStyle: 'solid',
-    borderColor: '#cdd9ec',
-    height: '45%',
-    marginRight: 10,
-  },
-  buttonPlaceOrder: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonPlaceOrderText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-  itemSeparator: {
-    height: 1,
-    opacity: 0.5,
-    backgroundColor: '#2c436a',
-    marginVertical: 10,
-  },
-  addressList: {
-    margin: 20,
-    borderBottomWidth: 1,
-    paddingBottom: 10,
-    borderColor: 'rgba(44, 67, 106, 0.5)',
-  },
-  bottomCardContainer: {
-    position: 'absolute',
-    bottom: 40,
-    marginHorizontal: 18,
-    width: '90%',
-    backgroundColor: '#ffffff',
-    shadowColor: 'rgba(44, 67, 106, 0.15)',
-    shadowOffset: {
-      width: 0,
-      height: 1.3,
+    bottomCardContainer: {
+      position: 'absolute',
+      bottom: 40,
+      marginHorizontal: 18,
+      width: '90%',
+      backgroundColor: '#ffffff',
+      shadowColor: 'rgba(44, 67, 106, 0.15)',
+      shadowOffset: {
+        width: 0,
+        height: 1.3,
+      },
+      shadowRadius: 5.3,
+      shadowOpacity: 1,
+      elevation: 5,
+      alignSelf: 'center',
     },
-    shadowRadius: 5.3,
-    shadowOpacity: 1,
-    elevation: 5,
-    alignSelf: 'center',
-  },
-  addCardBtnTxt: {
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    textAlign: 'left',
-    marginTop: 10,
-    color: Colors.darkOrange,
-    lineHeight: 25,
-  },
-});
+    addCardBtnTxt: {
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      textAlign: 'left',
+      marginTop: 10,
+      color: colors.darkOrange,
+      lineHeight: 25,
+    },
+  });

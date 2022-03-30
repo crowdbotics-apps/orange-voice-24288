@@ -6,7 +6,6 @@ import {API_URL_SUFFIX} from './config';
 //   "password": "string"
 // }
 const signIn = (params) => {
-  // return api.post(`/${params.type}/sign`, params);
   return api.post('rest-auth/login', {
     password: params.password,
     email: params.userName,
@@ -21,7 +20,7 @@ const driverSignIn = (params) => {
 //   "email": "string"
 // }
 const forgotPassword = (params) => {
-  return api.put(`/${params.type}/forgotpassword`, params);
+  return api.put(`rest-auth/password/reset/`, params);
 };
 
 // {
@@ -31,7 +30,6 @@ const forgotPassword = (params) => {
 //   "email": "string",
 // }
 const signup = (params) => {
-  // return api.post(`/${params.type}/signup`, params);
   return api.post('rest-auth/registration/', params);
 };
 

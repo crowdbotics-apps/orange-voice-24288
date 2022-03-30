@@ -12,12 +12,12 @@ const Button = memo(
           flexDirection: 'row',
           opacity: rest.disabled ? 0.5 : 1,
         }}>
-        {image && (
+        {image ? (
           <Image resizeMode={'contain'} style={imageStyle} source={image} />
-        )}
-        {svg && svg}
-        {svgUri && <SvgUri width={26} height={22} uri={svgUri} />}
-        {text && <Text style={textStyle}>{text}</Text>}
+        ) : null}
+        {svg ? svg : null}
+        {svgUri ? <SvgUri width={26} height={22} uri={svgUri} /> : null}
+        {text ? <Text style={textStyle}>{text}</Text> : null}
       </TouchableOpacity>
     );
   },

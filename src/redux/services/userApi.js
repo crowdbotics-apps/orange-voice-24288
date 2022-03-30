@@ -34,7 +34,7 @@ const updateUserProfile = (params) => {
 // }
 
 const resetUserPassword = (params) => {
-  return api.put('/user/changepassword', params);
+  return api.put('rest-auth/password/reset/', params);
 };
 
 export default {

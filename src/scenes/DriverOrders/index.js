@@ -9,7 +9,6 @@ import {
   SectionList,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {Colors} from '../../theme/color';
 import AppHeader from '../../components/AppHeader';
 import DriverTaskItem from '../../components/DriverTaskItem';
 import {Image} from 'react-native';
@@ -21,12 +20,15 @@ import {NavigationEvents} from 'react-navigation';
 import moment from 'moment';
 import {Fonts} from '../../theme/fonts';
 import {clearCredentials} from '../../redux/services/api';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const DriverOrders = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const {driverTasks} = useSelector((state) => state.order);
   const order = useSelector((state) => state.order);
   const [refreshing, setRefreshing] = useState(false);
@@ -140,7 +142,7 @@ const DriverOrders = memo(({navigation}) => {
         ]}
         renderSectionHeader={({section}) => [
           <Text style={styles.sectionHeader}>{section?.title}</Text>,
-          section?.data?.length === 0 && section?.ListEmptyComponent(),
+          section?.data?.length === 0 ? section?.ListEmptyComponent() : null,
         ]}
         SectionSeparatorComponent={() => <View style={{height: 10}} />}
         ListEmptyComponent={renderEmptyListView}
@@ -151,34 +153,35 @@ const DriverOrders = memo(({navigation}) => {
 
 export default DriverOrders;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-    paddingBottom: 20,
-  },
-  header: {
-    height: hasNotch && !isAndroid ? 102 : !hasNotch && !isAndroid ? 85 : 60,
-  },
-  list: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
-  txtNoTaskAvailable: {
-    color: Colors.darkOrange,
-    fontSize: 16,
-    letterSpacing: 0.3,
-    margin: 20,
-    textAlign: 'center',
-    fontFamily: Fonts.poppinsBold,
-  },
-  sectionHeader: {
-    backgroundColor: 'rgba(247,154,22,1)',
-    fontSize: 16,
-    padding: 5,
-    paddingHorizontal: 20,
-    letterSpacing: 0.3,
-    fontFamily: Fonts.poppinsRegular,
-    color: '#fff',
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.white,
+      paddingBottom: 20,
+    },
+    header: {
+      height: hasNotch && !isAndroid ? 102 : !hasNotch && !isAndroid ? 85 : 60,
+    },
+    list: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+    txtNoTaskAvailable: {
+      color: colors.darkOrange,
+      fontSize: 16,
+      letterSpacing: 0.3,
+      margin: 20,
+      textAlign: 'center',
+      fontFamily: Fonts.poppinsBold,
+    },
+    sectionHeader: {
+      backgroundColor: 'rgba(247,154,22,1)',
+      fontSize: 16,
+      padding: 5,
+      paddingHorizontal: 20,
+      letterSpacing: 0.3,
+      fontFamily: Fonts.poppinsRegular,
+      color: '#fff',
+    },
+  });

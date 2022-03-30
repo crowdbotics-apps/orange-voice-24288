@@ -42,10 +42,6 @@ def all_pods
     pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
     pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
     pod 'RNInputMask', :path => '../node_modules/react-native-text-input-mask/ios/InputMask'
-    pod 'FBSDKCoreKi'
-    pod 'FBSDKLoginKit'
-    pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
-    pod 'FirebaseAnalytics', '~> 7.0.0' 
 end
 
 target 'LaundrEZ' do

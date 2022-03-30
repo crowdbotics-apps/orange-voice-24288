@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.poppinsRegular,
     fontSize: 18,
     textAlign: 'center',
-    color: '#ed8f31',
+    color: Colors.darkOrange,
     lineHeight: 27,
   },
 });

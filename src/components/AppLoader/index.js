@@ -1,15 +1,16 @@
 import React from 'react';
 import {StyleSheet, ActivityIndicator} from 'react-native';
-import {Colors} from '../../theme/color';
+import useCustomTheme from '../../theme/useTheme';
 
 const AppLoader = () => {
+  const {colors} = useCustomTheme();
   return (
     <ActivityIndicator
       style={styles.indicatorStyle}
       importantForAccessibility="auto"
       animating={true}
       size="large"
-      color={Colors.darkOrange}
+      color={colors.darkOrange}
     />
   );
 };

@@ -10,6 +10,7 @@ import Navigation from './navigations';
 import OneSignal from 'react-native-onesignal';
 import storage from './redux/utils/storage';
 import NetworkUtils from './redux/utils/networkUtils';
+import ThemeContextProvider from './theme/ThemeContext';
 
 const sagaMiddleware = creatSagaMiddleware();
 let store = createStore(allReducers, applyMiddleware(sagaMiddleware, logger));
@@ -77,7 +78,9 @@ class App extends React.PureComponent {
     return (
       <Provider store={store}>
         <Root>
-          <Navigation />
+          <ThemeContextProvider>
+            <Navigation />
+          </ThemeContextProvider>
         </Root>
       </Provider>
     );

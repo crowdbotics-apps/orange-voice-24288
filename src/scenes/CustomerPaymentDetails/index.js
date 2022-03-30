@@ -10,10 +10,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 import AppHeader from '../../components/AppHeader';
-import {Colors} from '../../theme/color';
 import DeviceInfo from 'react-native-device-info';
 import {Form, Item, Label, Input, CheckBox, Icon} from 'native-base';
-import { Picker } from '@react-native-community/picker';
+import {Picker} from '@react-native-community/picker';
 import {Fonts} from '../../theme/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import Button from '../../components/Button';
@@ -24,6 +23,7 @@ import {errorMessage} from '../../redux/utils/alerts';
 import {BackArrow} from '../../../assets/img/backArrow';
 import {useDispatch} from 'react-redux';
 import allActions from '../../redux/actions';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
@@ -45,6 +45,8 @@ const monthNames = [
 
 const CustomerPaymentDetails = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const isStatic = navigation.getParam('static', false);
   const card = navigation.getParam('card', {});
 
@@ -97,7 +99,7 @@ const CustomerPaymentDetails = memo(({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <AppHeader
         headerTitle="Payment Details"
         headerStyle={{
@@ -175,9 +177,9 @@ const CustomerPaymentDetails = memo(({navigation}) => {
                 />
               </View>
             </View>
-            {touched.cardNumber && errors.cardNumber && (
+            {touched.cardNumber && errors.cardNumber ? (
               <Text style={styles.fieldError}>{errors.cardNumber}</Text>
-            )}
+            ) : null}
 
             <Text
               style={{
@@ -187,7 +189,7 @@ const CustomerPaymentDetails = memo(({navigation}) => {
                 marginLeft: 15,
                 textAlign: 'left',
                 marginVertical: 10,
-                color: '#ed8f31',
+                color: colors.darkOrange,
                 lineHeight: 25,
               }}>
               Expiry
@@ -227,7 +229,7 @@ const CustomerPaymentDetails = memo(({navigation}) => {
                     fontFamily: Fonts.poppinsMedium,
                     fontSize: 14,
                     letterSpacing: 0.3,
-                    color: '#2c436a',
+                    color: colors.steelBlue,
                     lineHeight: 21,
                     width: isAndroid ? 155 : 150,
                   }}
@@ -236,7 +238,7 @@ const CustomerPaymentDetails = memo(({navigation}) => {
                     fontFamily: Fonts.poppinsMedium,
                     fontSize: 14,
                     letterSpacing: 0.3,
-                    color: '#2c436a',
+                    color: colors.steelBlue,
                     lineHeight: 21,
                   }}
                   placeholderIconColor="#007aff">
@@ -277,7 +279,7 @@ const CustomerPaymentDetails = memo(({navigation}) => {
                     fontFamily: Fonts.poppinsMedium,
                     fontSize: 14,
                     letterSpacing: 0.3,
-                    color: '#2c436a',
+                    color: colors.steelBlue,
                     lineHeight: 21,
                     width: isAndroid ? 155 : 150,
                   }}
@@ -286,7 +288,7 @@ const CustomerPaymentDetails = memo(({navigation}) => {
                     fontFamily: Fonts.poppinsMedium,
                     fontSize: 14,
                     letterSpacing: 0.3,
-                    color: '#2c436a',
+                    color: colors.steelBlue,
                     lineHeight: 21,
                   }}
                   selectedValue={values.year}
@@ -319,13 +321,13 @@ const CustomerPaymentDetails = memo(({navigation}) => {
                 onChangeText={handleChange('cvv')}
               />
             </Item>
-            {touched.cvv && errors.cvv && (
+            {touched.cvv && errors.cvv ? (
               <Text style={styles.fieldError}>{errors.cvv}</Text>
-            )}
+            ) : null}
 
-            {!isStatic && (
+            {!isStatic ? (
               <LinearGradient
-                colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+                colors={[colors.lightOrange, colors.darkOrange]}
                 start={{y: 0.0, x: 1.0}}
                 style={{marginLeft: 10, marginTop: 20}}
                 end={{y: 0.0, x: 0.0}}>
@@ -336,7 +338,7 @@ const CustomerPaymentDetails = memo(({navigation}) => {
                   onPress={handleSubmit}
                 />
               </LinearGradient>
-            )}
+            ) : null}
           </Form>
         )}
       </Formik>
@@ -377,42 +379,43 @@ const CustomerPaymentDetails = memo(({navigation}) => {
 
 export default CustomerPaymentDetails;
 
-const styles = StyleSheet.create({
-  formContainer: {
-    marginRight: 40,
-    marginLeft: 25,
-    paddingVertical: 15,
-  },
-  fieldLabel: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: Colors.fieldLabel,
-    lineHeight: 18,
-  },
-  fieldInput: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: Colors.steelBlue,
-    lineHeight: 21,
-  },
-  fieldError: {
-    fontSize: 10,
-    alignSelf: 'flex-start',
-    marginLeft: 15,
-    color: 'red',
-  },
-  buttonSave: {
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonSaveText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    formContainer: {
+      marginRight: 40,
+      marginLeft: 25,
+      paddingVertical: 15,
+    },
+    fieldLabel: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: colors.fieldLabel,
+      lineHeight: 18,
+    },
+    fieldInput: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    fieldError: {
+      fontSize: 10,
+      alignSelf: 'flex-start',
+      marginLeft: 15,
+      color: 'red',
+    },
+    buttonSave: {
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonSaveText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+  });

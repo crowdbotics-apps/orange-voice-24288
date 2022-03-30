@@ -7,6 +7,7 @@ import user from './userReducer';
 import address from './addressReducer';
 import coupon from './couponReducer';
 import payment from './paymentsReducer';
+import domain from './domainReducer';
 
 const allReducers = combineReducers({
   auth,
@@ -16,7 +17,8 @@ const allReducers = combineReducers({
   user,
   address,
   coupon,
-  payment
+  payment,
+  domain,
 });
 
 export default allReducers;

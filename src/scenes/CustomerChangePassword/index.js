@@ -3,7 +3,6 @@ import {StyleSheet, View, Platform, Text} from 'react-native';
 import {Form, Item, Label, Input} from 'native-base';
 import Button from '../../components/Button';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
 import {BackArrow} from '../../../assets/img/backArrow';
@@ -13,12 +12,15 @@ import {successMessage, errorMessage} from '../../redux/utils/alerts';
 import {Formik} from 'formik';
 import {validationSchemaChangePassword} from '../../redux/utils/validation';
 import PasswordTextBox from '../../components/PasswordTextBox';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const CustomerChangePassword = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
 
   const form = {
     fields: {
@@ -52,7 +54,7 @@ const CustomerChangePassword = memo(({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <AppHeader
         headerTitle="Change Password"
         headerStyle={{
@@ -75,9 +77,9 @@ const CustomerChangePassword = memo(({navigation}) => {
                 onChangeText={handleChange('oldPassword')}
               />
 
-              {touched.oldPassword && errors.oldPassword && (
+              {touched.oldPassword && errors.oldPassword ? (
                 <Text style={styles.fieldError}>{errors.oldPassword}</Text>
-              )}
+              ) : null}
 
               <PasswordTextBox
                 label="New Password"
@@ -85,9 +87,9 @@ const CustomerChangePassword = memo(({navigation}) => {
                 onChangeText={handleChange('password')}
               />
 
-              {touched.password && errors.password && (
+              {touched.password && errors.password ? (
                 <Text style={styles.fieldError}>{errors.password}</Text>
-              )}
+              ) : null}
 
               <PasswordTextBox
                 label="Re-enter New Password"
@@ -95,9 +97,9 @@ const CustomerChangePassword = memo(({navigation}) => {
                 onChangeText={handleChange('confirmPassword')}
               />
 
-              {touched.confirmPassword && errors.confirmPassword && (
+              {touched.confirmPassword && errors.confirmPassword ? (
                 <Text style={styles.fieldError}>{errors.confirmPassword}</Text>
-              )}
+              ) : null}
             </Form>
             <Button
               text="Change Password"
@@ -114,73 +116,74 @@ const CustomerChangePassword = memo(({navigation}) => {
 
 export default CustomerChangePassword;
 
-const styles = StyleSheet.create({
-  fieldLabel: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: '#949EAE',
-    lineHeight: 18,
-  },
-  fieldInput: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: '#2C436A',
-    lineHeight: 21,
-  },
-  fieldError: {
-    fontSize: 10,
-    marginLeft: 15,
-    top: 5,
-    alignSelf: 'flex-start',
-    color: 'red',
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 30,
-  },
-  formContainer: {
-    marginRight: 40,
-    marginLeft: 25,
-    alignItems: 'center',
-  },
-  signUpButton: {
-    width: '90%',
-    marginLeft: 2,
-    marginTop: 70,
-    height: 50,
-    backgroundColor: '#ED8F31',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  signUpButtonText: {
-    fontSize: 18,
-    textAlign: 'center',
-    fontFamily: Fonts.poppinsRegular,
-    color: '#FFFFFF',
-    lineHeight: 27,
-  },
-  signInContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 30,
-    width: '87%',
-  },
-  haveAccountText: {
-    color: '#2C436A',
-    fontSize: 14,
-    letterSpacing: 0.3,
-    lineHeight: 21,
-    fontFamily: Fonts.poppinsMedium,
-  },
-  signInButtonText: {
-    marginLeft: 5,
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 16,
-    letterSpacing: 0.3,
-    color: '#ED8F31',
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    fieldLabel: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: '#949EAE',
+      lineHeight: 18,
+    },
+    fieldInput: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    fieldError: {
+      fontSize: 10,
+      marginLeft: 15,
+      top: 5,
+      alignSelf: 'flex-start',
+      color: 'red',
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      marginTop: 30,
+    },
+    formContainer: {
+      marginRight: 40,
+      marginLeft: 25,
+      alignItems: 'center',
+    },
+    signUpButton: {
+      width: '90%',
+      marginLeft: 2,
+      marginTop: 70,
+      height: 50,
+      backgroundColor: colors.darkOrange,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    signUpButtonText: {
+      fontSize: 18,
+      textAlign: 'center',
+      fontFamily: Fonts.poppinsRegular,
+      color: '#FFFFFF',
+      lineHeight: 27,
+    },
+    signInContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 30,
+      width: '87%',
+    },
+    haveAccountText: {
+      color: colors.steelBlue,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      lineHeight: 21,
+      fontFamily: Fonts.poppinsMedium,
+    },
+    signInButtonText: {
+      marginLeft: 5,
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 16,
+      letterSpacing: 0.3,
+      color: colors.darkOrange,
+    },
+  });

@@ -13,7 +13,6 @@ import {Form, Item, Label, Input, CheckBox, Icon} from 'native-base';
 import {Picker} from '@react-native-community/picker';
 import Button from '../../components/Button';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
 import {BackArrow} from '../../../assets/img/backArrow';
@@ -27,6 +26,7 @@ import {successMessage, errorMessage} from '../../redux/utils/alerts';
 import {Formik} from 'formik';
 import {validationSchemaAddress} from '../../redux/utils/validation';
 import TextInputMask from 'react-native-text-input-mask';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
@@ -37,6 +37,8 @@ const headerStyle =
 const Properties = ['Residential', 'Commercial', 'Industry'];
 
 const CustomerAddAddress = memo(({navigation}) => {
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const address = navigation.getParam('address');
   const cart = useSelector((state) => state.cart.cart);
   const user = useSelector((state) => state.user?.user);
@@ -219,15 +221,15 @@ const CustomerAddAddress = memo(({navigation}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{flex: 1, backgroundColor: 'transparent'}}>
-      <View style={{flex: 1, backgroundColor: Colors.white}}>
+      <View style={{flex: 1, backgroundColor: colors.white}}>
         <AppHeader
           headerTitle="Add Address"
           headerStyle={{height: headerStyle}}
           leftButtonImage={<BackArrow />}
           rightButtonImage={
             <View style={{minWidth: 25, height: 25}}>
-              <Cart color={Colors.white} height={22} width={35} />
-              {cart.length > 0 && (
+              <Cart color={colors.white} height={22} width={35} />
+              {cart.length > 0 ? (
                 <View
                   style={{
                     position: 'absolute',
@@ -249,7 +251,7 @@ const CustomerAddAddress = memo(({navigation}) => {
                     {cart.length}
                   </Text>
                 </View>
-              )}
+              ) : null}
             </View>
           }
           onRightButtonPress={() => navigation.navigate('CustomerOrderBasket')}
@@ -273,9 +275,9 @@ const CustomerAddAddress = memo(({navigation}) => {
               </Item>
             </View>,
             <View style={{paddingLeft: 25}}>
-              {formErrors.mainAddress && (
+              {formErrors.mainAddress ? (
                 <Text style={styles.fieldError}>{formErrors.mainAddress}</Text>
-              )}
+              ) : null}
             </View>,
             <ScrollView
               key={'main-components'}
@@ -298,11 +300,11 @@ const CustomerAddAddress = memo(({navigation}) => {
                     }}
                   />
                 </Item>
-                {formErrors.suiteNumber && (
+                {formErrors.suiteNumber ? (
                   <Text style={styles.fieldError}>
                     {formErrors.suiteNumber}
                   </Text>
-                )}
+                ) : null}
                 <Item floatingLabel>
                   <Label style={styles.fieldLabel}>Postal Code</Label>
                   <Input
@@ -317,9 +319,9 @@ const CustomerAddAddress = memo(({navigation}) => {
                     }}
                   />
                 </Item>
-                {formErrors.postalCode && (
+                {formErrors.postalCode ? (
                   <Text style={styles.fieldError}>{formErrors.postalCode}</Text>
-                )}
+                ) : null}
                 <Item floatingLabel>
                   <Label style={styles.fieldLabel}>Province</Label>
                   <Input
@@ -333,9 +335,9 @@ const CustomerAddAddress = memo(({navigation}) => {
                     }}
                   />
                 </Item>
-                {formErrors.state && (
+                {formErrors.state ? (
                   <Text style={styles.fieldError}>{formErrors.state}</Text>
-                )}
+                ) : null}
                 <Item floatingLabel>
                   <Label style={styles.fieldLabel}>City</Label>
                   <Input
@@ -349,9 +351,9 @@ const CustomerAddAddress = memo(({navigation}) => {
                     }}
                   />
                 </Item>
-                {formErrors.city && (
+                {formErrors.city ? (
                   <Text style={styles.fieldError}>{formErrors.city}</Text>
-                )}
+                ) : null}
                 <Item stackedLabel>
                   <TextInputMask
                     value={values.phoneNo}
@@ -374,12 +376,12 @@ const CustomerAddAddress = memo(({navigation}) => {
                         setFormErrors(generateErrors(values));
                       }
                     }}
-                    mask={'+1 ([000]) [000] [00] [00]'}
+                    mask={'([000]) [000] [00] [00]'}
                   />
                 </Item>
-                {formErrors.phoneNo && (
+                {formErrors.phoneNo ? (
                   <Text style={styles.fieldError}>{formErrors.phoneNo}</Text>
-                )}
+                ) : null}
                 <Item style={{marginTop: 25}}>
                   <View
                     style={{
@@ -397,7 +399,7 @@ const CustomerAddAddress = memo(({navigation}) => {
                         fontFamily: Fonts.poppinsMedium,
                         fontSize: 14,
                         letterSpacing: 0.3,
-                        color: '#2c436a',
+                        color: colors.steelBlue,
                         lineHeight: 21,
                       }}
                       textStyle={{
@@ -405,7 +407,7 @@ const CustomerAddAddress = memo(({navigation}) => {
                         fontFamily: Fonts.poppinsMedium,
                         fontSize: 14,
                         letterSpacing: 0.3,
-                        color: '#2c436a',
+                        color: colors.steelBlue,
                         lineHeight: 21,
                       }}
                       selectedValue={values.propertyType}
@@ -427,11 +429,11 @@ const CustomerAddAddress = memo(({navigation}) => {
                     </Picker>
                   </View>
                 </Item>
-                {formErrors.propertyType && (
+                {formErrors.propertyType ? (
                   <Text style={styles.fieldError}>
                     {formErrors.propertyType}
                   </Text>
-                )}
+                ) : null}
 
                 <Item floatingLabel>
                   <Label style={styles.fieldLabel}>Buzzer Code</Label>
@@ -457,9 +459,9 @@ const CustomerAddAddress = memo(({navigation}) => {
                     style={{
                       borderRadius: 0,
                       backgroundColor: primaryChecked
-                        ? '#ED8F31'
+                        ? colors.darkOrange
                         : 'transparent',
-                      borderColor: primaryChecked ? 'transparent' : '#2c436a',
+                      borderColor: primaryChecked ? 'transparent' : colors.steelBlue,
                     }}
                     checked={primaryChecked}
                   />
@@ -470,7 +472,7 @@ const CustomerAddAddress = memo(({navigation}) => {
                       fontFamily: Fonts.poppinsMedium,
                       fontSize: 14,
                       letterSpacing: 0.3,
-                      color: '#2c436a',
+                      color: colors.steelBlue,
                       lineHeight: 21,
                     }}>
                     Use as primary Address
@@ -496,75 +498,76 @@ const CustomerAddAddress = memo(({navigation}) => {
 
 export default CustomerAddAddress;
 
-const styles = StyleSheet.create({
-  fieldLabel: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: '#949EAE',
-    lineHeight: 18,
-  },
-  fieldInput: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 14,
-    letterSpacing: 0.3,
-    color: '#2C436A',
-    lineHeight: 21,
-  },
-  fieldError: {
-    fontSize: 10,
-    marginLeft: 15,
-    top: 2,
-    alignSelf: 'flex-start',
-    color: 'red',
-  },
-  signUpContainer: {
-    flex: 1,
-    alignItems: 'center',
-    marginVertical: 5,
-  },
-  formContainer: {
-    marginRight: 40,
-    marginLeft: 25,
-    justifyContent: 'space-between',
-    flex: 1,
-    alignItems: 'center',
-  },
-  signUpButton: {
-    marginTop: 30,
-    height: 50,
-    marginLeft: 10,
-    backgroundColor: '#ED8F31',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  signUpButtonText: {
-    fontSize: 18,
-    textAlign: 'center',
-    flex: 1,
-    fontFamily: Fonts.poppinsRegular,
-    color: '#FFFFFF',
-    lineHeight: 27,
-  },
-  signInContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 30,
-    width: '87%',
-  },
-  haveAccountText: {
-    color: '#2C436A',
-    fontSize: 14,
-    letterSpacing: 0.3,
-    lineHeight: 21,
-    fontFamily: Fonts.poppinsMedium,
-  },
-  signInButtonText: {
-    marginLeft: 5,
-    fontFamily: Fonts.poppinsSemiBold,
-    fontSize: 16,
-    letterSpacing: 0.3,
-    color: '#ED8F31',
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    fieldLabel: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: '#949EAE',
+      lineHeight: 18,
+    },
+    fieldInput: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    fieldError: {
+      fontSize: 10,
+      marginLeft: 15,
+      top: 2,
+      alignSelf: 'flex-start',
+      color: 'red',
+    },
+    signUpContainer: {
+      flex: 1,
+      alignItems: 'center',
+      marginVertical: 5,
+    },
+    formContainer: {
+      marginRight: 40,
+      marginLeft: 25,
+      justifyContent: 'space-between',
+      flex: 1,
+      alignItems: 'center',
+    },
+    signUpButton: {
+      marginTop: 30,
+      height: 50,
+      marginLeft: 10,
+      backgroundColor: colors.darkOrange,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    signUpButtonText: {
+      fontSize: 18,
+      textAlign: 'center',
+      flex: 1,
+      fontFamily: Fonts.poppinsRegular,
+      color: '#FFFFFF',
+      lineHeight: 27,
+    },
+    signInContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 30,
+      width: '87%',
+    },
+    haveAccountText: {
+      color: colors.steelBlue,
+      fontSize: 14,
+      letterSpacing: 0.3,
+      lineHeight: 21,
+      fontFamily: Fonts.poppinsMedium,
+    },
+    signInButtonText: {
+      marginLeft: 5,
+      fontFamily: Fonts.poppinsSemiBold,
+      fontSize: 16,
+      letterSpacing: 0.3,
+      color: colors.darkOrange,
+    },
+  });

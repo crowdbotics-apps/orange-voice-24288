@@ -31,8 +31,7 @@ export function* addCard(action) {
       action.params,
     );
     yield put(allActions.paymentActions.addCardSuccess({}));
-    alert(JSON.stringify(response.data))
-    action.onSuccess && action.onSuccess(response.data.results);
+    action.onSuccess && action.onSuccess(response.data);
   } catch (error) {
     action.onFail && action.onFail(error);
   } finally {

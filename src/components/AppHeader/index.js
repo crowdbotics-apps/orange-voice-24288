@@ -3,7 +3,7 @@ import {StyleSheet, Text, ImageBackground, View} from 'react-native';
 import Button from '../Button';
 import {SafeAreaView} from 'react-navigation';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
+import useCustomTheme from '../../theme/useTheme';
 
 const AppHeader = memo(
   ({
@@ -18,6 +18,8 @@ const AppHeader = memo(
     onLeftButtonPress,
     children,
   }) => {
+    const {colors} = useCustomTheme();
+    const styles = _styles(colors);
     return (
       <ImageBackground
         style={{...styles.container, ...headerStyle}}
@@ -30,13 +32,13 @@ const AppHeader = memo(
               svg={leftButtonImage}
               onPress={() => onLeftButtonPress && onLeftButtonPress()}
             />
-            {headerTitle && (
+            {headerTitle ? (
               <Text
                 numberOfLines={1}
                 style={{...styles.headerTitle, ...headerTitleStyle}}>
                 {headerTitle}
               </Text>
-            )}
+            ) : null}
             <Button
               imageStyle={{height: 27, width: 27}}
               text={rightButtonText}
@@ -54,33 +56,35 @@ const AppHeader = memo(
 
 export default AppHeader;
 
-const styles = StyleSheet.create({
-  container: {
-    height: 300,
-    width: '100%',
-    position: 'relative',
-    top: 0,
-    left: 0,
-  },
-  headerContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingVertical: 18,
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 16,
-    letterSpacing: 0.3,
-    textAlign: 'center',
-    width: 200,
-    color: Colors.white,
-    lineHeight: 25,
-  },
-  subViewStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    container: {
+      height: 300,
+      width: '100%',
+      position: 'relative',
+      top: 0,
+      left: 0,
+      backgroundColor: colors.darkOrange,
+    },
+    headerContent: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingHorizontal: 24,
+      paddingVertical: 18,
+      alignItems: 'center',
+    },
+    headerTitle: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 16,
+      letterSpacing: 0.3,
+      textAlign: 'center',
+      width: 200,
+      color: colors.white,
+      lineHeight: 25,
+    },
+    subViewStyle: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      flex: 1,
+    },
+  });

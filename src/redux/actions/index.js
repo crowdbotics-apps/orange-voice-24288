@@ -5,7 +5,7 @@ import addressActions from './addressActions';
 import orderActions from './orderActions';
 import couponActions from './couponActions';
 import paymentActions from './paymentsActions';
-
+import domainActions from './domainActions';
 const allActions = {
   authActions,
   productActions,
@@ -14,6 +14,7 @@ const allActions = {
   orderActions,
   couponActions,
   paymentActions,
+  domainActions,
 };
 
 export default allActions;

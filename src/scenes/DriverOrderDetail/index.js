@@ -9,7 +9,6 @@ import {
   Alert,
 } from 'react-native';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
 import MapView, {Marker} from 'react-native-maps';
 import DeviceInfo from 'react-native-device-info';
 import LinearGradient from 'react-native-linear-gradient';
@@ -26,12 +25,15 @@ import MapViewDirections from 'react-native-maps-directions';
 import Geolocation from '@react-native-community/geolocation';
 import openMap from 'react-native-open-maps';
 import storage from '../../redux/utils/storage';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const DriverOrderDetail = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const task = navigation?.getParam('order');
   const order = {...task};
   const {jobType, isCompleted} = task;
@@ -211,7 +213,7 @@ const DriverOrderDetail = memo(({navigation}) => {
         onRightButtonPress={() => Linking.openURL(`tel://${order.phoneNo}`)}
       />
       <View style={{flex: 1}}>
-        {coordinates?.lng && coordinates?.lat && (
+        {coordinates?.lng && coordinates?.lat ? (
           <MapView
             style={{flex: 1}}
             initialRegion={{
@@ -230,14 +232,14 @@ const DriverOrderDetail = memo(({navigation}) => {
 
             <MapViewDirections
               origin={origin}
-              strokeColor={'#2c436a'}
+              strokeColor={colors.steelBlue}
               strokeWidth={2}
               precision={'high'}
               destination={destination}
               apikey={GOOGLE_MAPS_APIKEY}
             />
           </MapView>
-        )}
+        ) : null}
 
         <TouchableOpacity
           onPress={() =>
@@ -271,16 +273,16 @@ const DriverOrderDetail = memo(({navigation}) => {
             }}
           />
 
-          {order?.description?.length > 0 && (
+          {order?.description?.length > 0 ? (
             <View style={styles.instructionContainer}>
               <Text style={styles.instructionLabel}>Driver Instruction</Text>
               <Text style={styles.instruction}>{order?.description}</Text>
             </View>
-          )}
+          ) : null}
 
-          {!isCompleted && (
+          {!isCompleted ? (
             <LinearGradient
-              colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+              colors={[colors.lightOrange, colors.darkOrange]}
               start={{y: 0.0, x: 1.0}}
               style={styles.btnGradient}
               end={{y: 0.0, x: 0.0}}>
@@ -291,7 +293,7 @@ const DriverOrderDetail = memo(({navigation}) => {
                 onPress={() => handleStatusUpdate(jobType)}
               />
             </LinearGradient>
-          )}
+          ) : null}
         </View>
       </View>
     </View>
@@ -300,74 +302,75 @@ const DriverOrderDetail = memo(({navigation}) => {
 
 export default DriverOrderDetail;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-  },
-  header: {
-    height: hasNotch && !isAndroid ? 100 : !hasNotch && !isAndroid ? 85 : 60,
-  },
-  detailHeader: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    right: 20,
-  },
-  buttonLogin: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  buttonLoginText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-  btnGradient: {
-    width: '100%',
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 40,
-    left: 20,
-    right: 20,
-  },
-  instructionContainer: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    width: '100%',
-    backgroundColor: Colors.white,
-    shadowColor: Colors.boxShadow,
-    shadowOffset: {
-      width: 0,
-      height: 1.3,
+const _styles = (colors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.white,
     },
-    shadowRadius: 5.3,
-    shadowOpacity: 1,
-    elevation: 3,
-  },
-  instructionLabel: {
-    fontFamily: Fonts.poppinsRegular,
-    fontWeight: 'normal',
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '#949eae',
-    fontSize: 10,
-    marginBottom: 5,
-  },
-  instruction: {
-    fontFamily: Fonts.poppinsRegular,
-    fontStyle: 'normal',
-    letterSpacing: 0,
-    textAlign: 'left',
-    color: '#2c436a',
-    fontSize: 10,
-    lineHeight: 18,
-  },
-});
+    header: {
+      height: hasNotch && !isAndroid ? 100 : !hasNotch && !isAndroid ? 85 : 60,
+    },
+    detailHeader: {
+      position: 'absolute',
+      top: 20,
+      left: 20,
+      right: 20,
+    },
+    buttonLogin: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    buttonLoginText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+    btnGradient: {
+      width: '100%',
+    },
+    footer: {
+      position: 'absolute',
+      bottom: 40,
+      left: 20,
+      right: 20,
+    },
+    instructionContainer: {
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+      width: '100%',
+      backgroundColor: colors.white,
+      shadowColor: colors.boxShadow,
+      shadowOffset: {
+        width: 0,
+        height: 1.3,
+      },
+      shadowRadius: 5.3,
+      shadowOpacity: 1,
+      elevation: 3,
+    },
+    instructionLabel: {
+      fontFamily: Fonts.poppinsRegular,
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      letterSpacing: 0,
+      textAlign: 'left',
+      color: '#949eae',
+      fontSize: 10,
+      marginBottom: 5,
+    },
+    instruction: {
+      fontFamily: Fonts.poppinsRegular,
+      fontStyle: 'normal',
+      letterSpacing: 0,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      fontSize: 10,
+      lineHeight: 18,
+    },
+  });

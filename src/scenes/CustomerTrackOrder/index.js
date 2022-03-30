@@ -1,7 +1,6 @@
 import React, {memo} from 'react';
 import {StyleSheet, View, Platform, Text} from 'react-native';
 import {Fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/color';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
 import {BackArrow} from '../../../assets/img/backArrow';
@@ -14,13 +13,15 @@ import {Box} from '../../../assets/img/box';
 import InProgress from '../../../assets/img/inprogress';
 import Cancelled from '../../../assets/img/cancelled';
 import {progressColor} from '../../redux/utils/orderUtil';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
 
 const CustomerTrackOrder = memo(({navigation}) => {
   const {orderNumber, orderDate, status} = navigation.getParam('orderById');
-
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const getColor = (_status) =>
     status === _status ? progressColor[status] : 'grey';
 
@@ -106,7 +107,7 @@ const CustomerTrackOrder = memo(({navigation}) => {
   ];
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <AppHeader
         headerTitle="Track your Order"
         headerStyle={{
@@ -142,51 +143,52 @@ const CustomerTrackOrder = memo(({navigation}) => {
 
 export default CustomerTrackOrder;
 
-const styles = StyleSheet.create({
-  calloutText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    textAlign: 'center',
-    flex: 1,
-    marginVertical: 5,
-    borderRadius: 3,
-    color: Colors.white,
-    padding: 5,
-    backgroundColor: Colors.lightBlue,
-    shadowColor: Colors.boxShadow,
-    shadowOffset: {
-      width: 0,
-      height: 1,
+const _styles = (colors) =>
+  StyleSheet.create({
+    calloutText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      textAlign: 'center',
+      flex: 1,
+      marginVertical: 5,
+      borderRadius: 3,
+      color: colors.white,
+      padding: 5,
+      backgroundColor: colors.lightBlue,
+      shadowColor: colors.boxShadow,
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowRadius: 2,
+      shadowOpacity: 1,
+      elevation: 5,
     },
-    shadowRadius: 2,
-    shadowOpacity: 1,
-    elevation: 5,
-  },
-  container: {
-    flex: 1,
-  },
-  textOrderId: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 18,
-    letterSpacing: 0.3,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 21,
-  },
-  textOrderNumber: {
-    fontFamily: Fonts.poppinsBold,
-    fontSize: 18,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 21,
-  },
-  textOrderDateTime: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 14,
-    letterSpacing: 0.2,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 18,
-  },
-});
+    container: {
+      flex: 1,
+    },
+    textOrderId: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 18,
+      letterSpacing: 0.3,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    textOrderNumber: {
+      fontFamily: Fonts.poppinsBold,
+      fontSize: 18,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    textOrderDateTime: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 14,
+      letterSpacing: 0.2,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 18,
+    },
+  });

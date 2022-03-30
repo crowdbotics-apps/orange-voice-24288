@@ -2,14 +2,13 @@ import React, {memo, useEffect} from 'react';
 import {StyleSheet, Text, View, FlatList, Platform} from 'react-native';
 import AppHeader from '../../components/AppHeader';
 import DeviceInfo from 'react-native-device-info';
-import {Colors} from '../../theme/color';
 import {BackArrow} from '../../../assets/img/backArrow';
 import {Cart} from '../../../assets/img/cart';
 import OrderListItem from '../../components/OrderListItem';
 import {Fonts} from '../../theme/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import Button from '../../components/Button';
-import Calendar from '../../../assets/img/calendar.svg';
+import Calendar from '../../../assets/img/Calendar';
 import Clock from '../../../assets/img/clock.svg';
 import PinOrange from '../../../assets/img/pin.svg';
 import {Textarea, Form} from 'native-base';
@@ -18,6 +17,7 @@ import {successMessage, errorMessage} from '../../redux/utils/alerts';
 import allActions from '../../redux/actions';
 import moment from 'moment';
 import storage from '../../redux/utils/storage';
+import useCustomTheme from '../../theme/useTheme';
 
 const hasNotch = DeviceInfo.hasNotch();
 const isAndroid = Platform.OS === 'android';
@@ -26,6 +26,8 @@ const headerHeight =
 
 const CustomerOrderReview = memo(({navigation}) => {
   const dispatch = useDispatch();
+  const {colors} = useCustomTheme();
+  const styles = _styles(colors);
   const cart = useSelector((state) => state.cart.cart);
   const orderDetails = useSelector((state) => state.order.orderDetails);
   const coupon = useSelector((state) => state.coupon.coupon);
@@ -145,7 +147,7 @@ const CustomerOrderReview = memo(({navigation}) => {
                 fontFamily: Fonts.poppinsRegular,
                 fontSize: 14,
                 letterSpacing: 0.3,
-                color: '#ed8f31',
+                color: colors.darkOrange,
                 marginVertical: 10,
               }}>
               Pickup Date & Time
@@ -156,7 +158,7 @@ const CustomerOrderReview = memo(({navigation}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Calendar />
+              <Calendar fill={colors.steelBlue} />
               <Text
                 style={{
                   fontFamily: Fonts.poppinsRegular,
@@ -164,7 +166,7 @@ const CustomerOrderReview = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   flex: 1,
                   paddingLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                 }}>
                 {pickUpDate}
               </Text>
@@ -184,7 +186,7 @@ const CustomerOrderReview = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   flex: 1,
                   paddingLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                 }}>
                 {pickUpTime}
               </Text>
@@ -200,7 +202,7 @@ const CustomerOrderReview = memo(({navigation}) => {
                 fontSize: 14,
                 marginVertical: 10,
                 letterSpacing: 0.3,
-                color: '#ed8f31',
+                color: colors.darkOrange,
               }}>
               Dropoff Date & Time
             </Text>
@@ -210,7 +212,7 @@ const CustomerOrderReview = memo(({navigation}) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
               }}>
-              <Calendar />
+              <Calendar fill={colors.steelBlue} />
               <Text
                 style={{
                   fontFamily: Fonts.poppinsRegular,
@@ -218,7 +220,7 @@ const CustomerOrderReview = memo(({navigation}) => {
                   letterSpacing: 0.2,
                   flex: 1,
                   paddingLeft: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                 }}>
                 {dropOffDate}
               </Text>
@@ -238,7 +240,7 @@ const CustomerOrderReview = memo(({navigation}) => {
                   fontSize: 12,
                   letterSpacing: 0.2,
                   marginVertical: 10,
-                  color: '#2c436a',
+                  color: colors.steelBlue,
                 }}>
                 {dropOffTime}
               </Text>
@@ -264,7 +266,7 @@ const CustomerOrderReview = memo(({navigation}) => {
               letterSpacing: 0.2,
               textAlign: 'left',
               marginLeft: 10,
-              color: '#2c436a',
+              color: colors.steelBlue,
               lineHeight: 18,
             }}>
             {location?.mainAddress}
@@ -306,11 +308,11 @@ const CustomerOrderReview = memo(({navigation}) => {
             fontSize: 16,
             letterSpacing: 0.3,
             lineHeight: 20,
-            color: '#ed8f31',
+            color: colors.darkOrange,
           }}
         />
         <LinearGradient
-          colors={['rgba(237,143,49,1.0)', 'rgba(255,163,4,1.0)']}
+          colors={[colors.lightOrange, colors.darkOrange]}
           start={{y: 0.0, x: 1.0}}
           style={{width: '90%', alignSelf: 'center', marginTop: 18}}
           end={{y: 0.0, x: 0.0}}>
@@ -326,7 +328,7 @@ const CustomerOrderReview = memo(({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: Colors.white}}>
+    <View style={{flex: 1, backgroundColor: colors.white}}>
       <AppHeader
         headerTitle="Order Review"
         headerTitleStyle={{marginRight: 20}}
@@ -385,125 +387,126 @@ const CustomerOrderReview = memo(({navigation}) => {
 
 export default CustomerOrderReview;
 
-const styles = StyleSheet.create({
-  headerContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  listContainer: {
-    flex: 1,
-    marginVertical: 10,
-  },
-  buttonOrder: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonOrderText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 18,
-    textAlign: 'center',
-    color: Colors.white,
-    lineHeight: 27,
-  },
-  receiptView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    marginHorizontal: 22,
-    borderBottomColor: '#332c436a',
-    paddingBottom: 12,
-  },
-  receiptTitle: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: '#2c436a',
-  },
-  receiptValue: {
-    fontFamily: Fonts.poppinsBold,
-    fontSize: 14,
-    color: '#2c436a',
-  },
-  grandTotalContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    height: 50,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    backgroundColor: '#357bf3',
-  },
-  discountContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginHorizontal: 20,
-    paddingBottom: 12,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
-    marginHorizontal: 25,
-  },
-  textOrderId: {
-    fontFamily: Fonts.poppinsMedium,
-    fontSize: 18,
-    letterSpacing: 0.3,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 21,
-  },
-  textOrderNumber: {
-    fontFamily: Fonts.poppinsBold,
-    fontSize: 18,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 21,
-  },
-  textOrderDateTime: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 14,
-    letterSpacing: 0.2,
-    textAlign: 'left',
-    color: '#2c436a',
-    lineHeight: 18,
-  },
-  textOrderStatus: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 14,
-    letterSpacing: 0.2,
-    textAlign: 'left',
-    color: '#2cd285',
-    lineHeight: 18,
-  },
-  itemNumberContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  textItemCount: {
-    fontFamily: Fonts.poppinsBold,
-    fontSize: 16,
-    color: Colors.darkOrange,
-  },
-  textItems: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 10,
-    color: Colors.darkOrange,
-  },
-  buttonOrderHistory: {
-    height: 36,
-    width: 113,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonOrderHistoryText: {
-    fontFamily: Fonts.poppinsRegular,
-    fontSize: 12,
-    textAlign: 'left',
-    color: '#ffffff',
-    lineHeight: 18,
-  },
-});
+const _styles = (colors) =>
+  StyleSheet.create({
+    headerContainer: {
+      flex: 1,
+      alignItems: 'center',
+    },
+    listContainer: {
+      flex: 1,
+      marginVertical: 10,
+    },
+    buttonOrder: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonOrderText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 18,
+      textAlign: 'center',
+      color: colors.white,
+      lineHeight: 27,
+    },
+    receiptView: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      marginHorizontal: 22,
+      borderBottomColor: '#332c436a',
+      paddingBottom: 12,
+    },
+    receiptTitle: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      letterSpacing: 0.2,
+      color: colors.steelBlue,
+    },
+    receiptValue: {
+      fontFamily: Fonts.poppinsBold,
+      fontSize: 14,
+      color: colors.steelBlue,
+    },
+    grandTotalContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      height: 50,
+      paddingHorizontal: 20,
+      alignItems: 'center',
+      backgroundColor: '#357bf3',
+    },
+    discountContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginHorizontal: 20,
+      paddingBottom: 12,
+    },
+    itemContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginTop: 10,
+      marginHorizontal: 25,
+    },
+    textOrderId: {
+      fontFamily: Fonts.poppinsMedium,
+      fontSize: 18,
+      letterSpacing: 0.3,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    textOrderNumber: {
+      fontFamily: Fonts.poppinsBold,
+      fontSize: 18,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 21,
+    },
+    textOrderDateTime: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 14,
+      letterSpacing: 0.2,
+      textAlign: 'left',
+      color: colors.steelBlue,
+      lineHeight: 18,
+    },
+    textOrderStatus: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 14,
+      letterSpacing: 0.2,
+      textAlign: 'left',
+      color: '#2cd285',
+      lineHeight: 18,
+    },
+    itemNumberContainer: {
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    textItemCount: {
+      fontFamily: Fonts.poppinsBold,
+      fontSize: 16,
+      color: colors.darkOrange,
+    },
+    textItems: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 10,
+      color: colors.darkOrange,
+    },
+    buttonOrderHistory: {
+      height: 36,
+      width: 113,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonOrderHistoryText: {
+      fontFamily: Fonts.poppinsRegular,
+      fontSize: 12,
+      textAlign: 'left',
+      color: '#ffffff',
+      lineHeight: 18,
+    },
+  });

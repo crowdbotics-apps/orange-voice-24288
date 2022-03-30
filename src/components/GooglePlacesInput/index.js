@@ -36,7 +36,7 @@ const GooglePlacesInput = memo(
           query={{
             // available options: https://developers.google.com/places/web-service/autocomplete
             // Test if key is working https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&name=cruise&key=addyourkeyhere
-            key: 'AIzaSyD_jvpSXmvQbq4PkBoncu9Uo9HVdRIt7l4',
+            key: 'AIzaSyAGnO2xxSbe_9h4rgAZFfw3oHoHsFeRrkc',
             language: 'en', // language of the results
             types: ['address', 'locality', 'sublocality'], // default: 'geocode', 'cities'
           }}
