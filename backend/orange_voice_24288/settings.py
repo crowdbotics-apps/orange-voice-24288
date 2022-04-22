@@ -207,7 +207,7 @@ EMAIL_HOST_PASSWORD = env.str("SENDGRID_PASSWORD", "")
 EMAIL_PORT = env.str("EMAIL_PORT", 587)
 EMAIL_USE_TLS = env.str("EMAIL_USE_TLS", True)
 SERVER_EMAIL = 'root@my-domain.com'
-DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", "laundrez1@gmail.com")
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", "tayub.bilwani@laundrez.ca")
 SENDGRID_API_KEY = env.str("SENDGRID_PASSWORD", "")
 SENDGRID_ECHO_TO_STDOUT = True
 

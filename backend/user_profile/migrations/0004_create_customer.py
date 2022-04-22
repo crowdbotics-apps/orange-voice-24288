@@ -4,7 +4,8 @@ from user_profile.seeddata import create_customers
 
 
 def create_seed_customers(_, __):
-    create_customers()
+    # create_customers()
+    pass
 
 
 class Migration(migrations.Migration):

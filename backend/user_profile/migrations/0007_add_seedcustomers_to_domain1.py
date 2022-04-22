@@ -4,7 +4,8 @@ from user_profile.seeddata import add_customer_to_superuser_domain
 
 
 def update_customer_details(_, __):
-    add_customer_to_superuser_domain()
+    # add_customer_to_superuser_domain()
+    pass
 
 
 class Migration(migrations.Migration):
