@@ -267,7 +267,7 @@ if DEBUG or not (EMAIL_HOST_USER and EMAIL_HOST_PASSWORD):
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
     CORS_ORIGIN_ALLOW_ALL = True
 else:
-    EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+    EMAIL_BACKEND = "sgbackend.SendGridBackend"
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://192.168.0.11:3000',
