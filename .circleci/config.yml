@@ -1,258 +1,34 @@
-version: 2
+version: 2.1
+setup: true
+orbs:
+  continuation: circleci/continuation@0.1.0
 jobs:
-  node:
-    working_directory: ~/build
-    docker:
-      - image: circleci/node:10
+  setup:
+    executor: continuation/default
     steps:
       - checkout
-
-      - restore_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-
-      - run: yarn install
-
-      - save_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-          paths:
-            - ~/.cache/yarn
-
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
-
-      #- run:
-      #    name: jest tests
-      #    command: |
-      #      mkdir -p test-results/jest
-      #      yarn run test
-      #    environment:
-      #      JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
-
-      - persist_to_workspace:
-          root: ~/build
-          paths:
-            - node_modules
-
-      #- store_test_results:
-      #    path: test-results
-
-      #- store_artifacts:
-      #    path: test-results
-
-      - run:
-          name: Webhook Failed
-          command: bash .circleci/webhook_callback.sh "failure"
-          when: on_fail
-
-  android:
-    working_directory: ~/build
-    docker:
-      - image: circleci/android:api-28-node
-    steps:
-      - checkout:
-          path: ~/build
-
-      - attach_workspace:
-          at: ~/build
-
-      - restore_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-
-      - run:
-          command: bundle install
-          working_directory: android
-
-      - save_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
-
-      #- run:
-      #    name: Run tests
-      #    command: |
-      #      mkdir -p test-results/fastlane
-      #      bundle exec fastlane test
-      #      mv fastlane/report.xml test-results/fastlane
-
-      #- store_test_results:
-      #    path: test-results
-
-      #- store_artifacts:
-      #    path: test-results
-
-      - run:
-          name: Populate EnvFile
-          command: env >> .env
-
-      - run:
-          name: Add upload-key.keystore file
-          working_directory: android
-          command:  |
-            cd app
-            echo "$ANDROID_KEYSTORE" | base64 --decode > upload-key.keystore
-
-      - run:
-          name: Build and upload to appetize.io
-          command: bundle exec fastlane deploy_appetize
-          working_directory: android
-
-      - store_artifacts:
-          path: android/app/build/outputs/apk/release/app-release.apk
-
-      - run:
-          name: create a new android app bundle build
-          command: bundle exec fastlane build_aab
-          working_directory: android
-
-      - store_artifacts:
-          path: android/app/build/outputs/bundle/release/app-release.aab
-                
-      - run:
-          name: Webhook Success
-          command: bash .circleci/webhook_callback.sh "success"
-          when: on_success
-
-      - run:
-          name: Webhook Failed
-          command: bash .circleci/webhook_callback.sh "failure"
-          when: on_fail
-
-  ios:
-    macos:
-      xcode: "11.1.0"
-    working_directory: ~/build
-
-    # use a --login shell so our "set Ruby version" command gets picked up for later steps
-    shell: /bin/bash --login -o pipefail
-
-    steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "c5:bd:6d:0b:a1:39:97:83:ca:b5:13:59:14:ff:49:40"
-
-      - checkout
-
-      - run:
-          name: Check if app has a paid plan
+      - run: 
+          name: Generate Pipeline generated_config.yml file
           command: |
-            if [ "$HAS_PAID_PLAN" != 1 ]; then
-              exit 1
+            if [ "$BUILD_TYPE" == "mobile_ios" ]; then
+              bash .circleci/generate_mobile_ios_config.sh
+            elif [ "$BUILD_TYPE" == "mobile_android" ]; then
+              bash .circleci/generate_mobile_android_config.sh
+            elif [ "$BUILD_TYPE" == "gcp" ]; then
+              bash backend/.circleci/generate_gcp_config.sh "backend/"
+            elif [ "$BUILD_TYPE" == "azure" ]; then
+              bash backend/.circleci/generate_azure_config.sh "backend/"
             fi
-
-      - run:
-          name: set Ruby version
-          command: echo "ruby-2.5" > ~/.ruby-version
-
-      - restore_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-
-      # not using a workspace here as Node and Yarn versions
-      # differ between our macOS executor image and the Docker containers above
-      - run: yarn install
-
-      - save_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-          paths:
-            - ~/.cache/yarn
-
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
-
-      - restore_cache:
-          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
-
-      - run:
-          command: bundle install
-          working_directory: ios
-
-      - save_cache:
-          key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
-
-      - restore_cache:
-          key: 1-pods-{{ checksum "ios/Podfile.lock" }}
-          paths:
-            - ios/Pods
-
-      - run:
-          name: Update CocaPods dependencies
-          command: pod install --verbose
-          working_directory: ios
-          timeout: 1200
-
-      - save_cache:
-          key: 1-pods-{{ checksum "ios/Podfile.lock" }}
-          paths:
-            - ios/Pods
-
-      - run:
-          name: Populate EnvFile
-          command: env >> .env
-
-      - run:
-          name: Run tests
-          command: bundle exec fastlane tests
-          working_directory: ios
-
-      - run:
-          name: Set up test results
-          working_directory: ios
-          command: |
-            mkdir -p test-results/fastlane test-results/xcode
-            mv fastlane/report.xml test-results/fastlane
-            mv fastlane/test_output/report.junit test-results/xcode/junit.xml
-
-      #- store_test_results:
-      #    path: ios/test-results
-
-      #- store_artifacts:
-      #    path: ios/test-results
-
-      - run:
-          name: Build and upload to appetize.io
-          command: bundle exec fastlane deploy_appetize
-          working_directory: ios
-
-      - store_artifacts:
-          path: /tmp/fastlane_build/app.zip
-
-      - run:
-          name: Create a new beta build for TestFlight
-          command: bundle exec fastlane create_build
-          working_directory: ios
-
-      - store_artifacts:
-          path: ios/app-release.ipa
-
-      - run:
-          name: Webhook Success
-          command: bash .circleci/webhook_callback.sh "success"
-          when: on_success
-
-      - run:
-          name: Webhook Failed
-          command: bash .circleci/webhook_callback.sh "failure"
-          when: on_fail
-
+            
+            if [ "$BUILD_TYPE" == "gcp" ] || [ "$BUILD_TYPE" == "azure" ]; then
+              echo '{}' > /home/circleci/parameters.json
+            else
+              echo '{ "mobile_lane": "'$MOBILE_LANE'" }' > /home/circleci/parameters.json
+            fi
+      - continuation/continue:
+          parameters: /home/circleci/parameters.json
+          configuration_path: configs/generated_config.yml
 workflows:
-  version: 2
-  node-android-ios:
+  setup-workflow:
     jobs:
-      - node
-      - android:
-          requires:
-            - node
-      - ios:
-          requires:
-            - node
+      - setup
