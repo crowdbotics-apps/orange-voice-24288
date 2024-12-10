@@ -1,31 +1,33 @@
-FROM ubuntu:bionic
+FROM crowdbotics/cb-django:3.8-slim-buster AS build
 
-ENV LANG C.UTF-8
-ARG DEBIAN_FRONTEND=noninteractive
-# Allow SECRET_KEY to be passed via arg so collectstatic can run during build time
+# Copy dependency management files and install app packages to /.venv
+COPY backend/Pipfile* /
+COPY backend/modules/ /modules/
+RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
+
+FROM crowdbotics/cb-django:3.8-slim-buster AS release
 ARG SECRET_KEY
 
-# libpq-dev and python3-dev help with psycopg2
-RUN apt-get update \
-  && apt-get install -y python3.7-dev python3-pip libpq-dev curl \
-  && apt-get clean all \
-  && rm -rf /var/lib/apt/lists/*
-  # You can add additional steps to the build by appending commands down here using the
-  # format `&& <command>`. Remember to add a `\` at the end of LOC 12.
-  # WARNING: Changes to this file may cause unexpected behaviors when building the app.
-  # Change it at your own risk.
-
+# Set Working directory
 WORKDIR /opt/webapp
-# COPY . .
-COPY backend/Pipfile* /opt/webapp/
-RUN pip3 install --no-cache-dir -q 'pipenv==2018.11.26' && pipenv install --deploy --system
-RUN pip3 install django-colorfield
-RUN pip3 install sendgrid-django
-RUN python3 manage.py collectstatic --no-input
 
-# Run the image as a non-root user
-RUN adduser --disabled-password --gecos "" django
+# Add runtime user with respective access permissions
+RUN groupadd -r django \
+  && useradd -d /opt/webapp -r -g django django \
+  && chown django:django -R /opt/webapp
+
 USER django
 
-# Run the web server on port $PORT
+# Copy virtual env from build stage
+COPY --chown=django:django --from=build /.venv /.venv
+ENV PATH="/.venv/bin:$PATH"
+
+# Copy app source
+COPY --chown=django:django ./backend .
+
+# Copy web build from  rn_web_build stage
+# COPY --chown=django:django --from=rn_web_build /tmp/web_build/backend/web_build ./web_build
+
+# Collect static files and serve app
+RUN python3 manage.py collectstatic --no-input
 CMD waitress-serve --port=$PORT orange_voice_24288.wsgi:application
